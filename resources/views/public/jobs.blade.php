@@ -16,7 +16,7 @@
 .clamp{ display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden; }
 .clamp-3{ -webkit-line-clamp:3; } .clamp-5{ -webkit-line-clamp:5; }
 .clamp.expanded{ display:block; }
-.more-btn{background:none;border:none;color:#0d6efd;font-size:12px;font-weight:600;padding:0;margin-top:4px;cursor:pointer;}
+.more-btn{background:none;border:none;color:var(--brand);font-size:12px;font-weight:600;padding:0;margin-top:4px;cursor:pointer;}
 </style>
 
 @if($positions->isEmpty())
