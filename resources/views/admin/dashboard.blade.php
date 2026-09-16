@@ -1,20 +1,21 @@
 @extends('layouts.admin')
 @section('title', 'Dashboard')
 @section('content')
-<div class="content-card p-2 mb-2">
-  <div class="row no-gutters">
-    <div class="col-6 col-md p-1"><a class="stat-link" href="{{ route('admin.applications.index') }}"><div class="stat"><span class="stat-icon si-total"><i class="bi bi-people-fill"></i></span><span><span class="h4">{{ $total }}</span><br><small>Total</small></span></div></a></div>
-    <div class="col-6 col-md p-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Baru']) }}"><div class="stat"><span class="stat-icon si-baru"><i class="bi bi-inbox-fill"></i></span><span><span class="h4 text-primary">{{ $baru }}</span><br><small>Baru</small></span></div></a></div>
-    <div class="col-6 col-md p-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Seleksi']) }}"><div class="stat"><span class="stat-icon si-proses"><i class="bi bi-hourglass-split"></i></span><span><span class="h4 text-warning">{{ $proses }}</span><br><small>Seleksi/Interview</small></span></div></a></div>
-    <div class="col-6 col-md p-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Diterima']) }}"><div class="stat"><span class="stat-icon si-terima"><i class="bi bi-check-circle-fill"></i></span><span><span class="h4 text-success">{{ $diterima }}</span><br><small>Diterima</small></span></div></a></div>
-    <div class="col-6 col-md p-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Ditolak']) }}"><div class="stat"><span class="stat-icon si-tolak"><i class="bi bi-x-circle-fill"></i></span><span><span class="h4 text-danger">{{ $ditolak }}</span><br><small>Ditolak</small></span></div></a></div>
+<div class="mb-2">
+  <div class="row no-gutters" style="margin-left:-2px;margin-right:-2px">
+    <div class="col-6 col-md px-1"><a class="stat-link" href="{{ route('admin.applications.index') }}"><div class="stat"><span class="stat-icon si-total"><i class="bi bi-people-fill"></i></span><span><span class="h4">{{ $total }}</span><br><small>Total</small></span></div></a></div>
+    <div class="col-6 col-md px-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Baru']) }}"><div class="stat"><span class="stat-icon si-baru"><i class="bi bi-inbox-fill"></i></span><span><span class="h4 text-primary">{{ $baru }}</span><br><small>Baru</small></span></div></a></div>
+    <div class="col-6 col-md px-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Seleksi']) }}"><div class="stat"><span class="stat-icon si-proses"><i class="bi bi-hourglass-split"></i></span><span><span class="h4 text-warning">{{ $proses }}</span><br><small>Seleksi/Interview</small></span></div></a></div>
+    <div class="col-6 col-md px-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Diterima']) }}"><div class="stat"><span class="stat-icon si-terima"><i class="bi bi-check-circle-fill"></i></span><span><span class="h4 text-success">{{ $diterima }}</span><br><small>Diterima</small></span></div></a></div>
+    <div class="col-6 col-md px-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Ditolak']) }}"><div class="stat"><span class="stat-icon si-tolak"><i class="bi bi-x-circle-fill"></i></span><span><span class="h4 text-danger">{{ $ditolak }}</span><br><small>Ditolak</small></span></div></a></div>
   </div>
+</div>
 </div>
 </div>
 <div class="row">
   <div class="col-md-8 mb-2"><div class="content-card p-2">
     <h6 class="font-weight-bold">Tren Lamaran (14 hari)</h6>
-    <canvas id="trendChart" height="72"></canvas>
+    <div style="position:relative;height:170px"><canvas id="trendChart"></canvas></div>
   </div></div>
   <div class="col-md-4 mb-2">
     <div class="content-card p-2 mb-2">
@@ -53,7 +54,7 @@
       labels: {!! json_encode($trendLabels) !!},
       datasets: [{ label: 'Lamaran', data: {!! json_encode($trendData) !!}, borderColor: '#0d6efd', backgroundColor: 'rgba(13,110,253,.12)', fill: true, lineTension: .3, pointRadius: 3 }]
     },
-    options: { legend: { display: false }, scales: { yAxes: [{ ticks: { beginAtZero: true, stepSize: 1 } }] } }
+    options: { responsive: true, maintainAspectRatio: false, legend: { display: false }, scales: { yAxes: [{ ticks: { beginAtZero: true, stepSize: 1 } }] } }
   });
 })();
 </script>
