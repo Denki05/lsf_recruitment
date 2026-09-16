@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Mail\ApplicationStatusChanged;
 use App\Position;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -35,21 +34,7 @@ class ApplicationController extends Controller
             $query->whereDate('created_at', $request->tanggal);
         }
 
-        // Filter flag SIM (dihitung di PHP karena tergantung syarat per loker)
-        $flag = $request->input('flag');
-        if ($flag && in_array($flag, ['Cocok', 'Ditinjau', 'Kurang'])) {
-            $all = $query->get()->filter(function ($a) use ($flag) {
-                return $a->sim_flag === $flag;
-            })->values();
-            $page = max(1, (int) $request->input('page', 1));
-            $perPage = 15;
-            $applicants = new LengthAwarePaginator(
-                $all->forPage($page, $perPage), $all->count(), $perPage, $page,
-                ['path' => $request->url(), 'query' => $request->query()]
-            );
-        } else {
-            $applicants = $query->paginate(15)->appends($request->query());
-        }
+        $applicants = $query->paginate(15)->appends($request->query());
 
         return view('admin.applications.index', compact('applicants', 'positions'));
     }
@@ -125,12 +110,6 @@ class ApplicationController extends Controller
         if ($request->filled('position_id')) $query->where('position_id', $request->position_id);
         if ($request->filled('status')) $query->where('status', $request->status);
         $rows = $query->get();
-        $flag = $request->input('flag');
-        if ($flag && in_array($flag, ['Cocok', 'Ditinjau', 'Kurang'])) {
-            $rows = $rows->filter(function ($r) use ($flag) {
-                return $r->sim_flag === $flag;
-            })->values();
-        }
 
         $filename = 'lamaran_' . date('Ymd_His') . '.csv';
         $headers = ['Content-Type' => 'text/csv', 'Content-Disposition' => "attachment; filename=\"$filename\""];
@@ -139,12 +118,12 @@ class ApplicationController extends Controller
             $out = fopen('php://output', 'w');
             // BOM agar Excel baca UTF-8 dengan benar
             fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($out, ['Tanggal', 'Nama Lengkap', 'JK', 'HP', 'Email', 'Domisili', 'SIM', 'Flag SIM', 'Posisi', 'Lokasi', 'Status Lamaran']);
+            fputcsv($out, ['Tanggal', 'Nama Lengkap', 'JK', 'HP', 'Email', 'Domisili', 'SIM', 'Posisi', 'Lokasi', 'Status Lamaran']);
             foreach ($rows as $r) {
                 fputcsv($out, [
                     $r->created_at->format('Y-m-d H:i'),
                     $r->nama_lengkap, $r->jenis_kelamin, $r->no_hp,
-                    $r->email ?: '-', $r->domisili ?: '-', $r->sim ?: '-', $r->sim_flag,
+                    $r->email ?: '-', $r->domisili ?: '-', $r->sim ?: '-',
                     $r->position->title ?? '-', $r->position->location ?? '-', $r->status,
                 ]);
             }

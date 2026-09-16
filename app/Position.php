@@ -24,21 +24,4 @@ class Position extends Model
     {
         return $query->where('is_active', true);
     }
-
-    /**
-     * Cek SIM pelamar terhadap syarat loker.
-     * $sim: A / B / C / A dan C / Tidak Punya (atau null)
-     * Hasil: Cocok | Ditinjau | Kurang
-     */
-    public function flagSim($sim)
-    {
-        if (empty($this->syarat_sim)) {
-            return 'Ditinjau'; // loker tanpa syarat SIM
-        }
-        if (empty($sim) || stripos($sim, 'Tidak Punya') !== false) {
-            return 'Kurang';
-        }
-        // Syarat 'A' terpenuhi oleh 'A' / 'A dan C'; dst.
-        return stripos($sim, $this->syarat_sim) !== false ? 'Cocok' : 'Kurang';
-    }
 }

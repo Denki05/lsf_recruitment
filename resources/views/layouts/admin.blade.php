@@ -4,44 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>@yield('title', 'Admin Recruitment')</title>
+<title>@yield('title', 'Admin Recruitment | LSF')</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <style>
-:root{--bg:#212529;--surface:#2b2f33;--border:#343a40;--primary:#0d6efd;}
-body{background:var(--bg)!important;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
-.header-bar{position:sticky;top:0;z-index:1000;background:var(--bg);padding:8px 12px;border-bottom:1px solid var(--border);}
-.nav-grid{display:flex;flex-wrap:wrap;gap:6px;}
-.nav-button{background:var(--surface);border:1px solid var(--border);color:#fff;padding:6px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:700;}
-.nav-button:hover{color:#fff;background:#343a40;text-decoration:none;}
-.nav-button.active{background:var(--primary);border-color:var(--primary);}
-.content-card{background:#fff;color:#212529;border-radius:12px;}
-.badge-status{font-size:11px;}
+:root{--brand:#0f4c81;--brand-dark:#0b3a63;--bg:#eef1f5;--card:#fff;--border:#e3e8ef;--text:#1c2733;--muted:#6b7a8d;}
+body{background:var(--bg)!important;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:13.5px;}
+.topnav{position:sticky;top:0;z-index:1000;background:linear-gradient(135deg,var(--brand),var(--brand-dark));color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.topnav .container{display:flex;align-items:center;gap:8px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap;}
+.brand{font-weight:800;font-size:15px;margin-right:8px;white-space:nowrap;}
+.brand small{font-weight:400;opacity:.75;}
+.nav-link-btn{color:#d7e5f3;text-decoration:none;font-size:12.5px;font-weight:600;padding:6px 10px;border-radius:8px;white-space:nowrap;}
+.nav-link-btn:hover{color:#fff;background:rgba(255,255,255,.15);text-decoration:none;}
+.nav-link-btn.active{background:#fff;color:var(--brand-dark);}
+.content-card{background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:0 1px 3px rgba(16,38,76,.06);}
+.content-card h6{font-size:13px;margin-bottom:8px;}
+.badge-status{font-size:10.5px;}
+.table{font-size:12.5px;margin-bottom:0;}
+.table th{border-top:none;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding:.45rem .5rem;}
+.table td{padding:.45rem .5rem;vertical-align:middle;}
+.form-control-sm{font-size:12.5px;}
+.btn-sm{font-size:12px;}
+.stat{border:1px solid var(--border);border-radius:10px;padding:10px 6px;background:#fff;}
+.stat .h4{margin-bottom:0;font-size:22px;}
+.stat small{color:var(--muted);font-size:11px;}
+.alert{font-size:12.5px;padding:.5rem .75rem;}
 @media(min-width:768px){.container{max-width:720px;}}
-@media(min-width:992px){.container{max-width:992px;}}
-.table{font-size:13px;}
+@media(min-width:992px){.container{max-width:1100px;}}
 </style>
 </head>
 <body>
-<div class="container" style="min-height:100vh">
-  <div class="header-bar d-flex justify-content-between align-items-center">
-    <strong><i class="bi bi-briefcase-fill"></i> HRD Panel</strong>
-    <small class="text-muted">{{ Auth::user()->name ?? '' }}</small>
-  </div>
-  <div class="nav-grid my-2">
-    <a class="nav-button {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
-    <a class="nav-button {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}" href="{{ route('admin.applications.index') }}"><i class="bi bi-inbox"></i> Lamaran</a>
-    <a class="nav-button {{ request()->routeIs('admin.positions.*') ? 'active' : '' }}" href="{{ route('admin.positions.index') }}"><i class="bi bi-megaphone"></i> Loker</a>
-    <a class="nav-button" href="{{ route('jobs.index') }}" target="_blank"><i class="bi bi-eye"></i> Lihat Loker</a>
-    <a class="nav-button" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="bi bi-box-arrow-right"></i> Logout</a>
-  </div>
+<nav class="topnav"><div class="container">
+  <span class="brand"><i class="bi bi-briefcase-fill"></i> HRD <small>Recruitment | LSF</small></span>
+  <a class="nav-link-btn {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+  <a class="nav-link-btn {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}" href="{{ route('admin.applications.index') }}"><i class="bi bi-inbox"></i> Lamaran</a>
+  <a class="nav-link-btn {{ request()->routeIs('admin.positions.*') ? 'active' : '' }}" href="{{ route('admin.positions.index') }}"><i class="bi bi-megaphone"></i> Loker</a>
+  <a class="nav-link-btn" href="{{ route('jobs.index') }}" target="_blank"><i class="bi bi-eye"></i> Situs</a>
+  <a class="nav-link-btn" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="bi bi-box-arrow-right"></i> Keluar</a>
+  <span class="ml-auto d-none d-md-inline" style="font-size:12px;opacity:.85">{{ Auth::user()->name ?? '' }}</span>
+</div></nav>
+<div class="container py-3" style="min-height:90vh">
   <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display:none">@csrf</form>
 
   @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
   @if($errors->any())<div class="alert alert-danger">{{ $errors->first() }}</div>@endif
 
   @yield('content')
-  <p class="text-center text-muted small mt-4">Recruitment &copy; {{ date('Y') }}</p>
+  <p class="text-center small mt-3 mb-1" style="color:var(--muted)">Recruitment | LSF &copy; {{ date('Y') }}</p>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>

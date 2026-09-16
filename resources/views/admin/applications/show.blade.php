@@ -12,7 +12,7 @@
       <tr><th width="35%">JK</th><td>{{ $applicant->jenis_kelamin }}</td></tr>
       <tr><th>Domisili</th><td>{{ $applicant->domisili ?: '-' }}</td></tr>
       <tr><th>Email</th><td>{{ $applicant->email ?: '-' }}</td></tr>
-      <tr><th>SIM / Flag</th><td>{{ $applicant->sim ?: '-' }} / <strong>{{ $applicant->sim_flag }}</strong>@if($applicant->position && $applicant->position->syarat_sim)<small class="text-muted"> (syarat: SIM {{ $applicant->position->syarat_sim }})</small>@endif</td></tr>
+      <tr><th>SIM</th><td>{{ $applicant->sim ?: '-' }}</td></tr>
     </table></div>
     <div class="col-md-6"><table class="table table-sm">
       <tr><th width="35%">HP</th><td>{{ $applicant->no_hp }}</td></tr>

@@ -18,14 +18,6 @@ class DashboardController extends Controller
         $perPosisi = Position::withCount('applicants')->orderBy('title')->get();
         $terbaru = Applicant::with('position')->latest()->take(8)->get();
 
-        // Ringkasan flag SIM (dihitung di PHP karena tergantung syarat per loker)
-        $flags = ['Cocok' => 0, 'Ditinjau' => 0, 'Kurang' => 0];
-        Applicant::with('position')->chunk(200, function ($rows) use (&$flags) {
-            foreach ($rows as $r) {
-                $flags[$r->sim_flag]++;
-            }
-        });
-
         // Tren 14 hari terakhir
         $trendLabels = [];
         $trendData = [];
@@ -35,6 +27,6 @@ class DashboardController extends Controller
             $trendData[] = Applicant::whereDate('created_at', $d->toDateString())->count();
         }
 
-        return view('admin.dashboard', compact('total', 'baru', 'proses', 'diterima', 'ditolak', 'perPosisi', 'terbaru', 'flags', 'trendLabels', 'trendData'));
+        return view('admin.dashboard', compact('total', 'baru', 'proses', 'diterima', 'ditolak', 'perPosisi', 'terbaru', 'trendLabels', 'trendData'));
     }
 }

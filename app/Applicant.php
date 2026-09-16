@@ -28,13 +28,4 @@ class Applicant extends Model
         $posisi = $this->position ? preg_replace('/[^A-Za-z0-9]+/', '_', $this->position->title) : 'Posisi';
         return trim($nama, '_') . '-' . trim($posisi, '_') . '-' . $this->created_at->format('Ymd_His') . '.' . $ext;
     }
-
-    /** Label auto-flag screening SIM dari syarat loker. */
-    public function getSimFlagAttribute()
-    {
-        if (!$this->position) {
-            return 'Ditinjau';
-        }
-        return $this->position->flagSim($this->sim);
-    }
 }
