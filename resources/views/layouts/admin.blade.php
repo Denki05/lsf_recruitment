@@ -25,9 +25,14 @@ body{background:var(--bg)!important;color:var(--text);font-family:-apple-system,
 .table td{padding:.45rem .5rem;vertical-align:middle;}
 .form-control-sm{font-size:12.5px;}
 .btn-sm{font-size:12px;}
-.stat{border:1px solid var(--border);border-radius:8px;padding:6px 4px;background:#fff;}
-.stat .h4{margin-bottom:0;font-size:19px;}
+.stat{border:1px solid var(--border);border-radius:8px;padding:6px 8px;background:#fff;display:flex;align-items:center;gap:8px;text-align:left;}
+.stat .h4{margin-bottom:0;font-size:19px;line-height:1.1;}
 .stat small{color:var(--muted);font-size:10.5px;}
+.stat-icon{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.si-total{background:#e8eef5;color:#0f4c81;} .si-baru{background:#e0f0ff;color:#0d6efd;}
+.si-proses{background:#fff4d6;color:#b8860b;} .si-terima{background:#dcf5e5;color:#146c43;}
+.si-tolak{background:#fbdfe3;color:#c81e3a;}
+a.stat-link:hover{text-decoration:none;} a.stat-link:hover .stat{border-color:var(--brand);box-shadow:0 1px 5px rgba(15,76,129,.18);}
 .alert{font-size:12.5px;padding:.5rem .75rem;}
 @media(min-width:768px){.container{max-width:100%;}}
 @media(min-width:992px){.container{max-width:100%;}}

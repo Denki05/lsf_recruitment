@@ -2,13 +2,14 @@
 @section('title', 'Dashboard')
 @section('content')
 <div class="content-card p-2 mb-2">
-  <div class="row text-center no-gutters" style="gap:0">
-    <div class="col col-md p-1"><div class="stat"><div class="h4 mb-0">{{ $total }}</div><small>Total</small></div></div>
-    <div class="col col-md p-1"><div class="stat"><div class="h4 mb-0 text-primary">{{ $baru }}</div><small>Baru</small></div></div>
-    <div class="col col-md p-1"><div class="stat"><div class="h4 mb-0 text-warning">{{ $proses }}</div><small>Seleksi/Interview</small></div></div>
-    <div class="col col-md p-1"><div class="stat"><div class="h4 mb-0 text-success">{{ $diterima }}</div><small>Diterima</small></div></div>
-    <div class="col col-md p-1"><div class="stat"><div class="h4 mb-0 text-danger">{{ $ditolak }}</div><small>Ditolak</small></div></div>
+  <div class="row no-gutters">
+    <div class="col-6 col-md p-1"><a class="stat-link" href="{{ route('admin.applications.index') }}"><div class="stat"><span class="stat-icon si-total"><i class="bi bi-people-fill"></i></span><span><span class="h4">{{ $total }}</span><br><small>Total</small></span></div></a></div>
+    <div class="col-6 col-md p-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Baru']) }}"><div class="stat"><span class="stat-icon si-baru"><i class="bi bi-inbox-fill"></i></span><span><span class="h4 text-primary">{{ $baru }}</span><br><small>Baru</small></span></div></a></div>
+    <div class="col-6 col-md p-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Seleksi']) }}"><div class="stat"><span class="stat-icon si-proses"><i class="bi bi-hourglass-split"></i></span><span><span class="h4 text-warning">{{ $proses }}</span><br><small>Seleksi/Interview</small></span></div></a></div>
+    <div class="col-6 col-md p-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Diterima']) }}"><div class="stat"><span class="stat-icon si-terima"><i class="bi bi-check-circle-fill"></i></span><span><span class="h4 text-success">{{ $diterima }}</span><br><small>Diterima</small></span></div></a></div>
+    <div class="col-6 col-md p-1"><a class="stat-link" href="{{ route('admin.applications.index', ['status' => 'Ditolak']) }}"><div class="stat"><span class="stat-icon si-tolak"><i class="bi bi-x-circle-fill"></i></span><span><span class="h4 text-danger">{{ $ditolak }}</span><br><small>Ditolak</small></span></div></a></div>
   </div>
+</div>
 </div>
 <div class="row">
   <div class="col-md-8 mb-2"><div class="content-card p-2">
