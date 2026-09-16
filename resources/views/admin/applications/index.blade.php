@@ -2,12 +2,17 @@
 @section('title', 'Data Lamaran')
 @section('content')
 <div class="content-card p-3">
-  <form class="form-row" method="GET">
-    <div class="form-group col-md-3"><input name="q" class="form-control form-control-sm" placeholder="Cari nama / HP" value="{{ request('q') }}"></div>
-    <div class="form-group col-md-3"><select name="position_id" class="form-control form-control-sm"><option value="">Semua posisi</option>@foreach($positions as $p)<option value="{{ $p->id }}" {{ request('position_id')==$p->id?'selected':'' }}>{{ $p->full_title }}</option>@endforeach</select></div>
-    <div class="form-group col-md-2"><select name="status" class="form-control form-control-sm"><option value="">Semua status</option>@foreach(['Baru','Seleksi','Interview','Diterima','Ditolak'] as $s)<option {{ request('status')==$s?'selected':'' }}>{{ $s }}</option>@endforeach</select></div>
-    <div class="form-group col-md-2"><input type="date" name="tanggal" class="form-control form-control-sm" value="{{ request('tanggal') }}"></div>
-    <div class="form-group col-md-2"><button class="btn btn-sm btn-primary btn-block">Filter</button></div>
+  <form method="GET">
+  <div class="form-row">
+    <div class="form-group col-md-4"><input name="q" class="form-control form-control-sm" placeholder="Cari nama / HP" value="{{ request('q') }}"></div>
+    <div class="form-group col-md-4"><select name="position_id" class="form-control form-control-sm"><option value="">Semua posisi</option>@foreach($positions as $p)<option value="{{ $p->id }}" {{ request('position_id')==$p->id?'selected':'' }}>{{ $p->full_title }}</option>@endforeach</select></div>
+    <div class="form-group col-md-4"><select name="status" class="form-control form-control-sm"><option value="">Semua status</option>@foreach(['Baru','Seleksi','Interview','Diterima','Ditolak'] as $s)<option {{ request('status')==$s?'selected':'' }}>{{ $s }}</option>@endforeach</select></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4"><select name="flag" class="form-control form-control-sm"><option value="">Flag SIM: semua</option>@foreach(['Cocok','Ditinjau','Kurang'] as $f)<option {{ request('flag')==$f?'selected':'' }}>{{ $f }}</option>@endforeach</select></div>
+    <div class="form-group col-md-4"><input type="date" name="tanggal" class="form-control form-control-sm" value="{{ request('tanggal') }}"></div>
+    <div class="form-group col-md-4"><button class="btn btn-sm btn-primary btn-block">Filter</button></div>
+  </div>
   </form>
   <div class="mb-2"><a href="{{ route('admin.applications.export', request()->query()) }}" class="btn btn-sm btn-success"><i class="bi bi-file-earmark-excel"></i> Export CSV/Excel</a></div>
   <div class="table-responsive"><table class="table table-sm table-hover">

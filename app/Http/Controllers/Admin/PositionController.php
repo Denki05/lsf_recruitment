@@ -24,10 +24,18 @@ class PositionController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:100',
             'location' => 'required|string|max:100',
+            'butuh_sim' => 'nullable|boolean',
             'syarat_sim' => 'nullable|in:A,B,C',
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
         ]);
+        // Syarat SIM opsional: hanya disimpan bila checkbox dicentang
+        if ($request->boolean('butuh_sim') && !empty($data['syarat_sim'])) {
+            $data['syarat_sim'] = $data['syarat_sim'];
+        } else {
+            $data['syarat_sim'] = null;
+        }
+        unset($data['butuh_sim']);
         $data['is_active'] = $request->boolean('is_active', true);
         Position::create($data);
         return redirect()->route('admin.positions.index')->with('success', 'Loker ditambahkan.');
@@ -45,10 +53,18 @@ class PositionController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:100',
             'location' => 'required|string|max:100',
+            'butuh_sim' => 'nullable|boolean',
             'syarat_sim' => 'nullable|in:A,B,C',
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
         ]);
+        // Syarat SIM opsional: hanya disimpan bila checkbox dicentang
+        if ($request->boolean('butuh_sim') && !empty($data['syarat_sim'])) {
+            $data['syarat_sim'] = $data['syarat_sim'];
+        } else {
+            $data['syarat_sim'] = null;
+        }
+        unset($data['butuh_sim']);
         $data['is_active'] = $request->boolean('is_active');
         $position->update($data);
         return redirect()->route('admin.positions.index')->with('success', 'Loker diperbarui.');
