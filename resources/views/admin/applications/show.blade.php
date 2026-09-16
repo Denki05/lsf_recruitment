@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('title', 'Detail Lamaran')
 @section('content')
-<div class="content-card p-3">
+<div class="content-card p-2">
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h5 class="font-weight-bold mb-0">{{ $applicant->nama_lengkap }}</h5>
     <span class="badge badge-primary">{{ $applicant->status }}</span>

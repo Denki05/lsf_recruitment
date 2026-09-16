@@ -1,40 +1,38 @@
 @extends('layouts.admin')
 @section('title', 'Dashboard')
 @section('content')
-<div class="content-card p-2 mb-3">
+<div class="content-card p-2 mb-2">
   <div class="row text-center no-gutters" style="gap:0">
-    <div class="col-6 col-md p-1"><div class="stat"><div class="h4 mb-0">{{ $total }}</div><small>Total</small></div></div>
-    <div class="col-6 col-md p-1"><div class="stat"><div class="h4 mb-0 text-primary">{{ $baru }}</div><small>Baru</small></div></div>
-    <div class="col-6 col-md p-1"><div class="stat"><div class="h4 mb-0 text-warning">{{ $proses }}</div><small>Seleksi/Interview</small></div></div>
-    <div class="col-6 col-md p-1"><div class="stat"><div class="h4 mb-0 text-success">{{ $diterima }}</div><small>Diterima</small></div></div>
-    <div class="col-6 col-md p-1"><div class="stat"><div class="h4 mb-0 text-danger">{{ $ditolak }}</div><small>Ditolak</small></div></div>
+    <div class="col col-md p-1"><div class="stat"><div class="h4 mb-0">{{ $total }}</div><small>Total</small></div></div>
+    <div class="col col-md p-1"><div class="stat"><div class="h4 mb-0 text-primary">{{ $baru }}</div><small>Baru</small></div></div>
+    <div class="col col-md p-1"><div class="stat"><div class="h4 mb-0 text-warning">{{ $proses }}</div><small>Seleksi/Interview</small></div></div>
+    <div class="col col-md p-1"><div class="stat"><div class="h4 mb-0 text-success">{{ $diterima }}</div><small>Diterima</small></div></div>
+    <div class="col col-md p-1"><div class="stat"><div class="h4 mb-0 text-danger">{{ $ditolak }}</div><small>Ditolak</small></div></div>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-8 mb-3"><div class="content-card p-2">
+  <div class="col-md-8 mb-2"><div class="content-card p-2">
     <h6 class="font-weight-bold">Tren Lamaran (14 hari)</h6>
-    <canvas id="trendChart" height="110"></canvas>
+    <canvas id="trendChart" height="72"></canvas>
   </div></div>
-  <div class="col-md-4 mb-3"><div class="content-card p-2">
-    <h6 class="font-weight-bold">Aksi Cepat</h6>
-    <div class="d-flex flex-column" style="gap:6px">
-      <a href="{{ route('admin.applications.index', ['status' => 'Baru']) }}" class="btn btn-sm btn-primary btn-block"><i class="bi bi-inbox"></i> Lamaran Baru</a>
-      <a href="{{ route('admin.positions.create') }}" class="btn btn-sm btn-outline-primary btn-block"><i class="bi bi-plus"></i> Tambah Loker</a>
-      <a href="{{ route('admin.applications.export') }}" class="btn btn-sm btn-outline-success btn-block"><i class="bi bi-file-earmark-excel"></i> Export</a>
-      <a href="{{ route('admin.positions.index') }}" class="btn btn-sm btn-outline-secondary btn-block"><i class="bi bi-megaphone"></i> Kelola Loker</a>
+  <div class="col-md-4 mb-2">
+    <div class="content-card p-2 mb-2">
+      <h6 class="font-weight-bold">Aksi Cepat</h6>
+      <div class="d-flex" style="gap:6px;flex-wrap:wrap">
+        <a href="{{ route('admin.applications.index', ['status' => 'Baru']) }}" class="btn btn-sm btn-primary"><i class="bi bi-inbox"></i> Baru</a>
+        <a href="{{ route('admin.positions.create') }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-plus"></i> Loker</a>
+        <a href="{{ route('admin.applications.export') }}" class="btn btn-sm btn-outline-success"><i class="bi bi-file-earmark-excel"></i> Export</a>
+      </div>
     </div>
-  </div></div>
+    <div class="content-card p-2">
+      <h6 class="font-weight-bold">Per Posisi</h6>
+      <ul class="list-group list-group-flush">@foreach($perPosisi as $p)<li class="list-group-item d-flex justify-content-between align-items-center py-1 px-0" style="font-size:12.5px">{{ $p->full_title }}<span class="badge badge-primary badge-pill">{{ $p->applicants_count }}</span></li>@endforeach</ul>
+    </div>
+  </div>
 </div>
 <div class="row">
-  <div class="col-md-5 mb-3"><div class="content-card p-2">
-    <h6 class="font-weight-bold">Per Posisi</h6>
-    <ul class="list-group list-group-flush">@foreach($perPosisi as $p)<li class="list-group-item d-flex justify-content-between align-items-center">{{ $p->full_title }}<span class="badge badge-primary badge-pill">{{ $p->applicants_count }}</span></li>@endforeach</ul>
-    <a href="{{ route('admin.positions.index') }}" class="btn btn-sm btn-outline-primary mt-2">Kelola Loker</a>
-  </div></div>
-</div>
-<div class="row">
-  <div class="col-12 mb-3"><div class="content-card p-2">
-    <h6 class="font-weight-bold">Lamaran Terbaru</h6>
+  <div class="col-12 mb-2"><div class="content-card p-2">
+    <div class="d-flex justify-content-between align-items-center mb-1"><h6 class="font-weight-bold mb-0">Lamaran Terbaru</h6><a href="{{ route('admin.applications.index') }}" class="btn btn-sm btn-link">Lihat semua →</a></div>
     <div class="table-responsive"><table class="table table-sm table-hover mb-0">
       <tr><th>Nama</th><th>Posisi</th><th>Status</th><th></th></tr>
       @forelse($terbaru as $a)<tr><td>{{ $a->nama_lengkap }}</td><td>{{ $a->position->title ?? '-' }}</td><td><span class="badge badge-info">{{ $a->status }}</span></td><td><a href="{{ route('admin.applications.show', $a->id) }}" class="btn btn-sm btn-outline-primary">Detail</a></td></tr>

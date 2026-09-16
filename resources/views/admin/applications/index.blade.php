@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('title', 'Data Lamaran')
 @section('content')
-<div class="content-card p-3">
+<div class="content-card p-2">
   <form method="GET">
   <div class="form-row">
     <div class="form-group col-md-3"><input name="q" class="form-control form-control-sm" placeholder="Cari nama / HP" value="{{ request('q') }}"></div>

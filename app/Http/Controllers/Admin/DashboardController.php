@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $diterima = Applicant::where('status', 'Diterima')->count();
         $ditolak = Applicant::where('status', 'Ditolak')->count();
         $perPosisi = Position::withCount('applicants')->orderBy('title')->get();
-        $terbaru = Applicant::with('position')->latest()->take(8)->get();
+        $terbaru = Applicant::with('position')->latest()->take(5)->get();
 
         // Tren 14 hari terakhir
         $trendLabels = [];

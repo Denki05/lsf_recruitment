@@ -25,16 +25,17 @@ body{background:var(--bg)!important;color:var(--text);font-family:-apple-system,
 .table td{padding:.45rem .5rem;vertical-align:middle;}
 .form-control-sm{font-size:12.5px;}
 .btn-sm{font-size:12px;}
-.stat{border:1px solid var(--border);border-radius:10px;padding:10px 6px;background:#fff;}
-.stat .h4{margin-bottom:0;font-size:22px;}
-.stat small{color:var(--muted);font-size:11px;}
+.stat{border:1px solid var(--border);border-radius:8px;padding:6px 4px;background:#fff;}
+.stat .h4{margin-bottom:0;font-size:19px;}
+.stat small{color:var(--muted);font-size:10.5px;}
 .alert{font-size:12.5px;padding:.5rem .75rem;}
-@media(min-width:768px){.container{max-width:720px;}}
-@media(min-width:992px){.container{max-width:1100px;}}
+@media(min-width:768px){.container{max-width:100%;}}
+@media(min-width:992px){.container{max-width:100%;}}
+.admin-wrap{padding-left:14px;padding-right:14px;}
 </style>
 </head>
 <body>
-<nav class="topnav"><div class="container">
+<nav class="topnav"><div class="container admin-wrap">
   <span class="brand"><i class="bi bi-briefcase-fill"></i> HRD <small>Recruitment | LSF</small></span>
   <a class="nav-link-btn {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
   <a class="nav-link-btn {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}" href="{{ route('admin.applications.index') }}"><i class="bi bi-inbox"></i> Lamaran</a>
@@ -43,7 +44,7 @@ body{background:var(--bg)!important;color:var(--text);font-family:-apple-system,
   <a class="nav-link-btn" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="bi bi-box-arrow-right"></i> Keluar</a>
   <span class="ml-auto d-none d-md-inline" style="font-size:12px;opacity:.85">{{ Auth::user()->name ?? '' }}</span>
 </div></nav>
-<div class="container py-3" style="min-height:90vh">
+<div class="container admin-wrap py-2" style="min-height:90vh">
   <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display:none">@csrf</form>
 
   @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif

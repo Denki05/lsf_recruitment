@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('title', 'Kelola Loker')
 @section('content')
-<div class="content-card p-3">
+<div class="content-card p-2">
   <div class="d-flex justify-content-between mb-2"><h5 class="font-weight-bold mb-0">Loker / Posisi</h5><a href="{{ route('admin.positions.create') }}" class="btn btn-sm btn-primary"><i class="bi bi-plus"></i> Tambah</a></div>
   <div class="table-responsive"><table class="table table-sm table-hover">
     <tr><th>Posisi</th><th>Lokasi</th><th>SIM</th><th>Status</th><th>Pelamar</th><th>Aksi</th></tr>

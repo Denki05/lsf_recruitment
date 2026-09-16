@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('title', ($position->exists ? 'Edit' : 'Tambah') . ' Loker')
 @section('content')
-<div class="content-card p-3">
+<div class="content-card p-2">
   <h5 class="font-weight-bold">{{ $position->exists ? 'Edit' : 'Tambah' }} Loker</h5>
   <form method="POST" action="{{ $position->exists ? route('admin.positions.update', $position->id) : route('admin.positions.store') }}">@csrf @if($position->exists) @method('PUT') @endif
     <div class="form-row">
