@@ -1,5 +1,5 @@
 @extends('layouts.public')
-@section('title', 'Lamaran Terkirim')
+@section('title', 'Lamaran Terkirim | LSF')
 @section('content')
 <div class="text-center py-4">
   <div style="font-size:56px;color:#198754"><i class="bi bi-check-circle-fill"></i></div>

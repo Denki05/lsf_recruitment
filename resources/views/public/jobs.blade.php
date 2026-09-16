@@ -1,7 +1,7 @@
 @extends('layouts.public')
-@section('title', 'Lowongan Kerja')
-@section('hero_title', 'Lowongan Kerja')
-@section('hero_sub', 'Pilih posisi yang cocok, klik Lamar — form cepat kurang dari 2 menit.')
+@section('title', 'Recruitment | LSF')
+@section('hero_title', 'Recruitment')
+@section('hero_sub', 'Silakan pilih posisi yang sesuai, klik Lamar — formulir cepat kurang dari 2 menit.')
 
 @section('content')
 <style>
