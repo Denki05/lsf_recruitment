@@ -21,7 +21,6 @@ class ApplicationController extends Controller
             $q = $request->q;
             $query->where(function ($w) use ($q) {
                 $w->where('nama_lengkap', 'like', "%{$q}%")
-                  ->orWhere('no_ktp', 'like', "%{$q}%")
                   ->orWhere('no_hp', 'like', "%{$q}%");
             });
         }
@@ -119,14 +118,14 @@ class ApplicationController extends Controller
             $out = fopen('php://output', 'w');
             // BOM agar Excel baca UTF-8 dengan benar
             fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($out, ['Tanggal', 'Nama Lengkap', 'Panggilan', 'TTL', 'JK', 'KTP', 'HP', 'Sosmed', 'Nikah', 'Agama', 'Kendaraan', 'SIM', 'Posisi', 'Lokasi', 'Status']);
+            fputcsv($out, ['Tanggal', 'Nama Lengkap', 'JK', 'Status', 'Agama', 'Alamat', 'HP', 'Sosmed', 'Kendaraan', 'SIM', 'Posisi', 'Lokasi', 'Status Lamaran']);
             foreach ($rows as $r) {
                 fputcsv($out, [
                     $r->created_at->format('Y-m-d H:i'),
-                    $r->nama_lengkap, $r->nama_panggilan,
-                    $r->tempat_lahir . ', ' . date('Y-m-d', strtotime($r->tanggal_lahir)),
-                    $r->jenis_kelamin, "'" . $r->no_ktp, $r->no_hp, $r->sosmed,
-                    $r->status_pernikahan, $r->agama, $r->kendaraan, $r->sim,
+                    $r->nama_lengkap, $r->jenis_kelamin,
+                    $r->status_pernikahan ?: '-', $r->agama ?: '-',
+                    $r->alamat_ktp, $r->no_hp, $r->sosmed,
+                    $r->kendaraan, $r->sim,
                     $r->position->title ?? '-', $r->position->location ?? '-', $r->status,
                 ]);
             }

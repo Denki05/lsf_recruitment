@@ -13,22 +13,14 @@
 {{-- STEP 1 --}}
 <div class="step-pane active" data-step="1">
   <h5 class="sect font-weight-bold">1. Data Diri</h5>
-  <p class="step-desc">Isi identitas sesuai KTP — dipakai HRD untuk verifikasi awal.</p>
+  <p class="step-desc">Isi data diri singkat — dipakai HRD untuk verifikasi awal.</p>
   <div class="form-row">
     <div class="form-group col-md-6"><label class="required">Nama Lengkap</label><input name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap') }}" required maxlength="100"></div>
-    <div class="form-group col-md-6"><label class="required">Nama Panggilan</label><input name="nama_panggilan" class="form-control" value="{{ old('nama_panggilan') }}" required maxlength="50"></div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col-md-6"><label class="required">Tempat Lahir</label><input name="tempat_lahir" class="form-control" value="{{ old('tempat_lahir') }}" required></div>
-    <div class="form-group col-md-6"><label class="required">Tanggal Lahir (min 17 th)</label><input type="date" name="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir') }}" required></div>
-  </div>
-  <div class="form-row">
     <div class="form-group col-md-6"><label class="required">Jenis Kelamin</label><select name="jenis_kelamin" class="form-control" required><option value="">-- pilih --</option><option {{ old('jenis_kelamin')=='Laki-laki'?'selected':'' }}>Laki-laki</option><option {{ old('jenis_kelamin')=='Perempuan'?'selected':'' }}>Perempuan</option></select></div>
-    <div class="form-group col-md-6"><label class="required">No KTP (16 digit)</label><input name="no_ktp" class="form-control" value="{{ old('no_ktp') }}" required pattern="[0-9]{16}" maxlength="16" inputmode="numeric" placeholder="3273xxxxxxxxxxxx"></div>
   </div>
   <div class="form-row">
-    <div class="form-group col-md-6"><label class="required">Status Pernikahan</label><select name="status_pernikahan" class="form-control" required><option value="">-- pilih --</option>@foreach(['Belum Menikah','Menikah','Cerai'] as $s)<option {{ old('status_pernikahan')==$s?'selected':'' }}>{{ $s }}</option>@endforeach</select></div>
-    <div class="form-group col-md-6"><label class="required">Agama</label><select name="agama" class="form-control" required><option value="">-- pilih --</option>@foreach(['Islam','Kristen','Katolik','Hindu','Buddha','Khonghucu','Lainnya'] as $a)<option {{ old('agama')==$a?'selected':'' }}>{{ $a }}</option>@endforeach</select></div>
+    <div class="form-group col-md-6"><label>Status</label><select name="status_pernikahan" class="form-control"><option value="">-- pilih (opsional) --</option>@foreach(['Belum Menikah','Menikah','Cerai'] as $s)<option {{ old('status_pernikahan')==$s?'selected':'' }}>{{ $s }}</option>@endforeach</select></div>
+    <div class="form-group col-md-6"><label>Agama</label><select name="agama" class="form-control"><option value="">-- pilih (opsional) --</option>@foreach(['Islam','Kristen','Katolik','Hindu','Buddha','Khonghucu','Lainnya'] as $a)<option {{ old('agama')==$a?'selected':'' }}>{{ $a }}</option>@endforeach</select></div>
   </div>
   <div class="text-right"><button type="button" class="btn btn-primary next-btn">Lanjut <i class="bi bi-arrow-right"></i></button></div>
 </div>
@@ -36,12 +28,8 @@
 {{-- STEP 2 --}}
 <div class="step-pane" data-step="2">
   <h5 class="sect font-weight-bold">2. Alamat & Kontak</h5>
-  <p class="step-desc">Alamat KTP, alamat tinggal (centang jika sama), HP/WA aktif, dan sosmed agar HRD mudah menghubungimu.</p>
-  <div class="form-row">
-    <div class="form-group col-md-6"><label class="required">Alamat Sesuai KTP</label><textarea name="alamat_ktp" class="form-control" rows="2" required>{{ old('alamat_ktp') }}</textarea></div>
-    <div class="form-group col-md-6"><label>Alamat Sekarang</label><textarea name="alamat_sekarang" id="alamatSekarang" class="form-control" rows="2">{{ old('alamat_sekarang') }}</textarea></div>
-  </div>
-  <div class="form-check mb-2"><input type="checkbox" class="form-check-input" id="samaKtp" name="sama_dengan_ktp" value="1" {{ old('sama_dengan_ktp')?'checked':'' }}><label class="form-check-label" for="samaKtp" style="font-size:12px">Alamat sekarang sama dengan KTP</label></div>
+  <p class="step-desc">Alamat tinggal, HP/WA aktif, dan sosmed agar HRD mudah menghubungimu.</p>
+  <div class="form-group"><label class="required">Alamat</label><textarea name="alamat_ktp" class="form-control" rows="2" required placeholder="Alamat tinggal saat ini">{{ old('alamat_ktp') }}</textarea></div>
   <div class="form-row">
     <div class="form-group col-md-6"><label class="required">No HP / WA</label><input name="no_hp" class="form-control" value="{{ old('no_hp') }}" required placeholder="08xxxxxxxxxx"></div>
     <div class="form-group col-md-6"><label>Social Media</label><input name="sosmed" class="form-control" value="{{ old('sosmed') }}" maxlength="255" placeholder="IG: @..., TikTok: @..."></div>
@@ -94,12 +82,6 @@ document.querySelectorAll('.next-btn').forEach(b => b.addEventListener('click', 
   showStep(Math.min(3, step+1));
 }));
 document.querySelectorAll('.prev-btn').forEach(b => b.addEventListener('click', () => showStep(Math.max(1, step-1))));
-document.getElementById('samaKtp').addEventListener('change', function(){
-  const t = document.getElementById('alamatSekarang');
-  t.disabled = this.checked;
-  if(this.checked) t.placeholder = 'Otomatis sama dengan alamat KTP';
-});
-if(document.getElementById('samaKtp').checked) document.getElementById('alamatSekarang').disabled = true;
 var berkasInput = document.getElementById('berkas');
 var dropzone = document.getElementById('dropzone');
 function handleFile(f){
