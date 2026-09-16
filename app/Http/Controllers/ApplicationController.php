@@ -36,9 +36,11 @@ class ApplicationController extends Controller
             'sim' => 'required|in:A,B,C,A dan C,Tidak Punya',
             'position_id' => 'required|exists:positions,id',
             'berkas' => 'required|file|mimes:pdf,doc,docx,zip|max:5120',
+            'ai_consent' => 'required|accepted',
         ], [
             'berkas.max' => 'Ukuran file maksimal 5 MB.',
             'berkas.mimes' => 'File harus PDF / DOC / DOCX / ZIP.',
+            'ai_consent.accepted' => 'Anda harus menyetujui pemrosesan data untuk melamar.',
         ]);
 
         $position = Position::findOrFail($validated['position_id']);
@@ -58,6 +60,7 @@ class ApplicationController extends Controller
             'email' => $validated['email'] ?? null,
             'domisili' => $validated['domisili'],
             'sim' => $validated['sim'],
+            'ai_consent' => true,
             'file_path' => $storedPath,
             'file_original' => $file->getClientOriginalName(),
             'file_mime' => $file->getClientMimeType(),

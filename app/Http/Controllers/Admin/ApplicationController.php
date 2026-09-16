@@ -109,6 +109,9 @@ class ApplicationController extends Controller
     public function evaluateAi($id)
     {
         $applicant = Applicant::with('position')->findOrFail($id);
+        if (!$applicant->ai_consent) {
+            return back()->withErrors(['ai' => 'Pelamar tidak menyetujui pemrosesan AI.']);
+        }
         $cvText = (new \App\Services\CvScreening())->getCvRawText($applicant);
         if (trim($cvText) === '') {
             return back()->withErrors(['ai' => 'Teks CV tidak bisa dibaca AI (bukan PDF/DOCX berteks).']);

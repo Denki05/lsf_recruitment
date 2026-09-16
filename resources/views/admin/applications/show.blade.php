@@ -56,7 +56,11 @@
   @else
   <div style="font-size:12px;color:var(--muted)" class="mt-1">Belum dievaluasi. Sekali klik, hasil tersimpan dan tidak dihitung ulang.</div>
   @endif
+  @if(!$applicant->ai_consent)
+  <div style="font-size:12px;color:var(--muted)" class="mt-1"><i class="bi bi-shield-lock"></i> Pelamar tidak menyetujui pemrosesan AI — evaluasi terkunci.</div>
+  @else
   <form method="POST" action="{{ route('admin.applications.ai', $applicant->id) }}" class="mt-1">@csrf<button class="btn btn-sm btn-outline-primary"><i class="bi bi-stars"></i> {{ is_null($applicant->ai_score) ? 'Jalankan Evaluasi AI' : 'Evaluasi Ulang' }}</button></form>
+  @endif
 </div>
 <div class="content-card p-2 mb-2">
   <form method="POST" action="{{ route('admin.applications.status', $applicant->id) }}">@csrf

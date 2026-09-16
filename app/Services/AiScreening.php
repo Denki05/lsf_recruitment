@@ -29,7 +29,9 @@ class AiScreening
         $applicant->loadMissing('position');
         $pos = $applicant->position;
 
-        $prompt = $this->prompt($applicant, $pos, $cvText);
+        // Anonimisasi: identitas tidak ikut terkirim ke AI
+        $cvText = $this->anonymize($cvText, $applicant);
+        $prompt = $this->prompt($pos, $applicant->sim, $cvText);
 
         try {
             $client = new Client(['timeout' => (int) config('services.openrouter.timeout', 60)]);
@@ -62,7 +64,25 @@ class AiScreening
         }
     }
 
-    protected function prompt($applicant, $pos, $cvText)
+    /** Hapus identitas (nama, HP, email, domisili) dari teks CV. */
+    public function anonymize($text, $applicant)
+    {
+        $masks = array_filter([
+            $applicant->nama_lengkap, $applicant->no_hp, $applicant->email, $applicant->domisili,
+        ]);
+        foreach ($masks as $m) {
+            $m = trim($m);
+            if (mb_strlen($m) >= 4) {
+                $text = str_ireplace($m, '[dihapus]', $text);
+            }
+        }
+        // Pola umum: email & nomor HP/WA apa pun
+        $text = preg_replace('/[\w.+-]+@[\w-]+\.[\w.]+/', '[email-dihapus]', $text);
+        $text = preg_replace('/(\+?62|0)8\d{8,12}/', '[hp-dihapus]', $text);
+        return $text;
+    }
+
+    protected function prompt($pos, $sim, $cvText)
     {
         $loker = $pos
             ? "Posisi: {$pos->title} ({$pos->location})\nDeskripsi: " . ($pos->description ?: '-') . "\nRequirement:\n" . ($pos->requirements ?: '-')
@@ -70,8 +90,8 @@ class AiScreening
         $cv = mb_substr($cvText, 0, 6000);
         return "Nilai kecocokan kandidat berikut untuk lowongan ini (Bahasa Indonesia).\n\n"
             . "=== LOWONGAN ===\n$loker\n\n"
-            . "=== DATA KANDIDAT ===\nNama: {$applicant->nama_lengkap}\nDomisili: " . ($applicant->domisili ?: '-') . "\nSIM: " . ($applicant->sim ?: '-') . "\n\n"
-            . "=== ISI CV ===\n$cv\n\n"
+            . "=== DATA KANDIDAT (anonim) ===\nSIM: " . ($sim ?: '-') . "\n\n"
+            . "=== ISI CV (anonim) ===\n$cv\n\n"
             . 'Balas HANYA JSON: {"score": 0-100, "summary": "2 kalimat", "strengths": ["maks 5"], "gaps": ["maks 5"]}';
     }
 

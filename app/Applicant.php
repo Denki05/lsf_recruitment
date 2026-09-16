@@ -11,11 +11,12 @@ class Applicant extends Model
         'jenis_kelamin', 'no_ktp', 'alamat_ktp', 'alamat_sekarang', 'no_hp', 'email', 'domisili', 'sosmed',
         'status_pernikahan', 'agama', 'kendaraan', 'sim',
         'file_path', 'file_original', 'file_mime', 'file_size',
-        'status', 'catatan_admin',
+        'status', 'catatan_admin', 'ai_consent',
         'ai_score', 'ai_summary', 'ai_strengths', 'ai_gaps', 'ai_evaluated_at',
     ];
 
     protected $casts = [
+        'ai_consent' => 'boolean',
         'ai_evaluated_at' => 'datetime',
     ];
 
