@@ -24,6 +24,7 @@ class PositionController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:100',
             'location' => 'required|string|max:100',
+            'syarat_sim' => 'nullable|in:A,B,C',
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
         ]);
@@ -44,6 +45,7 @@ class PositionController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:100',
             'location' => 'required|string|max:100',
+            'syarat_sim' => 'nullable|in:A,B,C',
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
         ]);

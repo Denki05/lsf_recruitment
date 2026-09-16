@@ -11,14 +11,16 @@
   </form>
   <div class="mb-2"><a href="{{ route('admin.applications.export', request()->query()) }}" class="btn btn-sm btn-success"><i class="bi bi-file-earmark-excel"></i> Export CSV/Excel</a></div>
   <div class="table-responsive"><table class="table table-sm table-hover">
-    <tr><th>#</th><th>Tanggal</th><th>Nama</th><th>Posisi</th><th>Status</th><th>Aksi</th></tr>
+    <tr><th>#</th><th>Tanggal</th><th>Nama</th><th>Posisi</th><th>SIM</th><th>Flag</th><th>Status</th><th>Aksi</th></tr>
     @forelse($applicants as $a)<tr>
       <td>{{ $a->id }}</td><td>{{ $a->created_at->format('d/m/Y') }}</td>
       <td><strong>{{ $a->nama_lengkap }}</strong><br><small class="text-muted">{{ $a->no_hp }}</small></td>
       <td><small>{{ $a->position->full_title ?? '-' }}</small></td>
+      <td><small>{{ $a->sim ?: '-' }}</small></td>
+      <td>@if($a->sim_flag=='Cocok')<span class="badge badge-success badge-status">Cocok</span>@elseif($a->sim_flag=='Kurang')<span class="badge badge-danger badge-status">Kurang</span>@else<span class="badge badge-warning badge-status">Ditinjau</span>@endif</td>
       <td><span class="badge badge-info badge-status">{{ $a->status }}</span></td>
       <td class="text-nowrap"><a href="{{ route('admin.applications.show', $a->id) }}" class="btn btn-sm btn-outline-primary">Detail</a> <a href="{{ route('admin.applications.download', $a->id) }}" class="btn btn-sm btn-outline-success">File</a></td>
-    </tr>@empty<tr><td colspan="6" class="text-center text-muted">Tidak ada data.</td></tr>@endforelse
+    </tr>@empty<tr><td colspan="8" class="text-center text-muted">Tidak ada data.</td></tr>@endforelse
   </table></div>
   {{ $applicants->links() }}
 </div>

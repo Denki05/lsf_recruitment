@@ -19,16 +19,14 @@ class ApplicationController extends Controller
 
     public function store(Request $request)
     {
+        // Tahap 1: form cepat (identitas minimal + SIM + CV)
         $validated = $request->validate([
             'nama_lengkap' => 'required|string|max:100',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'status_pernikahan' => 'nullable|in:Belum Menikah,Menikah,Cerai',
-            'agama' => 'nullable|string|max:30',
-            'alamat_ktp' => 'required|string|max:1000',
             'no_hp' => 'required|regex:/^[0-9+\-\s]{10,20}$/',
-            'sosmed' => 'nullable|string|max:255',
-            'kendaraan' => 'required|string|max:30',
-            'sim' => 'required|string|max:30',
+            'email' => 'nullable|email|max:150',
+            'domisili' => 'required|string|max:100',
+            'sim' => 'required|in:A,B,C,A dan C,Tidak Punya',
             'position_id' => 'required|exists:positions,id',
             'berkas' => 'required|file|mimes:pdf,doc,docx,zip|max:5120',
         ], [
@@ -49,12 +47,9 @@ class ApplicationController extends Controller
             'position_id' => $position->id,
             'nama_lengkap' => $validated['nama_lengkap'],
             'jenis_kelamin' => $validated['jenis_kelamin'],
-            'status_pernikahan' => $validated['status_pernikahan'] ?? null,
-            'agama' => $validated['agama'] ?? null,
-            'alamat_ktp' => $validated['alamat_ktp'],
             'no_hp' => $validated['no_hp'],
-            'sosmed' => $validated['sosmed'] ?? null,
-            'kendaraan' => $validated['kendaraan'],
+            'email' => $validated['email'] ?? null,
+            'domisili' => $validated['domisili'],
             'sim' => $validated['sim'],
             'file_path' => $storedPath,
             'file_original' => $file->getClientOriginalName(),

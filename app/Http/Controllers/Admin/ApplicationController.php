@@ -118,14 +118,12 @@ class ApplicationController extends Controller
             $out = fopen('php://output', 'w');
             // BOM agar Excel baca UTF-8 dengan benar
             fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($out, ['Tanggal', 'Nama Lengkap', 'JK', 'Status', 'Agama', 'Alamat', 'HP', 'Sosmed', 'Kendaraan', 'SIM', 'Posisi', 'Lokasi', 'Status Lamaran']);
+            fputcsv($out, ['Tanggal', 'Nama Lengkap', 'JK', 'HP', 'Email', 'Domisili', 'SIM', 'Flag SIM', 'Posisi', 'Lokasi', 'Status Lamaran']);
             foreach ($rows as $r) {
                 fputcsv($out, [
                     $r->created_at->format('Y-m-d H:i'),
-                    $r->nama_lengkap, $r->jenis_kelamin,
-                    $r->status_pernikahan ?: '-', $r->agama ?: '-',
-                    $r->alamat_ktp, $r->no_hp, $r->sosmed,
-                    $r->kendaraan, $r->sim,
+                    $r->nama_lengkap, $r->jenis_kelamin, $r->no_hp,
+                    $r->email ?: '-', $r->domisili ?: '-', $r->sim ?: '-', $r->sim_flag,
                     $r->position->title ?? '-', $r->position->location ?? '-', $r->status,
                 ]);
             }
