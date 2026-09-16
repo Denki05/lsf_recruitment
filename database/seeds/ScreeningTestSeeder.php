@@ -25,8 +25,8 @@ class ScreeningTestSeeder extends Seeder
 
         // Bahan screening tes (hanya diisi bila kosong — tidak menimpa editan)
         $materials = [
-            ['gudang, forklift, stock opname', "Min. pengalaman 2 tahun di logistik\nWajib SIM B aktif", 'B'],
-            ['selling, negosiasi, target pasar', "Min. pengalaman 3 tahun sebagai sales\nWajib SIM A aktif", 'A'],
+            ['gudang, forklift:3, stock opname:2', "Min. pengalaman 2 tahun di logistik\nWajib SIM B aktif", 'B'],
+            ['selling:2, negosiasi:2, target pasar:3', "Min. pengalaman 3 tahun sebagai sales\nWajib SIM A aktif", 'A'],
             ['digital marketing, SEO, konten', "Min. pengalaman 3 tahun di marketing", null],
         ];
         foreach ($positions as $i => $pos) {

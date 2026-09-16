@@ -36,8 +36,8 @@
   </div>
   @if($screening['scorable'] && $screening['score'] !== null)
   <div class="progress mt-1 mb-1" style="height:8px"><div class="progress-bar bg-{{ $screening['score'] >= 70 ? 'success' : ($screening['score'] >= 40 ? 'warning' : 'danger') }}" style="width:{{ $screening['score'] }}%"></div></div>
-  @if(count($screening['matched']))<div style="font-size:12px"><span style="color:var(--muted)">Cocok:</span> @foreach($screening['matched'] as $m)<span class="badge badge-success">{{ $m }}</span> @endforeach</div>@endif
-  @if(count($screening['missing']))<div style="font-size:12px" class="mt-1"><span style="color:var(--muted)">Hilang:</span> @foreach($screening['missing'] as $m)<span class="badge badge-light border">{{ $m }}</span> @endforeach</div>@endif
+  @if(count($screening['matched']))<div style="font-size:12px"><span style="color:var(--muted)">Cocok:</span> @foreach($screening['matched'] as $m)<span class="badge badge-success" title="bobot {{ $m['weight'] }}">{{ $m['label'] }} ×{{ $m['weight'] }}</span> @endforeach</div>@endif
+  @if(count($screening['missing']))<div style="font-size:12px" class="mt-1"><span style="color:var(--muted)">Hilang:</span> @foreach($screening['missing'] as $m)<span class="badge badge-light border" title="bobot {{ $m['weight'] }}">{{ $m['label'] }} ×{{ $m['weight'] }}</span> @endforeach</div>@endif
   @endif
   @if(!empty($screening['note']))<div style="font-size:12px;color:var(--muted)" class="mt-1"><i class="bi bi-info-circle"></i> {{ $screening['note'] }}</div>@endif
 </div>

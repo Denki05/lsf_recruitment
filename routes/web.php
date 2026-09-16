@@ -24,6 +24,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
 
     Route::get('/lamaran', 'Admin\ApplicationController@index')->name('applications.index');
+    Route::post('/lamaran/bulk-status', 'Admin\ApplicationController@bulkStatus')->name('applications.bulk');
     Route::get('/lamaran/export', 'Admin\ApplicationController@export')->name('applications.export');
     Route::get('/lamaran/{id}', 'Admin\ApplicationController@show')->name('applications.show');
     Route::post('/lamaran/{id}/status', 'Admin\ApplicationController@updateStatus')->name('applications.status');

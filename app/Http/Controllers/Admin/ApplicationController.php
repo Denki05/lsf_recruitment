@@ -34,9 +34,49 @@ class ApplicationController extends Controller
             $query->whereDate('created_at', $request->tanggal);
         }
 
-        $applicants = $query->paginate(15)->appends($request->query());
+        // Urut skor tertinggi (dihitung per baris — cocok untuk skala HRD)
+        if ($request->input('sort') === 'skor') {
+            $svc = new \App\Services\CvScreening();
+            $all = $query->get()->map(function ($a) use ($svc) {
+                try {
+                    $a->skor = $svc->score($a)['score'];
+                } catch (\Exception $e) {
+                    $a->skor = null;
+                }
+                return $a;
+            })->sortByDesc(function ($a) {
+                return $a->skor === null ? -1 : $a->skor;
+            })->values();
+            $applicants = $this->paginateManual($all, $request);
+        } else {
+            $applicants = $query->paginate(15)->appends($request->query());
+        }
 
         return view('admin.applications.index', compact('applicants', 'positions'));
+    }
+
+    protected function paginateManual($items, Request $request, $perPage = 15)
+    {
+        $page = max(1, (int) $request->input('page', 1));
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $items->forPage($page, $perPage), $items->count(), $perPage, $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+    }
+
+    /** Ubah status massal dari checkbox tabel. */
+    public function bulkStatus(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'exists:applicants,id',
+            'status' => 'required|in:Baru,Seleksi,Interview,Diterima,Ditolak',
+        ], ['ids.required' => 'Pilih minimal 1 lamaran dulu.']);
+        Applicant::whereIn('id', $request->ids)->update([
+            'status' => $request->status,
+            'updated_at' => now(),
+        ]);
+        return back()->with('success', count($request->ids) . ' lamaran diubah ke ' . $request->status . '.');
     }
 
     public function show($id)
