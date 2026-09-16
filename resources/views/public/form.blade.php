@@ -18,7 +18,7 @@
   <div class="form-group col-md-4"><label class="required">Domisili</label><input name="domisili" class="form-control" value="{{ old('domisili') }}" required maxlength="100" placeholder="cth. Surabaya"></div>
   <div class="form-group col-md-4"><label class="required">Posisi Dilamar</label>
   @if(!empty($selectedPosition))
-    <div class="alert alert-info py-2 mb-0"><i class="bi bi-briefcase-fill"></i> <strong>{{ $selectedPosition->full_title }}</strong></div>
+    <div class="alert alert-info py-1 px-2 mb-0 text-truncate" style="font-size:13px" title="{{ $selectedPosition->full_title }}"><i class="bi bi-briefcase-fill"></i> <strong>{{ $selectedPosition->full_title }}</strong></div>
     <input type="hidden" name="position_id" value="{{ $selectedPosition->id }}">
   @else
     <select name="position_id" class="form-control" required><option value="">-- pilih --</option>@foreach($positions as $p)<option value="{{ $p->id }}" {{ old('position_id')==$p->id?'selected':'' }}>{{ $p->full_title }}</option>@endforeach</select>
