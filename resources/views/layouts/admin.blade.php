@@ -32,7 +32,7 @@ body{background:var(--bg)!important;color:#fff;font-family:-apple-system,BlinkMa
     <a class="nav-button {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
     <a class="nav-button {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}" href="{{ route('admin.applications.index') }}"><i class="bi bi-inbox"></i> Lamaran</a>
     <a class="nav-button {{ request()->routeIs('admin.positions.*') ? 'active' : '' }}" href="{{ route('admin.positions.index') }}"><i class="bi bi-megaphone"></i> Loker</a>
-    <a class="nav-button" href="{{ route('lamaran.form') }}" target="_blank"><i class="bi bi-eye"></i> Lihat Form</a>
+    <a class="nav-button" href="{{ route('jobs.index') }}" target="_blank"><i class="bi bi-eye"></i> Lihat Loker</a>
     <a class="nav-button" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="bi bi-box-arrow-right"></i> Logout</a>
   </div>
   <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display:none">@csrf</form>

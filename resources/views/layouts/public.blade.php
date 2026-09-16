@@ -44,8 +44,8 @@ h5.sect{font-size:16px;margin-bottom:2px;}
 <body>
 <div class="top-hero">
   <div class="container container-narrow text-center">
-    <h3 class="font-weight-bold mb-1"><i class="bi bi-briefcase-fill"></i> Recruitment</h3>
-    <p class="mb-0">Form cepat (< 2 menit). Siapkan CV (PDF/DOC/ZIP, maks 5 MB).</p>
+    <h3 class="font-weight-bold mb-1"><i class="bi bi-briefcase-fill"></i> @yield('hero_title', 'Recruitment')</h3>
+    <p class="mb-0">@yield('hero_sub', 'Form cepat (< 2 menit). Siapkan CV (PDF/DOC/ZIP, maks 5 MB).')</p>
   </div>
 </div>
 <div class="container container-narrow pb-1">

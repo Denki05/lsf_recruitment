@@ -27,6 +27,7 @@ class PositionController extends Controller
             'butuh_sim' => 'nullable|boolean',
             'syarat_sim' => 'nullable|in:A,B,C',
             'description' => 'nullable|string',
+            'requirements' => 'nullable|string',
             'is_active' => 'nullable|boolean',
         ]);
         // Syarat SIM opsional: hanya disimpan bila checkbox dicentang
@@ -56,6 +57,7 @@ class PositionController extends Controller
             'butuh_sim' => 'nullable|boolean',
             'syarat_sim' => 'nullable|in:A,B,C',
             'description' => 'nullable|string',
+            'requirements' => 'nullable|string',
             'is_active' => 'nullable|boolean',
         ]);
         // Syarat SIM opsional: hanya disimpan bila checkbox dicentang

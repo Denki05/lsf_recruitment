@@ -10,6 +10,6 @@
     <tr><th>Berkas</th><td>{{ $applicant->file_original }}</td></tr>
     <tr><th>Tanggal</th><td>{{ $applicant->created_at->format('d M Y H:i') }}</td></tr>
   </table>
-  <a href="{{ route('lamaran.form') }}" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Kembali ke Form</a>
+  <a href="{{ route('jobs.index') }}" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Lihat Loker Lain</a>
 </div>
 @endsection

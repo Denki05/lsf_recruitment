@@ -12,7 +12,8 @@
     <div class="form-row">
       <div class="form-group col-md-4"><label>Jenis SIM yang disyaratkan</label><select name="syarat_sim" id="syaratSim" class="form-control"><option value="">-- pilih --</option>@foreach(['A','B','C'] as $s)<option value="{{ $s }}" {{ old('syarat_sim', $position->syarat_sim)==$s?'selected':'' }}>Wajib SIM {{ $s }}</option>@endforeach</select></div>
     </div>
-    <div class="form-group"><label>Deskripsi</label><textarea name="description" class="form-control" rows="3">{{ old('description', $position->description) }}</textarea></div>
+    <div class="form-group"><label>Deskripsi Pekerjaan</label><textarea name="description" class="form-control" rows="3" placeholder="Gambaran tugas & tanggung jawab">{{ old('description', $position->description) }}</textarea></div>
+    <div class="form-group"><label>Requirement / Kualifikasi</label><textarea name="requirements" class="form-control" rows="4" placeholder="Tulis per baris, cth:&#10;- Min. pengalaman 2 tahun&#10;- Wajib SIM B aktif&#10;- Bersedia dinas luar kota">{{ old('requirements', $position->requirements) }}</textarea></div>
     <div class="form-check mb-3"><input type="checkbox" name="is_active" value="1" class="form-check-input" id="aktif" {{ old('is_active', $position->is_active ?? true) ? 'checked' : '' }}><label class="form-check-label" for="aktif">Aktif (tampil di form pelamar)</label></div>
     <button class="btn btn-primary">Simpan</button> <a href="{{ route('admin.positions.index') }}" class="btn btn-light border">Batal</a>
   </form>

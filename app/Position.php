@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Position extends Model
 {
-    protected $fillable = ['title', 'location', 'syarat_sim', 'description', 'is_active'];
+    protected $fillable = ['title', 'location', 'syarat_sim', 'description', 'requirements', 'is_active'];
 
     protected $casts = ['is_active' => 'boolean'];
 

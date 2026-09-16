@@ -9,9 +9,10 @@
 use Illuminate\Support\Facades\Route;
 
 // Frontend pelamar (publik, tanpa login)
-Route::get('/', 'ApplicationController@create')->name('lamaran.form');
-Route::post('/lamaran', 'ApplicationController@store')->name('lamaran.store');
+Route::get('/', 'JobsController@index')->name('jobs.index');
 Route::get('/lamaran/sukses/{id}', 'ApplicationController@success')->name('lamaran.sukses');
+Route::get('/lamaran/{position?}', 'ApplicationController@create')->name('lamaran.form')->where('position', '[0-9]+');
+Route::post('/lamaran', 'ApplicationController@store')->name('lamaran.store');
 
 // Admin auth
 Route::get('/admin/login', 'Admin\LoginController@showLogin')->name('admin.login');

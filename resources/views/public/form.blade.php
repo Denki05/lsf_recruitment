@@ -2,6 +2,7 @@
 @section('title', 'Form Lamaran Cepat')
 
 @section('content')
+<div class="mb-2"><a href="{{ route('jobs.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Semua Lowongan</a></div>
 <form method="POST" action="{{ route('lamaran.store') }}" enctype="multipart/form-data" id="lamaranForm">
 @csrf
 <p class="step-desc">Isi data singkat di bawah ini (kurang dari 2 menit), lalu upload CV. Data lengkap diminta lagi bila kamu dipanggil ke tahap berikutnya.</p>
@@ -15,7 +16,13 @@
 </div>
 <div class="form-row">
   <div class="form-group col-md-4"><label class="required">Domisili</label><input name="domisili" class="form-control" value="{{ old('domisili') }}" required maxlength="100" placeholder="cth. Surabaya"></div>
-  <div class="form-group col-md-4"><label class="required">Posisi Dilamar</label><select name="position_id" class="form-control" required><option value="">-- pilih --</option>@foreach($positions as $p)<option value="{{ $p->id }}" {{ old('position_id')==$p->id?'selected':'' }}>{{ $p->full_title }}</option>@endforeach</select></div>
+  <div class="form-group col-md-4"><label class="required">Posisi Dilamar</label>
+  @if(!empty($selectedPosition))
+    <div class="alert alert-info py-2 mb-0"><i class="bi bi-briefcase-fill"></i> <strong>{{ $selectedPosition->full_title }}</strong></div>
+    <input type="hidden" name="position_id" value="{{ $selectedPosition->id }}">
+  @else
+    <select name="position_id" class="form-control" required><option value="">-- pilih --</option>@foreach($positions as $p)<option value="{{ $p->id }}" {{ old('position_id')==$p->id?'selected':'' }}>{{ $p->full_title }}</option>@endforeach</select>
+  @endif</div>
   <div class="form-group col-md-4"><label class="required">SIM</label><select name="sim" class="form-control" required><option value="">-- pilih --</option>@foreach(['A','B','C','A dan C','Tidak Punya'] as $s)<option {{ old('sim')==$s?'selected':'' }}>{{ $s }}</option>@endforeach</select></div>
 </div>
 <div class="form-group"><label class="required">Upload CV (PDF/DOC/DOCX/ZIP, maks 5 MB)</label>

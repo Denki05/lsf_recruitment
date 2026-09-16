@@ -11,10 +11,17 @@ use Illuminate\Support\Facades\Storage;
 
 class ApplicationController extends Controller
 {
-    public function create()
+    public function create($position = null)
     {
         $positions = Position::active()->orderBy('title')->get();
-        return view('public.form', compact('positions'));
+        $selectedPosition = null;
+        if ($position) {
+            $selectedPosition = Position::active()->find($position);
+            if (!$selectedPosition) {
+                return redirect()->route('jobs.index');
+            }
+        }
+        return view('public.form', compact('positions', 'selectedPosition'));
     }
 
     public function store(Request $request)
