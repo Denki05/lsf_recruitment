@@ -25,12 +25,19 @@ class CvScreening
             return $this->result(false, null, [], [], 'Posisi tidak ditemukan.');
         }
 
-        $points = []; // ['label'=>, 'weight'=>, 'needles'=>[[kata...]], 'sim'=>?]
+        $points = []; // ['label'=>, 'weight'=>, 'needles'=>[], 'need'=>int|null, 'ratio'=>float|null, 'sim'=>?]
+        // Bonus: skill tags bila admin (pernah) mengisinya
         foreach ($position->skill_list as $s) {
-            $points[] = ['label' => $s['tag'], 'weight' => $s['weight'], 'needles' => [$s['tag']]];
+            $points[] = ['label' => $s['tag'], 'weight' => $s['weight'], 'needles' => [$s['tag']], 'need' => 1];
         }
+        // Otomatis: tiap baris requirement (bobot 2)
         foreach ($position->requirement_list as $line) {
-            $points[] = ['label' => $this->shorten($line), 'weight' => 2, 'needles' => $this->keywords($line)];
+            $points[] = ['label' => $this->shorten($line), 'weight' => 2, 'needles' => $this->keywords($line), 'need' => null, 'ratio' => 0.5];
+        }
+        // Otomatis: kesesuaian deskripsi (bobot 2, cocok bila ≥40% kata penting kena)
+        $descKeys = $this->keywords($position->description ?: '', 5, 30);
+        if (!empty($descKeys)) {
+            $points[] = ['label' => 'Kesesuaian deskripsi', 'weight' => 2, 'needles' => $descKeys, 'need' => null, 'ratio' => 0.4];
         }
         if (!empty($position->syarat_sim)) {
             $points[] = ['label' => 'SIM ' . $position->syarat_sim, 'weight' => 2, 'needles' => [], 'sim' => $position->syarat_sim];
@@ -63,7 +70,9 @@ class CvScreening
                 $missing[] = $this->chip($p);
                 continue;
             }
-            $need = max(1, (int) ceil(count($p['needles']) / 2));
+            $need = isset($p['need']) && $p['need'] !== null
+                ? $p['need']
+                : max(1, (int) ceil(count($p['needles']) * (isset($p['ratio']) ? $p['ratio'] : 0.5)));
             if ($this->hits($cvText, $p['needles'], $need)) {
                 $matched[] = $this->chip($p);
                 $got += $p['weight'];
@@ -93,6 +102,28 @@ class CvScreening
      * Baca teks CV: PDF teks, DOCX, atau PDF di dalam ZIP.
      * Return ['text' => stemmed string ('' bila gagal), 'partial' => bool, 'note' => string]
      */
+    public function getCvText(Applicant $applicant)
+    {
+        return $this->readCvText($applicant);
+    }
+
+    /** Teks CV mentah (untuk AI) — '' bila tidak bisa dibaca. */
+    public function getCvRawText(Applicant $applicant)
+    {
+        $ext = strtolower(pathinfo($applicant->file_original, PATHINFO_EXTENSION));
+        $mime = strtolower($applicant->file_mime ?: '');
+        if ($ext === 'zip') {
+            return $this->extractZipPdf($applicant);
+        }
+        if ($ext === 'docx' || $mime === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+            return $this->extractDocx($applicant);
+        }
+        if ($ext === 'pdf' || $mime === 'application/pdf') {
+            return $this->extractPdf($applicant);
+        }
+        return '';
+    }
+
     protected function readCvText(Applicant $applicant)
     {
         $ext = strtolower(pathinfo($applicant->file_original, PATHINFO_EXTENSION));
@@ -217,17 +248,21 @@ class CvScreening
         return implode(' ', $words);
     }
 
-    /** Kata kunci signifikan (kata ≥4 huruf, di-stem). */
-    protected function keywords($line)
+    /** Kata kunci signifikan (abaikan stopword, opsional batas jumlah). */
+    protected function keywords($line, $minLen = 4, $max = 0)
     {
+        static $stop = ['yang','dan','untuk','dengan','dari','pada','adalah','ini','itu','dalam','sebagai','atau','juga','akan','oleh','karena','agar','supaya','jika','kalau','tidak','bisa','harus','dapat','telah','sudah','sangat','lebih','kurang','para','saja','bila','saat','kepada','terhadap','antara','setelah','sebelum','selama','serta','tetapi','namun','melalui','tanpa','nya'];
         $words = preg_split('/[^\p{L}\p{N}]+/u', mb_strtolower($line));
         $out = [];
         foreach ($words as $w) {
-            if (mb_strlen($w) >= 4) {
+            if (mb_strlen($w) >= $minLen && !in_array($w, $stop, true) && !in_array($w, $out, true)) {
                 $out[] = $w;
             }
         }
-        return array_values(array_unique($out));
+        if ($max > 0) {
+            $out = array_slice($out, 0, $max);
+        }
+        return array_values($out);
     }
 
     /** Cocok bila ≥$need kata kunci kena (substring / stem / typo 1-2 huruf). */

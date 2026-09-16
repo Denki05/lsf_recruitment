@@ -28,6 +28,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/lamaran/export', 'Admin\ApplicationController@export')->name('applications.export');
     Route::get('/lamaran/{id}', 'Admin\ApplicationController@show')->name('applications.show');
     Route::post('/lamaran/{id}/status', 'Admin\ApplicationController@updateStatus')->name('applications.status');
+    Route::post('/lamaran/{id}/ai', 'Admin\ApplicationController@evaluateAi')->name('applications.ai');
     Route::get('/lamaran/{id}/download', 'Admin\ApplicationController@download')->name('applications.download');
     Route::delete('/lamaran/{id}', 'Admin\ApplicationController@destroy')->name('applications.destroy');
 

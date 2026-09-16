@@ -36,7 +36,6 @@
       <td class="text-nowrap">
         <a href="{{ route('admin.applications.show', $a->id) }}" class="btn btn-sm btn-outline-primary">Detail</a>
         <a href="{{ route('admin.applications.download', $a->id) }}" class="btn btn-sm btn-outline-success">File</a>
-        @if($a->wa_link)<a href="{{ $a->wa_link }}" target="_blank" class="btn btn-sm btn-outline-success" title="Chat WA"><i class="bi bi-whatsapp"></i></a>@endif
       </td>
     </tr>@empty<tr><td colspan="7" class="text-center text-muted">Tidak ada data.</td></tr>@endforelse
   </table></div>

@@ -105,6 +105,28 @@ class ApplicationController extends Controller
         return view('admin.applications.show', compact('applicant', 'zipList', 'screening'));
     }
 
+    /** Jalankan evaluasi AI (on-demand, hasil di-cache di DB). */
+    public function evaluateAi($id)
+    {
+        $applicant = Applicant::with('position')->findOrFail($id);
+        $cvText = (new \App\Services\CvScreening())->getCvRawText($applicant);
+        if (trim($cvText) === '') {
+            return back()->withErrors(['ai' => 'Teks CV tidak bisa dibaca AI (bukan PDF/DOCX berteks).']);
+        }
+        $result = (new \App\Services\AiScreening())->evaluate($applicant, $cvText);
+        if (!$result['ok']) {
+            return back()->withErrors(['ai' => $result['error']]);
+        }
+        $applicant->update([
+            'ai_score' => $result['score'],
+            'ai_summary' => $result['summary'],
+            'ai_strengths' => json_encode($result['strengths']),
+            'ai_gaps' => json_encode($result['gaps']),
+            'ai_evaluated_at' => now(),
+        ]);
+        return back()->with('success', 'Evaluasi AI selesai: skor ' . $result['score'] . '%.');
+    }
+
     public function updateStatus(Request $request, $id)
     {
         $request->validate([

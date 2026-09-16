@@ -41,6 +41,23 @@
   @endif
   @if(!empty($screening['note']))<div style="font-size:12px;color:var(--muted)" class="mt-1"><i class="bi bi-info-circle"></i> {{ $screening['note'] }}</div>@endif
 </div>
+<div class="content-card p-2 mb-2" style="border-left:3px solid #6f42c1">
+  <div class="d-flex justify-content-between align-items-center">
+    <h6 class="font-weight-bold mb-0"><i class="bi bi-stars"></i> Evaluasi AI <small style="color:var(--muted)">(OpenRouter, saran — bukan keputusan)</small></h6>
+    @if(!is_null($applicant->ai_score))<span class="badge badge-{{ $applicant->ai_score >= 70 ? 'success' : ($applicant->ai_score >= 40 ? 'warning' : 'danger') }}" style="font-size:13px">{{ $applicant->ai_score }}%</span>@endif
+  </div>
+  @if(!is_null($applicant->ai_score))
+  <div style="font-size:12.5px" class="mt-1">{{ $applicant->ai_summary }}</div>
+  @php($str = json_decode($applicant->ai_strengths ?: '[]', true) ?: [])
+  @php($gaps = json_decode($applicant->ai_gaps ?: '[]', true) ?: [])
+  @if(count($str))<div style="font-size:12px" class="mt-1"><span style="color:var(--muted)">Plus:</span> @foreach($str as $s)<span class="badge badge-success">{{ $s }}</span> @endforeach</div>@endif
+  @if(count($gaps))<div style="font-size:12px" class="mt-1"><span style="color:var(--muted)">Minus:</span> @foreach($gaps as $g)<span class="badge badge-light border">{{ $g }}</span> @endforeach</div>@endif
+  <div style="font-size:11px;color:var(--muted)" class="mt-1">Dievaluasi {{ $applicant->ai_evaluated_at ? $applicant->ai_evaluated_at->format('d M Y H:i') : '-' }}</div>
+  @else
+  <div style="font-size:12px;color:var(--muted)" class="mt-1">Belum dievaluasi. Sekali klik, hasil tersimpan dan tidak dihitung ulang.</div>
+  @endif
+  <form method="POST" action="{{ route('admin.applications.ai', $applicant->id) }}" class="mt-1">@csrf<button class="btn btn-sm btn-outline-primary"><i class="bi bi-stars"></i> {{ is_null($applicant->ai_score) ? 'Jalankan Evaluasi AI' : 'Evaluasi Ulang' }}</button></form>
+</div>
 <div class="content-card p-2 mb-2">
   <form method="POST" action="{{ route('admin.applications.status', $applicant->id) }}">@csrf
   <div class="form-row align-items-end">
