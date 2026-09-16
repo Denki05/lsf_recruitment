@@ -24,11 +24,13 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
 
     Route::get('/lamaran', 'Admin\ApplicationController@index')->name('applications.index');
+    Route::get('/lamaran/banding', 'Admin\ApplicationController@compare')->name('applications.compare');
     Route::post('/lamaran/bulk-status', 'Admin\ApplicationController@bulkStatus')->name('applications.bulk');
     Route::get('/lamaran/export', 'Admin\ApplicationController@export')->name('applications.export');
     Route::get('/lamaran/{id}', 'Admin\ApplicationController@show')->name('applications.show');
     Route::post('/lamaran/{id}/status', 'Admin\ApplicationController@updateStatus')->name('applications.status');
     Route::post('/lamaran/{id}/ai', 'Admin\ApplicationController@evaluateAi')->name('applications.ai');
+    Route::post('/lamaran/{id}/ai-reuse', 'Admin\ApplicationController@reuseAi')->name('applications.aiReuse');
     Route::get('/lamaran/{id}/download', 'Admin\ApplicationController@download')->name('applications.download');
     Route::delete('/lamaran/{id}', 'Admin\ApplicationController@destroy')->name('applications.destroy');
 

@@ -20,24 +20,29 @@
     <div class="col-auto ml-auto">
       @if(request('sort') === 'skor')
       <a href="{{ route('admin.applications.index', \Illuminate\Support\Arr::except(request()->query(), ['sort', 'page'])) }}" class="btn btn-sm btn-secondary"><i class="bi bi-arrow-down-up"></i> Urutan normal</a>
+      @elseif(request('sort') === 'ai')
+      <a href="{{ route('admin.applications.index', \Illuminate\Support\Arr::except(request()->query(), ['sort', 'page'])) }}" class="btn btn-sm btn-secondary"><i class="bi bi-arrow-down-up"></i> Urutan normal</a>
       @else
       <a href="{{ route('admin.applications.index', array_merge(request()->query(), ['sort' => 'skor'])) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-trophy"></i> Urut skor</a>
+      <a href="{{ route('admin.applications.index', array_merge(request()->query(), ['sort' => 'ai'])) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-stars"></i> Urut AI</a>
       @endif
+      <button type="button" class="btn btn-sm btn-outline-primary" id="compareBtn"><i class="bi bi-columns-gap"></i> Banding</button>
     </div>
   </div>
   <div class="table-responsive"><table class="table table-sm table-hover">
-    <tr><th></th><th>#</th><th>Tanggal</th><th>Nama</th><th>Posisi</th><th>Status</th><th>Aksi</th></tr>
+    <tr><th></th><th>#</th><th>Tanggal</th><th>Nama</th><th>Posisi</th><th>Status</th><th>AI</th><th>Aksi</th></tr>
     @forelse($applicants as $a)<tr>
       <td><input type="checkbox" name="ids[]" value="{{ $a->id }}" class="row-check"></td>
       <td>{{ $a->id }}</td><td>{{ $a->created_at->format('d/m/Y') }}</td>
       <td><strong>{{ $a->nama_lengkap }}</strong><br><small class="text-muted">{{ $a->no_hp }}</small></td>
       <td><small>{{ $a->position->full_title ?? '-' }}</small></td>
       <td><span class="badge badge-info badge-status">{{ $a->status }}</span>@if(isset($a->skor) && $a->skor !== null)<br><small class="badge badge-light border mt-1">{{ $a->skor }}%</small>@endif</td>
+      <td>{!! is_null($a->ai_score) ? '<small class="text-muted">-</small>' : '<span class="badge badge-primary badge-status">' . $a->ai_score . '%</span>' !!}</td>
       <td class="text-nowrap">
         <a href="{{ route('admin.applications.show', $a->id) }}" class="btn btn-sm btn-outline-primary">Detail</a>
         <a href="{{ route('admin.applications.download', $a->id) }}" class="btn btn-sm btn-outline-success">File</a>
       </td>
-    </tr>@empty<tr><td colspan="7" class="text-center text-muted">Tidak ada data.</td></tr>@endforelse
+    </tr>@empty<tr><td colspan="8" class="text-center text-muted">Tidak ada data.</td></tr>@endforelse
   </table></div>
   </form>
   {{ $applicants->appends(request()->query())->links() }}

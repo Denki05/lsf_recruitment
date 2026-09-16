@@ -60,8 +60,26 @@
   <div style="font-size:12px;color:var(--muted)" class="mt-1"><i class="bi bi-shield-lock"></i> Pelamar tidak menyetujui pemrosesan AI — evaluasi terkunci.</div>
   @else
   <form method="POST" action="{{ route('admin.applications.ai', $applicant->id) }}" class="mt-1">@csrf<button class="btn btn-sm btn-outline-primary"><i class="bi bi-stars"></i> {{ is_null($applicant->ai_score) ? 'Jalankan Evaluasi AI' : 'Evaluasi Ulang' }}</button></form>
+  @if(is_null($applicant->ai_score))
+  <form method="POST" action="{{ route('admin.applications.aiReuse', $applicant->id) }}" class="mt-1">@csrf<button class="btn btn-sm btn-outline-secondary"><i class="bi bi-clock-history"></i> Salin dari riwayat (tanpa AI)</button></form>
+  @endif
   @endif
 </div>
+@if(count($history))
+<div class="content-card p-2 mb-2">
+  <h6 class="font-weight-bold">Riwayat Pelamar Ini <small style="color:var(--muted)">(no HP sama)</small></h6>
+  <div class="table-responsive"><table class="table table-sm table-hover mb-0">
+    <tr><th>#</th><th>Tanggal</th><th>Posisi</th><th>Status</th><th>Skor AI</th><th></th></tr>
+    @foreach($history as $h)<tr>
+      <td>{{ $h->id }}</td><td>{{ $h->created_at->format('d/m/Y') }}</td>
+      <td><small>{{ $h->position->full_title ?? '-' }}</small></td>
+      <td><span class="badge badge-info badge-status">{{ $h->status }}</span></td>
+      <td>{{ is_null($h->ai_score) ? '-' : $h->ai_score . '%' }}</td>
+      <td><a href="{{ route('admin.applications.show', $h->id) }}" class="btn btn-sm btn-outline-primary">Buka</a></td>
+    </tr>@endforeach
+  </table></div>
+</div>
+@endif
 <div class="content-card p-2 mb-2">
   <form method="POST" action="{{ route('admin.applications.status', $applicant->id) }}">@csrf
   <div class="form-row align-items-end">

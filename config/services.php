@@ -32,8 +32,8 @@ return [
 
     'openrouter' => [
         'key' => env('OPENROUTER_API_KEY'),
-        'model' => env('OPENROUTER_MODEL', 'meta-llama/llama-3.1-8b-instruct'),
-        'timeout' => env('OPENROUTER_TIMEOUT', 60),
+        'model' => env('OPENROUTER_MODEL', 'meta-llama/llama-3.1-8b-instruct:free'),
+        'timeout' => env('OPENROUTER_TIMEOUT', 90),
     ],
 
 ];

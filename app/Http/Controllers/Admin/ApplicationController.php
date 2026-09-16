@@ -34,8 +34,11 @@ class ApplicationController extends Controller
             $query->whereDate('created_at', $request->tanggal);
         }
 
-        // Urut skor tertinggi (dihitung per baris — cocok untuk skala HRD)
-        if ($request->input('sort') === 'skor') {
+        // Urut skor AI (level DB, null di bawah) atau skor keyword (dihitung per baris)
+        if ($request->input('sort') === 'ai') {
+            $query->orderByRaw('ai_score IS NULL, ai_score DESC');
+            $applicants = $query->paginate(15)->appends($request->query());
+        } elseif ($request->input('sort') === 'skor') {
             $svc = new \App\Services\CvScreening();
             $all = $query->get()->map(function ($a) use ($svc) {
                 try {
@@ -79,6 +82,52 @@ class ApplicationController extends Controller
         return back()->with('success', count($request->ids) . ' lamaran diubah ke ' . $request->status . '.');
     }
 
+    /** Bandingkan 2-4 kandidat berdampingan (skor keyword + AI + data). */
+    public function compare(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:2|max:4',
+            'ids.*' => 'exists:applicants,id',
+        ], ['ids.required' => 'Centang 2-4 lamaran untuk dibandingkan.', 'ids.min' => 'Pilih minimal 2 lamaran.', 'ids.max' => 'Maksimal 4 lamaran.']);
+        $svc = new \App\Services\CvScreening();
+        $rows = Applicant::with('position')->whereIn('id', $request->ids)->get();
+        $data = [];
+        foreach ($rows as $a) {
+            try {
+                $kw = $svc->score($a);
+            } catch (\Exception $e) {
+                $kw = ['score' => null];
+            }
+            $data[] = ['applicant' => $a, 'skor' => isset($kw['score']) ? $kw['score'] : null];
+        }
+        usort($data, function ($x, $y) {
+            return ($y['skor'] === null ? -1 : $y['skor']) - ($x['skor'] === null ? -1 : $x['skor']);
+        });
+        return view('admin.applications.compare', compact('data'));
+    }
+
+    /** Salin evaluasi AI terakhir pelamar yang sama (tanpa hit API). */
+    public function reuseAi($id)
+    {
+        $applicant = Applicant::findOrFail($id);
+        $prev = Applicant::where('id', '<>', $id)
+            ->where('no_hp', $applicant->no_hp)
+            ->whereNotNull('ai_score')
+            ->latest('ai_evaluated_at')
+            ->first();
+        if (!$prev) {
+            return back()->withErrors(['ai' => 'Tidak ada riwayat evaluasi AI untuk pelamar ini.']);
+        }
+        $applicant->update([
+            'ai_score' => $prev->ai_score,
+            'ai_summary' => $prev->ai_summary . ' (disalin dari lamaran #' . $prev->id . ')',
+            'ai_strengths' => $prev->ai_strengths,
+            'ai_gaps' => $prev->ai_gaps,
+            'ai_evaluated_at' => now(),
+        ]);
+        return back()->with('success', 'Evaluasi disalin dari riwayat (skor ' . $prev->ai_score . '%) tanpa hit AI.');
+    }
+
     public function show($id)
     {
         $applicant = Applicant::with('position')->findOrFail($id);
@@ -102,7 +151,14 @@ class ApplicationController extends Controller
         } catch (\Exception $e) {
             $screening = ['scorable' => false, 'score' => null, 'matched' => [], 'missing' => [], 'note' => 'Gagal menghitung saran.'];
         }
-        return view('admin.applications.show', compact('applicant', 'zipList', 'screening'));
+        // Riwayat lamaran pelamar yang sama (no HP sama)
+        $history = Applicant::with('position')
+            ->where('id', '<>', $applicant->id)
+            ->where('no_hp', $applicant->no_hp)
+            ->latest()
+            ->take(5)
+            ->get();
+        return view('admin.applications.show', compact('applicant', 'zipList', 'screening', 'history'));
     }
 
     /** Jalankan evaluasi AI (on-demand, hasil di-cache di DB). */
