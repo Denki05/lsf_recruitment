@@ -56,7 +56,13 @@ class ApplicationController extends Controller
                 }
             }
         }
-        return view('admin.applications.show', compact('applicant', 'zipList'));
+        // Saran kecocokan (tidak pernah menggagalkan halaman)
+        try {
+            $screening = (new \App\Services\CvScreening())->score($applicant);
+        } catch (\Exception $e) {
+            $screening = ['scorable' => false, 'score' => null, 'matched' => [], 'missing' => [], 'note' => 'Gagal menghitung saran.'];
+        }
+        return view('admin.applications.show', compact('applicant', 'zipList', 'screening'));
     }
 
     public function updateStatus(Request $request, $id)

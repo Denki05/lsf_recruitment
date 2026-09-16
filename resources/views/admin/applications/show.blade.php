@@ -29,6 +29,18 @@
     @if(count($zipList))<div class="alert alert-info mt-2 mb-0 py-1" style="font-size:12px"><strong>Isi ZIP:</strong><ul class="mb-0 pl-3">@foreach($zipList as $z)<li>{{ $z }}</li>@endforeach</ul></div>@endif
   </div></div>
 </div>
+<div class="content-card p-2 mb-2" style="border-left:3px solid var(--brand)">
+  <div class="d-flex justify-content-between align-items-center">
+    <h6 class="font-weight-bold mb-0">Saran Kecocokan <small style="color:var(--muted)">(bukan keputusan)</small></h6>
+    @if($screening['scorable'] && $screening['score'] !== null)<span class="badge badge-{{ $screening['score'] >= 70 ? 'success' : ($screening['score'] >= 40 ? 'warning' : 'danger') }}" style="font-size:13px">{{ $screening['score'] }}%</span>@endif
+  </div>
+  @if($screening['scorable'] && $screening['score'] !== null)
+  <div class="progress mt-1 mb-1" style="height:8px"><div class="progress-bar bg-{{ $screening['score'] >= 70 ? 'success' : ($screening['score'] >= 40 ? 'warning' : 'danger') }}" style="width:{{ $screening['score'] }}%"></div></div>
+  @if(count($screening['matched']))<div style="font-size:12px"><span style="color:var(--muted)">Cocok:</span> @foreach($screening['matched'] as $m)<span class="badge badge-success">{{ $m }}</span> @endforeach</div>@endif
+  @if(count($screening['missing']))<div style="font-size:12px" class="mt-1"><span style="color:var(--muted)">Hilang:</span> @foreach($screening['missing'] as $m)<span class="badge badge-light border">{{ $m }}</span> @endforeach</div>@endif
+  @endif
+  @if(!empty($screening['note']))<div style="font-size:12px;color:var(--muted)" class="mt-1"><i class="bi bi-info-circle"></i> {{ $screening['note'] }}</div>@endif
+</div>
 <div class="content-card p-2 mb-2">
   <form method="POST" action="{{ route('admin.applications.status', $applicant->id) }}">@csrf
   <div class="form-row align-items-end">

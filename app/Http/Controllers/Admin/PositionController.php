@@ -28,8 +28,18 @@ class PositionController extends Controller
             'syarat_sim' => 'nullable|in:A,B,C',
             'description' => 'nullable|string',
             'requirements' => 'nullable|string',
+            'skill_tags' => 'nullable|string|max:500',
             'is_active' => 'nullable|boolean',
         ]);
+        // Requirement baku: tiap baris min. 3 karakter
+        if (!empty($data['requirements'])) {
+            $lines = preg_split('/\r\n|\r|\n/', $data['requirements']);
+            foreach ($lines as $l) {
+                if (mb_strlen(trim($l)) > 0 && mb_strlen(trim($l)) < 3) {
+                    return back()->withErrors(['requirements' => 'Tiap baris requirement min. 3 karakter, 1 poin per baris.'])->withInput();
+                }
+            }
+        }
         // Syarat SIM opsional: hanya disimpan bila checkbox dicentang
         if ($request->boolean('butuh_sim') && !empty($data['syarat_sim'])) {
             $data['syarat_sim'] = $data['syarat_sim'];
@@ -58,8 +68,18 @@ class PositionController extends Controller
             'syarat_sim' => 'nullable|in:A,B,C',
             'description' => 'nullable|string',
             'requirements' => 'nullable|string',
+            'skill_tags' => 'nullable|string|max:500',
             'is_active' => 'nullable|boolean',
         ]);
+        // Requirement baku: tiap baris min. 3 karakter
+        if (!empty($data['requirements'])) {
+            $lines = preg_split('/\r\n|\r|\n/', $data['requirements']);
+            foreach ($lines as $l) {
+                if (mb_strlen(trim($l)) > 0 && mb_strlen(trim($l)) < 3) {
+                    return back()->withErrors(['requirements' => 'Tiap baris requirement min. 3 karakter, 1 poin per baris.'])->withInput();
+                }
+            }
+        }
         // Syarat SIM opsional: hanya disimpan bila checkbox dicentang
         if ($request->boolean('butuh_sim') && !empty($data['syarat_sim'])) {
             $data['syarat_sim'] = $data['syarat_sim'];
