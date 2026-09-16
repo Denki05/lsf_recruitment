@@ -24,11 +24,11 @@ body{background:#f0f2f5;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
 .step-item.done{background:#e9f7ef;border-color:#198754;color:#198754;}
 .step-item.done .num{background:#198754;}
 .step-desc{font-size:12.5px;color:#6c757d;margin-bottom:8px;}
-.dropzone{border:2px dashed #adb5bd;border-radius:12px;padding:14px;text-align:center;cursor:pointer;background:#f8f9fa;transition:border-color .2s,background .2s;}
+.dropzone{border:2px dashed #adb5bd;border-radius:10px;padding:8px 12px;text-align:center;cursor:pointer;background:#f8f9fa;transition:border-color .2s,background .2s;display:flex;align-items:center;justify-content:center;gap:10px;}
 .dropzone:hover,.dropzone.dragover{border-color:#0d6efd;background:#e7f0fd;}
-.dropzone .dz-icon{font-size:30px;color:#0d6efd;}
-.dropzone .dz-text{font-size:14px;font-weight:600;}
-.dropzone .dz-sub{font-size:12px;color:#6c757d;}
+.dropzone .dz-icon{font-size:24px;color:#0d6efd;flex-shrink:0;}
+.dropzone .dz-text{font-size:13.5px;font-weight:600;text-align:left;}
+.dropzone .dz-sub{font-size:11.5px;color:#6c757d;text-align:left;}
 .step-pane{display:none;}
 .step-pane.active{display:block;}
 .form-group{margin-bottom:10px;}

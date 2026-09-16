@@ -5,7 +5,7 @@
 <div class="mb-2"><a href="{{ route('jobs.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Semua Lowongan</a></div>
 <form method="POST" action="{{ route('lamaran.store') }}" enctype="multipart/form-data" id="lamaranForm">
 @csrf
-<p class="step-desc">Isi data singkat di bawah ini (kurang dari 2 menit), lalu upload CV. Data lengkap diminta lagi bila kamu dipanggil ke tahap berikutnya.</p>
+<p class="step-desc">Isi singkat (< 2 menit) + upload CV. Data lengkap diminta lagi bila kamu dipanggil.</p>
 <div class="form-row">
   <div class="form-group col-md-6"><label class="required">Nama Lengkap</label><input name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap') }}" required maxlength="100"></div>
   <div class="form-group col-md-6"><label class="required">Jenis Kelamin</label><select name="jenis_kelamin" class="form-control" required><option value="">-- pilih --</option><option {{ old('jenis_kelamin')=='Laki-laki'?'selected':'' }}>Laki-laki</option><option {{ old('jenis_kelamin')=='Perempuan'?'selected':'' }}>Perempuan</option></select></div>
@@ -28,8 +28,8 @@
 <div class="form-group"><label class="required">Upload CV (PDF/DOC/DOCX/ZIP, maks 5 MB)</label>
   <div class="dropzone" id="dropzone">
     <div class="dz-icon"><i class="bi bi-cloud-arrow-up-fill"></i></div>
-    <div class="dz-text">Seret & letakkan file di sini, atau <u>klik untuk pilih file</u></div>
-    <div class="dz-sub" id="fileInfo">Nama file saat diunduh HRD: NamaPelamar-Posisi-Tanggal.ext</div>
+    <div><div class="dz-text">Seret & letakkan file di sini, atau <u>klik untuk pilih file</u></div>
+    <div class="dz-sub" id="fileInfo">CV: PDF/DOC/ZIP maks 5 MB → terunduh HRD sebagai Nama-Posisi-Tanggal.ext</div></div>
   </div>
   <input type="file" name="berkas" id="berkas" accept=".pdf,.doc,.docx,.zip" required hidden>
 </div>
