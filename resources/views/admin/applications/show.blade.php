@@ -1,36 +1,46 @@
 @extends('layouts.admin')
 @section('title', 'Detail Lamaran')
 @section('content')
-<div class="content-card p-2">
-  <div class="d-flex justify-content-between align-items-center mb-2">
-    <h5 class="font-weight-bold mb-0">{{ $applicant->nama_lengkap }}</h5>
-    <span class="badge badge-primary">{{ $applicant->status }}</span>
+<div class="mb-2"><a href="{{ route('admin.applications.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Kembali</a></div>
+<div class="row">
+  <div class="col-md-7 mb-2"><div class="content-card p-2" style="height:100%">
+    <div class="d-flex justify-content-between align-items-center mb-1">
+      <h5 class="font-weight-bold mb-0" style="font-size:15px">{{ $applicant->nama_lengkap }}</h5>
+      <span class="badge badge-primary">{{ $applicant->status }}</span>
+    </div>
+    <div class="mb-2" style="font-size:12px;color:var(--muted)"><i class="bi bi-briefcase"></i> {{ $applicant->position->full_title ?? '-' }} &nbsp;·&nbsp; <i class="bi bi-clock"></i> {{ $applicant->created_at->format('d M Y H:i') }}</div>
+    <div class="row" style="font-size:12.5px">
+      <div class="col-6 mb-1"><span style="color:var(--muted)">JK</span><br><strong>{{ $applicant->jenis_kelamin }}</strong></div>
+      <div class="col-6 mb-1"><span style="color:var(--muted)">HP / WA</span><br><strong>{{ $applicant->no_hp }}</strong></div>
+      <div class="col-6 mb-1"><span style="color:var(--muted)">Domisili</span><br><strong>{{ $applicant->domisili ?: '-' }}</strong></div>
+      <div class="col-6 mb-1"><span style="color:var(--muted)">Email</span><br><strong>{{ $applicant->email ?: '-' }}</strong></div>
+      <div class="col-6 mb-1"><span style="color:var(--muted)">SIM</span><br><strong>{{ $applicant->sim ?: '-' }}</strong></div>
+      <div class="col-6 mb-1"><span style="color:var(--muted)">Sosmed</span><br><strong>{{ $applicant->sosmed ?: '-' }}</strong></div>
+    </div>
+  </div></div>
+  <div class="col-md-5 mb-2"><div class="content-card p-2" style="height:100%">
+    <h6 class="font-weight-bold">Berkas</h6>
+    <div class="d-flex align-items-center mb-2" style="gap:8px">
+      <span style="font-size:26px;color:#c81e3a"><i class="bi bi-file-earmark-text-fill"></i></span>
+      <div style="font-size:12.5px;min-width:0"><strong class="d-block text-truncate">{{ $applicant->file_original }}</strong><span style="color:var(--muted)">{{ number_format(($applicant->file_size?:0)/1024,0) }} KB</span></div>
+    </div>
+    <a href="{{ route('admin.applications.download', $applicant->id) }}" class="btn btn-sm btn-success btn-block"><i class="bi bi-download"></i> Download</a>
+    <small style="color:var(--muted)">Tersimpan sebagai:<br>{{ $applicant->download_name }}</small>
+    @if(count($zipList))<div class="alert alert-info mt-2 mb-0 py-1" style="font-size:12px"><strong>Isi ZIP:</strong><ul class="mb-0 pl-3">@foreach($zipList as $z)<li>{{ $z }}</li>@endforeach</ul></div>@endif
+  </div></div>
+</div>
+<div class="content-card p-2 mb-2">
+  <form method="POST" action="{{ route('admin.applications.status', $applicant->id) }}">@csrf
+  <div class="form-row align-items-end">
+    <div class="form-group col-md-3 mb-0"><label>Ubah Status</label><select name="status" class="form-control form-control-sm">@foreach(['Baru','Seleksi','Interview','Diterima','Ditolak'] as $s)<option {{ $applicant->status==$s?'selected':'' }}>{{ $s }}</option>@endforeach</select></div>
+    <div class="form-group col-md-7 mb-0"><label>Catatan Admin</label><input name="catatan_admin" class="form-control form-control-sm" value="{{ $applicant->catatan_admin }}" placeholder="cth. Cocok, panggil interview Senin"></div>
+    <div class="form-group col-md-2 mb-0"><button class="btn btn-sm btn-primary btn-block">Simpan</button></div>
   </div>
-  <p class="text-muted">{{ $applicant->position->full_title ?? '-' }} — masuk {{ $applicant->created_at->format('d M Y H:i') }}</p>
-  <div class="row">
-    <div class="col-md-6"><table class="table table-sm">
-      <tr><th width="35%">JK</th><td>{{ $applicant->jenis_kelamin }}</td></tr>
-      <tr><th>Domisili</th><td>{{ $applicant->domisili ?: '-' }}</td></tr>
-      <tr><th>Email</th><td>{{ $applicant->email ?: '-' }}</td></tr>
-      <tr><th>SIM</th><td>{{ $applicant->sim ?: '-' }}</td></tr>
-    </table></div>
-    <div class="col-md-6"><table class="table table-sm">
-      <tr><th width="35%">HP</th><td>{{ $applicant->no_hp }}</td></tr>
-      <tr><th>Sosmed</th><td>{{ $applicant->sosmed ?: '-' }}</td></tr>
-      <tr><th>Berkas</th><td>{{ $applicant->file_original }} ({{ number_format(($applicant->file_size?:0)/1024,0) }} KB)<br><a href="{{ route('admin.applications.download', $applicant->id) }}" class="btn btn-sm btn-success mt-1"><i class="bi bi-download"></i> Download (nama: {{ $applicant->download_name }})</a></td></tr>
-    </table></div>
-  </div>
-  @if(count($zipList))<div class="alert alert-info"><strong>Isi ZIP:</strong><ul class="mb-0">@foreach($zipList as $z)<li>{{ $z }}</li>@endforeach</ul></div>@endif
-
-  <hr>
-  <form method="POST" action="{{ route('admin.applications.status', $applicant->id) }}" class="form-row">@csrf
-    <div class="form-group col-md-3"><label>Status</label><select name="status" class="form-control form-control-sm">@foreach(['Baru','Seleksi','Interview','Diterima','Ditolak'] as $s)<option {{ $applicant->status==$s?'selected':'' }}>{{ $s }}</option>@endforeach</select></div>
-    <div class="form-group col-md-7"><label>Catatan Admin</label><input name="catatan_admin" class="form-control form-control-sm" value="{{ $applicant->catatan_admin }}"></div>
-    <div class="form-group col-md-2"><label>&nbsp;</label><button class="btn btn-sm btn-primary btn-block">Simpan</button></div>
   </form>
-  <div class="d-flex justify-content-between">
-    <a href="{{ route('admin.applications.index') }}" class="btn btn-sm btn-light border">Kembali</a>
-    <form method="POST" action="{{ route('admin.applications.destroy', $applicant->id) }}" onsubmit="return confirm('Hapus data ini?')">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger">Hapus</button></form>
-  </div>
+</div>
+<div class="content-card p-2">
+  <form method="POST" action="{{ route('admin.applications.destroy', $applicant->id) }}" onsubmit="return confirm('Hapus data lamaran ini beserta file-nya?')">@csrf @method('DELETE')
+    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Hapus Lamaran</button>
+  </form>
 </div>
 @endsection
