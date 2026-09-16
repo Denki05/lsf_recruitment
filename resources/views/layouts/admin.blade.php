@@ -49,7 +49,7 @@ a.stat-link:hover{text-decoration:none;} a.stat-link:hover .stat{border-color:va
   <a class="nav-link-btn" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="bi bi-box-arrow-right"></i> Keluar</a>
   <span class="ml-auto d-none d-md-inline" style="font-size:12px;opacity:.85">{{ Auth::user()->name ?? '' }}</span>
 </div></nav>
-<div class="container admin-wrap py-2" style="min-height:90vh">
+<div class="container admin-wrap py-2">
   <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display:none">@csrf</form>
 
   @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
