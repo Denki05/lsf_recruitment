@@ -34,7 +34,7 @@
   <input type="file" name="berkas" id="berkas" accept=".pdf,.doc,.docx,.zip" required hidden>
 </div>
 <button type="submit" class="btn btn-success btn-block"><i class="bi bi-send"></i> Kirim Lamaran</button>
-<div class="form-check mt-2"><input type="checkbox" name="ai_consent" value="1" id="aiConsent" class="form-check-input" required {{ old('ai_consent') ? 'checked' : '' }}><label class="form-check-label" for="aiConsent" style="font-size:12.5px">Saya menyatakan data di atas benar dan <strong>menyetujui CV diproses otomatis (termasuk AI)</strong> untuk keperluan rekrutmen.</label></div>
+<div class="form-check mt-2"><input type="checkbox" name="ai_consent" value="1" id="aiConsent" class="form-check-input" required {{ old('ai_consent') ? 'checked' : '' }}><label class="form-check-label" for="aiConsent" style="font-size:12.5px">Saya menyatakan data di atas benar dan <strong>menyetujui CV diproses</strong> untuk keperluan rekrutmen.</label></div>
 </form>
 
 @push('scripts')
