@@ -40,6 +40,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             cache()->forget($key);
+            $request->session()->forget('current_branch_id');
             return redirect()->intended(route('admin.dashboard'));
         }
 

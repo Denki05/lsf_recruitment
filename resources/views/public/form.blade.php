@@ -15,10 +15,16 @@
   <div class="form-group col-md-6"><label>Email</label><input type="email" name="email" class="form-control" value="{{ old('email') }}" maxlength="150" placeholder="opsional"></div>
 </div>
 <div class="form-row">
+  <div class="form-group col-md-4"><label class="required">Tanggal Lahir</label><input type="date" name="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir') }}" required max="{{ date('Y-m-d') }}"></div>
+  <div class="form-group col-md-4"><label class="required">Jenjang Pendidikan</label><select name="education" class="form-control" required><option value="">-- pilih --</option>@foreach($educations as $e)<option value="{{ $e }}" {{ old('education')==$e?'selected':'' }}>{{ $e }}</option>@endforeach</select></div>
+  <div class="form-group col-md-4"><label class="required">Permintaan Gaji (Rp)</label><input type="number" name="expected_salary" class="form-control" value="{{ old('expected_salary') }}" required min="0" max="1000000000" placeholder="cth. 5000000"></div>
+</div>
+<div class="form-group"><div class="form-check"><input type="checkbox" name="willing_overtime" value="1" id="lembur" class="form-check-input" {{ old('willing_overtime') ? 'checked' : '' }}><label class="form-check-label" for="lembur">Bersedia lembur di luar jam kerja</label></div></div>
+<div class="form-row">
   <div class="form-group col-md-4"><label class="required">Domisili</label><input name="domisili" class="form-control" value="{{ old('domisili') }}" required maxlength="100" placeholder="cth. Surabaya"></div>
   <div class="form-group col-md-4"><label class="required">Posisi Dilamar</label>
   @if(!empty($selectedPosition))
-    <div class="alert alert-info py-1 px-2 mb-0 text-truncate" style="font-size:13px" title="{{ $selectedPosition->full_title }}"><i class="bi bi-briefcase-fill"></i> <strong>{{ $selectedPosition->full_title }}</strong></div>
+    <div class="alert alert-info py-1 px-2 mb-0 text-truncate" style="font-size:13px" title="{{ $selectedPosition->full_title }}"><i class="bi bi-briefcase-fill"></i> <strong>{{ $selectedPosition->full_title }}</strong>@if($selectedPosition->branch)<br><small><i class="bi bi-diagram-3"></i> {{ $selectedPosition->branch->name }}{{ $selectedPosition->branch->location ? ' — '.$selectedPosition->branch->location : '' }}</small>@endif</div>
     <input type="hidden" name="position_id" value="{{ $selectedPosition->id }}">
   @else
     <select name="position_id" class="form-control" required><option value="">-- pilih --</option>@foreach($positions as $p)<option value="{{ $p->id }}" {{ old('position_id')==$p->id?'selected':'' }}>{{ $p->full_title }}</option>@endforeach</select>

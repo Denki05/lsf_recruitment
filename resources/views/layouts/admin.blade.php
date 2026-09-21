@@ -45,7 +45,22 @@ a.stat-link:hover{text-decoration:none;} a.stat-link:hover .stat{border-color:va
   <a class="nav-link-btn {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a>
   <a class="nav-link-btn {{ request()->routeIs('admin.applications.*') ? 'active' : '' }}" href="{{ route('admin.applications.index') }}"><i class="bi bi-inbox"></i> Lamaran</a>
   <a class="nav-link-btn {{ request()->routeIs('admin.positions.*') ? 'active' : '' }}" href="{{ route('admin.positions.index') }}"><i class="bi bi-megaphone"></i> Loker</a>
+  @if(Auth::check() && Auth::user()->isSuperadmin())
+  <a class="nav-link-btn {{ request()->routeIs('admin.branches.*') ? 'active' : '' }}" href="{{ route('admin.branches.index') }}"><i class="bi bi-diagram-3"></i> Cabang</a>
+  <a class="nav-link-btn {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}"><i class="bi bi-people"></i> Login</a>
+  @endif
   <a class="nav-link-btn" href="{{ route('jobs.index') }}" target="_blank"><i class="bi bi-eye"></i> Situs</a>
+  @php($myBranches = \App\Services\BranchAccess::accessibleBranches())
+  @if(Auth::check() && $myBranches->count() > 1 || (Auth::check() && Auth::user()->isSuperadmin()))
+  <form method="POST" action="{{ route('admin.branch.switch') }}" class="d-inline ml-1">@csrf
+    <select name="branch_id" class="form-control form-control-sm d-inline" style="width:auto;display:inline-block;font-size:12px" onchange="this.form.submit()" title="Cabang aktif">
+      <option value="">Semua cabang</option>
+      @foreach($myBranches as $b)<option value="{{ $b->id }}" {{ (int) session('current_branch_id') === (int) $b->id ? 'selected' : '' }}>{{ $b->name }}</option>@endforeach
+    </select>
+  </form>
+  @elseif(Auth::check() && $myBranches->count() === 1)
+  <span class="badge badge-light ml-1" style="font-size:11px"><i class="bi bi-geo-alt"></i> {{ $myBranches->first()->name }}</span>
+  @endif
   <a class="nav-link-btn" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="bi bi-box-arrow-right"></i> Keluar</a>
   <span class="ml-auto d-none d-md-inline" style="font-size:12px;opacity:.85">{{ Auth::user()->name ?? '' }}</span>
 </div></nav>

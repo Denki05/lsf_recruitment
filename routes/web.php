@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 
 // Frontend pelamar (publik, tanpa login)
 Route::get('/', 'JobsController@index')->name('jobs.index');
+Route::get('/c/{branch}', 'JobsController@branch')->name('jobs.branch');
+Route::get('/loker/{id}', 'JobsController@show')->name('jobs.show')->where('id', '[0-9]+');
 Route::get('/lamaran/sukses/{id}', 'ApplicationController@success')->name('lamaran.sukses');
 Route::get('/lamaran/{position?}', 'ApplicationController@create')->name('lamaran.form')->where('position', '[0-9]+');
 Route::post('/lamaran', 'ApplicationController@store')->name('lamaran.store');
@@ -33,6 +35,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::post('/lamaran/{id}/ai-reuse', 'Admin\ApplicationController@reuseAi')->name('applications.aiReuse');
     Route::get('/lamaran/{id}/download', 'Admin\ApplicationController@download')->name('applications.download');
     Route::delete('/lamaran/{id}', 'Admin\ApplicationController@destroy')->name('applications.destroy');
+
+    Route::post('/cabang/switch', 'Admin\BranchController@switch')->name('branch.switch');
+    Route::resource('cabang', 'Admin\BranchController')->names('branches')->except(['show']);
+    Route::resource('pengguna', 'Admin\UserController')->names('users')->except(['show']);
 
     Route::resource('loker', 'Admin\PositionController')->names('positions')->except(['show']);
 });

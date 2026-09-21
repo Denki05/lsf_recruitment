@@ -14,8 +14,8 @@ class ApplicationController extends Controller
 {
     public function index(Request $request)
     {
-        $positions = Position::orderBy('title')->get();
-        $query = Applicant::with('position')->latest();
+        $positions = \App\Services\BranchAccess::scopePositions(Position::with('branch')->orderBy('title'))->get();
+        $query = \App\Services\BranchAccess::scopeApplicants(Applicant::with(['position.branch'])->latest());
 
         if ($request->filled('q')) {
             $q = $request->q;
@@ -32,6 +32,35 @@ class ApplicationController extends Controller
         }
         if ($request->filled('tanggal')) {
             $query->whereDate('created_at', $request->tanggal);
+        }
+        // Screening: SIM, pendidikan, bersedia lembur
+        if ($request->filled('sim')) {
+            $query->where('sim', $request->sim);
+        }
+        if ($request->filled('education')) {
+            $query->where('education', $request->education);
+        }
+        if ($request->input('lembur') === '1') {
+            $query->where('willing_overtime', true);
+        } elseif ($request->input('lembur') === '0') {
+            $query->where('willing_overtime', false);
+        }
+        // Screening: range gaji (permintaan gaji pelamar)
+        if ($request->filled('gaji_min')) {
+            $query->where('expected_salary', '>=', (int) $request->gaji_min);
+        }
+        if ($request->filled('gaji_max')) {
+            $query->where('expected_salary', '<=', (int) $request->gaji_max);
+        }
+        // Screening: umur (dihitung per hari ini dari tanggal_lahir)
+        if ($request->filled('umur_min') || $request->filled('umur_maks')) {
+            $query->whereNotNull('tanggal_lahir');
+            if ($request->filled('umur_min')) {
+                $query->whereDate('tanggal_lahir', '<=', now()->subYears((int) $request->umur_min)->toDateString());
+            }
+            if ($request->filled('umur_maks')) {
+                $query->whereDate('tanggal_lahir', '>=', now()->subYears((int) $request->umur_maks + 1)->addDay()->toDateString());
+            }
         }
 
         // Urut skor AI (level DB, null di bawah) atau skor keyword (dihitung per baris)
@@ -75,7 +104,11 @@ class ApplicationController extends Controller
             'ids.*' => 'exists:applicants,id',
             'status' => 'required|in:Baru,Seleksi,Interview,Diterima,Ditolak',
         ], ['ids.required' => 'Pilih minimal 1 lamaran dulu.']);
-        Applicant::whereIn('id', $request->ids)->update([
+        $allowed = \App\Services\BranchAccess::scopeApplicants(Applicant::whereIn('id', $request->ids))->pluck('id')->all();
+        if (count($allowed) !== count($request->ids)) {
+            abort(403, 'Ada lamaran di luar cabang Anda.');
+        }
+        Applicant::whereIn('id', $allowed)->update([
             'status' => $request->status,
             'updated_at' => now(),
         ]);
@@ -90,7 +123,10 @@ class ApplicationController extends Controller
             'ids.*' => 'exists:applicants,id',
         ], ['ids.required' => 'Centang 2-4 lamaran untuk dibandingkan.', 'ids.min' => 'Pilih minimal 2 lamaran.', 'ids.max' => 'Maksimal 4 lamaran.']);
         $svc = new \App\Services\CvScreening();
-        $rows = Applicant::with('position')->whereIn('id', $request->ids)->get();
+        $rows = \App\Services\BranchAccess::scopeApplicants(Applicant::with('position')->whereIn('id', $request->ids))->get();
+        if ($rows->count() !== count($request->ids)) {
+            abort(403, 'Ada lamaran di luar cabang Anda.');
+        }
         $data = [];
         foreach ($rows as $a) {
             try {
@@ -110,6 +146,7 @@ class ApplicationController extends Controller
     public function reuseAi($id)
     {
         $applicant = Applicant::findOrFail($id);
+        \App\Services\BranchAccess::ensureApplicantAccess($applicant->load('position'));
         $prev = Applicant::where('id', '<>', $id)
             ->where('no_hp', $applicant->no_hp)
             ->whereNotNull('ai_score')
@@ -131,6 +168,7 @@ class ApplicationController extends Controller
     public function show($id)
     {
         $applicant = Applicant::with('position')->findOrFail($id);
+        \App\Services\BranchAccess::ensureApplicantAccess($applicant);
         $zipList = [];
         if (strtolower(pathinfo($applicant->file_original, PATHINFO_EXTENSION)) === 'zip') {
             $full = Storage::disk('public')->path($applicant->file_path);
@@ -165,6 +203,7 @@ class ApplicationController extends Controller
     public function evaluateAi($id)
     {
         $applicant = Applicant::with('position')->findOrFail($id);
+        \App\Services\BranchAccess::ensureApplicantAccess($applicant);
         if (!$applicant->ai_consent) {
             return back()->withErrors(['ai' => 'Pelamar tidak menyetujui pemrosesan AI.']);
         }
@@ -195,6 +234,7 @@ class ApplicationController extends Controller
         ]);
         $applicant = Applicant::with('position')->findOrFail($id);
         $old = $applicant->status;
+        \App\Services\BranchAccess::ensureApplicantAccess($applicant);
         $applicant->status = $request->status;
         $applicant->catatan_admin = $request->catatan_admin;
         $applicant->save();
@@ -216,6 +256,7 @@ class ApplicationController extends Controller
     public function download($id)
     {
         $applicant = Applicant::with('position')->findOrFail($id);
+        \App\Services\BranchAccess::ensureApplicantAccess($applicant);
         if (!Storage::disk('public')->exists($applicant->file_path)) {
             abort(404, 'File tidak ditemukan.');
         }
@@ -225,6 +266,7 @@ class ApplicationController extends Controller
     public function destroy($id)
     {
         $applicant = Applicant::findOrFail($id);
+        \App\Services\BranchAccess::ensureApplicantAccess($applicant->load('position'));
         Storage::disk('public')->delete($applicant->file_path);
         $applicant->delete();
         return redirect()->route('admin.applications.index')->with('success', 'Data lamaran dihapus.');
@@ -233,9 +275,20 @@ class ApplicationController extends Controller
     public function export(Request $request)
     {
         // Export CSV (bisa dibuka di Excel) — tanpa dependency tambahan agar stabil di PHP 7.3
-        $query = Applicant::with('position')->orderBy('created_at', 'desc');
+        $query = \App\Services\BranchAccess::scopeApplicants(Applicant::with('position.branch')->orderBy('created_at', 'desc'));
         if ($request->filled('position_id')) $query->where('position_id', $request->position_id);
         if ($request->filled('status')) $query->where('status', $request->status);
+        if ($request->filled('sim')) $query->where('sim', $request->sim);
+        if ($request->filled('education')) $query->where('education', $request->education);
+        if ($request->input('lembur') === '1') $query->where('willing_overtime', true);
+        elseif ($request->input('lembur') === '0') $query->where('willing_overtime', false);
+        if ($request->filled('gaji_min')) $query->where('expected_salary', '>=', (int) $request->gaji_min);
+        if ($request->filled('gaji_max')) $query->where('expected_salary', '<=', (int) $request->gaji_max);
+        if ($request->filled('umur_min') || $request->filled('umur_maks')) {
+            $query->whereNotNull('tanggal_lahir');
+            if ($request->filled('umur_min')) $query->whereDate('tanggal_lahir', '<=', now()->subYears((int) $request->umur_min)->toDateString());
+            if ($request->filled('umur_maks')) $query->whereDate('tanggal_lahir', '>=', now()->subYears((int) $request->umur_maks + 1)->addDay()->toDateString());
+        }
         $rows = $query->get();
 
         $filename = 'lamaran_' . date('Ymd_His') . '.csv';
@@ -245,12 +298,19 @@ class ApplicationController extends Controller
             $out = fopen('php://output', 'w');
             // BOM agar Excel baca UTF-8 dengan benar
             fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($out, ['Tanggal', 'Nama Lengkap', 'JK', 'HP', 'Email', 'Domisili', 'SIM', 'Posisi', 'Lokasi', 'Status Lamaran']);
+            fputcsv($out, ['Tanggal', 'Nama Lengkap', 'Tgl Lahir', 'Umur', 'JK', 'HP', 'Email', 'Domisili', 'Pendidikan', 'Gaji Diminta', 'Lembur', 'SIM', 'Cabang', 'Posisi', 'Lokasi', 'Status Lamaran']);
             foreach ($rows as $r) {
                 fputcsv($out, [
                     $r->created_at->format('Y-m-d H:i'),
-                    $r->nama_lengkap, $r->jenis_kelamin, $r->no_hp,
-                    $r->email ?: '-', $r->domisili ?: '-', $r->sim ?: '-',
+                    $r->nama_lengkap,
+                    $r->tanggal_lahir ? $r->tanggal_lahir->format('Y-m-d') : '-',
+                    $r->umur !== null ? $r->umur : '-',
+                    $r->jenis_kelamin, $r->no_hp,
+                    $r->email ?: '-', $r->domisili ?: '-',
+                    $r->education ?: '-', $r->expected_salary !== null ? $r->expected_salary : '-',
+                    $r->willing_overtime ? 'Ya' : 'Tidak',
+                    $r->sim ?: '-',
+                    $r->position && $r->position->branch ? $r->position->branch->name : '-',
                     $r->position->title ?? '-', $r->position->location ?? '-', $r->status,
                 ]);
             }

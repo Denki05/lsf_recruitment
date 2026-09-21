@@ -8,15 +8,19 @@ class Applicant extends Model
 {
     protected $fillable = [
         'position_id', 'nama_lengkap', 'nama_panggilan', 'tempat_lahir', 'tanggal_lahir',
-        'jenis_kelamin', 'no_ktp', 'alamat_ktp', 'alamat_sekarang', 'no_hp', 'email', 'domisili', 'sosmed',
+        'jenis_kelamin', 'no_ktp', 'alamat_ktp', 'alamat_sekarang', 'no_hp', 'email', 'domisili',
+        'expected_salary', 'willing_overtime', 'education', 'sosmed',
         'status_pernikahan', 'agama', 'kendaraan', 'sim',
         'file_path', 'file_original', 'file_mime', 'file_size',
         'status', 'catatan_admin', 'ai_consent',
         'ai_score', 'ai_summary', 'ai_strengths', 'ai_gaps', 'ai_evaluated_at',
     ];
 
+    const EDUCATION_LEVELS = ['SD', 'SMP', 'SMA/SMK', 'D3', 'D4/S1', 'S2', 'S3'];
+
     protected $casts = [
         'ai_consent' => 'boolean',
+        'willing_overtime' => 'boolean',
         'ai_evaluated_at' => 'datetime',
     ];
 
@@ -25,6 +29,28 @@ class Applicant extends Model
     public function position()
     {
         return $this->belongsTo(Position::class);
+    }
+
+    /** Umur dalam tahun penuh per hari ini (tanggal-bulan-tahun berjalan). Null bila tgl lahir kosong. */
+    public function getUmurAttribute()
+    {
+        if (empty($this->tanggal_lahir)) {
+            return null;
+        }
+        try {
+            $tgl = $this->tanggal_lahir instanceof \DateTimeInterface
+                ? \Carbon\Carbon::instance($this->tanggal_lahir)
+                : \Carbon\Carbon::parse($this->tanggal_lahir);
+            return $tgl->age;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    public static function educationRank($edu)
+    {
+        $i = array_search((string) $edu, self::EDUCATION_LEVELS);
+        return $i === false ? -1 : $i;
     }
 
     public function getDownloadNameAttribute()

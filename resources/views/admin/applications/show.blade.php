@@ -12,6 +12,10 @@
     <div class="row" style="font-size:12.5px">
       <div class="col-6 mb-1"><span style="color:var(--muted)">JK</span><br><strong>{{ $applicant->jenis_kelamin }}</strong></div>
       <div class="col-6 mb-1"><span style="color:var(--muted)">HP / WA</span><br><strong>{{ $applicant->no_hp }}</strong></div>
+      <div class="col-6 mb-1"><span style="color:var(--muted)">Tgl Lahir / Umur</span><br><strong>{{ $applicant->tanggal_lahir ? $applicant->tanggal_lahir->format('d M Y') : '-' }}{{ $applicant->umur !== null ? ' ('.$applicant->umur.' thn)' : '' }}</strong></div>
+      <div class="col-6 mb-1"><span style="color:var(--muted)">Pendidikan</span><br><strong>{{ $applicant->education ?: '-' }}</strong></div>
+      <div class="col-6 mb-1"><span style="color:var(--muted)">Permintaan Gaji</span><br><strong>{{ $applicant->expected_salary !== null ? 'Rp '.number_format($applicant->expected_salary, 0, ',', '.') : '-' }}</strong></div>
+      <div class="col-6 mb-1"><span style="color:var(--muted)">Bersedia Lembur</span><br><strong>{{ $applicant->willing_overtime ? 'Ya' : 'Tidak' }}</strong></div>
       <div class="col-6 mb-1"><span style="color:var(--muted)">Domisili</span><br><strong>{{ $applicant->domisili ?: '-' }}</strong></div>
       <div class="col-6 mb-1"><span style="color:var(--muted)">Email</span><br><strong>{{ $applicant->email ?: '-' }}</strong></div>
       <div class="col-6 mb-1"><span style="color:var(--muted)">SIM</span><br><strong>{{ $applicant->sim ?: '-' }}</strong></div>

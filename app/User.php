@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'is_superadmin',
     ];
 
     /**
@@ -35,5 +35,36 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_superadmin' => 'boolean',
     ];
+
+    public function branches()
+    {
+        return $this->belongsToMany(Branch::class, 'branch_user');
+    }
+
+    public function isSuperadmin()
+    {
+        return (bool) $this->is_superadmin;
+    }
+
+    /** Daftar branch_id yang boleh diakses user ini. Superadmin = semua. */
+    public function accessibleBranchIds()
+    {
+        if ($this->isSuperadmin()) {
+            return Branch::pluck('id')->all();
+        }
+        return $this->branches()->pluck('branches.id')->all();
+    }
+
+    public function canAccessBranch($branchId)
+    {
+        if ($this->isSuperadmin()) {
+            return true;
+        }
+        if (empty($branchId)) {
+            return false;
+        }
+        return $this->branches()->where('branches.id', $branchId)->exists();
+    }
 }

@@ -6,18 +6,57 @@ use Illuminate\Database\Eloquent\Model;
 
 class Position extends Model
 {
-    protected $fillable = ['title', 'location', 'syarat_sim', 'description', 'requirements', 'skill_tags', 'is_active'];
+    protected $fillable = ['branch_id', 'title', 'location', 'gaji', 'pendidikan_minimal', 'usia_min', 'usia_maks', 'butuh_lembur', 'syarat_sim', 'description', 'requirements', 'skill_tags', 'is_active'];
 
-    protected $casts = ['is_active' => 'boolean'];
+    protected $casts = ['is_active' => 'boolean', 'butuh_lembur' => 'boolean'];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 
     public function applicants()
     {
         return $this->hasMany(Applicant::class);
     }
 
+    /** Daftar SIM yang disyaratkan, dukung format tunggal "B" maupun multi "A,C". */
+    public function getSimListAttribute()
+    {
+        if (empty($this->syarat_sim)) {
+            return [];
+        }
+        $parts = preg_split('/[,;\/|]+/', (string) $this->syarat_sim);
+        $out = [];
+        foreach ($parts as $p) {
+            $p = strtoupper(trim($p));
+            if (in_array($p, ['A', 'B', 'C'], true) && !in_array($p, $out, true)) {
+                $out[] = $p;
+            }
+        }
+        return $out;
+    }
+
+    public static function normalizeSim($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+        $list = is_array($value) ? $value : preg_split('/[,;\/|]+/', (string) $value);
+        $out = [];
+        foreach ((array) $list as $p) {
+            $p = strtoupper(trim((string) $p));
+            if (in_array($p, ['A', 'B', 'C'], true) && !in_array($p, $out, true)) {
+                $out[] = $p;
+            }
+        }
+        return $out ? implode(',', $out) : null;
+    }
+
     public function getFullTitleAttribute()
     {
-        return $this->title . ' (' . $this->location . ')';
+        $branch = $this->branch ? ' [' . $this->branch->name . ']' : '';
+        return $this->title . ' (' . $this->location . ')' . $branch;
     }
 
     public function scopeActive($query)

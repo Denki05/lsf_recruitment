@@ -39,7 +39,9 @@ class CvScreening
         if (!empty($descKeys)) {
             $points[] = ['label' => 'Kesesuaian deskripsi', 'weight' => 2, 'needles' => $descKeys, 'need' => null, 'ratio' => 0.4];
         }
-        if (!empty($position->syarat_sim)) {
+        if (!empty($position->sim_list)) {
+            $points[] = ['label' => 'SIM ' . implode(', ', $position->sim_list), 'weight' => 2, 'needles' => [], 'sim_any' => $position->sim_list];
+        } elseif (!empty($position->syarat_sim)) {
             $points[] = ['label' => 'SIM ' . $position->syarat_sim, 'weight' => 2, 'needles' => [], 'sim' => $position->syarat_sim];
         }
 
@@ -57,8 +59,28 @@ class CvScreening
 
         foreach ($points as $p) {
             $total += $p['weight'];
+            // "Tidak Punya" tidak boleh cocok dengan huruf A (substring) — anggap tidak punya SIM
+            $hasSim = !empty($applicant->sim) && strtolower(trim($applicant->sim)) !== 'tidak punya';
+            if (isset($p['sim_any'])) {
+                $has = false;
+                if ($hasSim) {
+                    foreach ((array) $p['sim_any'] as $need) {
+                        if (stripos($applicant->sim, $need) !== false) {
+                            $has = true;
+                            break;
+                        }
+                    }
+                }
+                if ($has) {
+                    $matched[] = $this->chip($p);
+                    $got += $p['weight'];
+                } else {
+                    $missing[] = $this->chip($p);
+                }
+                continue;
+            }
             if (isset($p['sim'])) {
-                if (!empty($applicant->sim) && stripos($applicant->sim, $p['sim']) !== false) {
+                if ($hasSim && stripos($applicant->sim, $p['sim']) !== false) {
                     $matched[] = $this->chip($p);
                     $got += $p['weight'];
                 } else {
