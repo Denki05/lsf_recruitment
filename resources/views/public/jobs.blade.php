@@ -1,13 +1,18 @@
 @extends('layouts.public')
 
-<!-- DYNAMIC HEADER LAYOUT (White-label, tidak terikat LSF) -->
+<!-- DYNAMIC HEADER LAYOUT -->
 @section('title', isset($branch) ? 'Lowongan ' . $branch->name : 'Portal Karir & Rekrutmen')
 @section('hero_title', isset($branch) ? 'Karir di ' . $branch->name : 'Eksplorasi Peluang Karir')
 @section('hero_sub', isset($branch) ? 'Temukan peluang karir terbaik untuk penempatan ' . ($branch->location ?? 'cabang ini') . '.' : 'Temukan posisi yang sesuai dan kembangkan potensi Anda bersama kami. Proses rekrutmen cepat & transparan.')
 
 @section('content')
 <style>
-.job-list-container { max-width: 960px; margin: 0 auto; }
+/* 1. Container Ekstra Lebar (Maksimal 1320px) */
+.job-list-container { 
+  max-width: 1320px; 
+  margin: 0 auto; 
+  padding: 0 15px; /* Tambahan padding agar tidak menempel di tepi layar */
+}
 
 /* Dynamic Header Internal */
 .page-internal-header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; }
@@ -22,22 +27,39 @@
 .job-count-info { font-size: 12px; color: #64748b; margin-bottom: 12px; font-weight: 500; }
 
 /* GRID SYSTEM KARTU LOWONGAN */
-#jobList { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+/* 2. Grid dengan Kartu Lebih Lebar (Minimum 380px per kartu) */
+#jobList { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
+  gap: 20px; /* Jarak antar kartu sedikit dijauhkan agar lebih rapi */
+}
 
 /* Card Compact */
 .job-card { display: flex; flex-direction: column; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; text-decoration: none; color: inherit; transition: all 0.2s; height: 100%; }
 .job-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(15, 76, 129, 0.08); border-color: #b9cdf5; text-decoration: none; color: inherit; }
 
-.job-card-header { display: flex; gap: 12px; margin-bottom: 12px; }
+.job-card-header { display: flex; gap: 12px; margin-bottom: 8px; align-items: flex-start; }
 .job-avatar { width: 42px; height: 42px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #0f4c81, #3b82c4); }
-.job-main { flex: 1; min-width: 0; }
-.job-title { font-size: 14.5px; font-weight: 800; color: #1e293b; margin: 0 0 2px 0; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Bagian Teks Header Card */
+.job-main { flex: 1; min-width: 0; /* min-width: 0 penting agar text-overflow berfungsi di flexbox */ }
+.job-title-wrapper { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+.job-title { 
+  font-size: 15px; font-weight: 800; color: #1e293b; margin: 0; 
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* Paksa 1 baris */
+}
+.job-new-badge { background: #d1fae5; color: #059669; font-size: 9px; font-weight: 700; border-radius: 20px; padding: 2px 6px; text-transform: uppercase; flex-shrink: 0; }
 .job-company { font-size: 11.5px; color: #64748b; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.job-new-badge { background: #d1fae5; color: #059669; font-size: 9px; font-weight: 700; border-radius: 20px; padding: 2px 6px; text-transform: uppercase; margin-left: 6px; vertical-align: middle; }
+
+/* Deskripsi Singkat */
+.job-excerpt { 
+  font-size: 11.5px; color: #475569; line-height: 1.5; margin-bottom: 12px; 
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; 
+}
 
 /* Chips */
 .job-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-.job-chips span { font-size: 11px; font-weight: 500; background: #f1f5f9; color: #475569; border-radius: 4px; padding: 3px 8px; }
+.job-chips span { font-size: 10.5px; font-weight: 500; background: #f1f5f9; color: #475569; border-radius: 4px; padding: 3px 8px; }
 .job-chips span.pay-chip { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; font-weight: 600; }
 
 /* Footer Card */
@@ -99,17 +121,28 @@
           {{ mb_strtoupper(mb_substr($p->branch ? $p->branch->name : 'C', 0, 1)) }}
         </div>
         <div class="job-main">
-          <h3 class="job-title">
-            {{ $p->title }}
+          <div class="job-title-wrapper">
+            <!-- Judul dipaksa 1 baris, jika panjang jadi titik-titik -->
+            <h3 class="job-title" title="{{ $p->title }}">{{ $p->title }}</h3>
             @if($p->created_at && $p->created_at->gt(now()->subDays(7)))
               <span class="job-new-badge">Baru</span>
             @endif
-          </h3>
-          <!-- Menggunakan config app.name agar otomatis mengikuti nama aplikasi di .env -->
+          </div>
           <div class="job-company"><i class="bi bi-building"></i> {{ $p->branch ? $p->branch->name : config('app.name', 'Perusahaan Kami') }}</div>
         </div>
       </div>
       
+      <!-- Deskripsi Singkat Loker (Maks 2 Baris) -->
+      <div class="job-excerpt">
+        @if($p->description)
+          {{ \Illuminate\Support\Str::limit(strip_tags($p->description), 110) }}
+        @elseif(is_array($p->requirement_list) && count($p->requirement_list) > 0)
+          Kualifikasi: {{ \Illuminate\Support\Str::limit(strip_tags(implode(', ', $p->requirement_list)), 100) }}
+        @else
+          Bergabunglah dengan tim kami. Klik untuk melihat detail kualifikasi dan deskripsi pekerjaan secara lengkap.
+        @endif
+      </div>
+
       <div class="job-chips">
         <span><i class="bi bi-geo-alt-fill text-muted"></i> {{ $p->location }}</span>
         @if($p->pendidikan_minimal)
