@@ -22,6 +22,11 @@ class PositionController extends Controller
         return BranchAccess::accessibleBranches();
     }
 
+    protected function regionOptions()
+    {
+        return \App\Region::ordered()->get();
+    }
+
     protected function validateData(Request $request)
     {
         $user = auth()->user();
@@ -32,6 +37,7 @@ class PositionController extends Controller
             'location' => 'required|string|max:100',
             'gaji' => 'nullable|integer|min:0|max:1000000000',
             'pendidikan_minimal' => 'nullable|in:SD,SMP,SMA/SMK,D3,D4/S1,S2,S3',
+            'usia_range' => 'nullable|regex:/^\d{1,2}\s*-\s*\d{1,2}$/',
             'usia_min' => 'nullable|integer|min:15|max:70',
             'usia_maks' => 'nullable|integer|min:15|max:70|gte:usia_min',
             'butuh_lembur' => 'nullable|boolean',
@@ -49,6 +55,19 @@ class PositionController extends Controller
         if (!$user->isSuperadmin() && !$user->canAccessBranch($data['branch_id'])) {
             abort(403, 'Anda tidak punya akses ke cabang ini.');
         }
+        // Rentang usia 1 input ("18-35") diurai ke usia_min / usia_maks
+        if (!empty($data['usia_range']) && trim($data['usia_range']) !== '') {
+            [$umin, $umaks] = array_map('intval', preg_split('/\s*-\s*/', trim($data['usia_range'])));
+            if ($umin < 15 || $umin > 70 || $umaks < 15 || $umaks > 70 || $umin > $umaks) {
+                return back()->withErrors(['usia_range' => 'Rentang usia tidak valid (cth: 18-35, 15–70).'])->withInput();
+            }
+            $data['usia_min'] = $umin;
+            $data['usia_maks'] = $umaks;
+        } else {
+            $data['usia_min'] = $data['usia_min'] ?? null;
+            $data['usia_maks'] = $data['usia_maks'] ?? null;
+        }
+        unset($data['usia_range']);
         // Requirement per-baris (dynamic rows) digabung jadi 1 teks per baris
         if (!empty($data['requirements_lines'])) {
             $joined = collect($data['requirements_lines'])->map(function ($l) {
@@ -103,7 +122,8 @@ class PositionController extends Controller
         if ($branches->isEmpty()) {
             return redirect()->route('admin.positions.index')->withErrors(['msg' => 'Belum ada cabang yang bisa Anda kelola. Hubungi superadmin.']);
         }
-        return view('admin.positions.form', ['position' => new Position(), 'branches' => $branches]);
+        $regions = $this->regionOptions();
+        return view('admin.positions.form', ['position' => new Position(), 'branches' => $branches, 'regions' => $regions]);
     }
 
     public function store(Request $request)
@@ -126,7 +146,8 @@ class PositionController extends Controller
         $position = Position::findOrFail($id);
         BranchAccess::ensurePositionAccess($position);
         $branches = $this->branchOptions();
-        return view('admin.positions.form', compact('position', 'branches'));
+        $regions = $this->regionOptions();
+        return view('admin.positions.form', compact('position', 'branches', 'regions'));
     }
 
     public function update(Request $request, $id)

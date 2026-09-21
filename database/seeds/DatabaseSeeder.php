@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AdminUserSeeder::class);
         $this->seedBranches();
+        $this->seedRegions();
         $this->call(PositionsTableSeeder::class);
     }
 
@@ -81,5 +82,40 @@ class DatabaseSeeder extends Seeder
         $ppiUser->is_superadmin = false;
         $ppiUser->save();
         $ppiUser->branches()->syncWithoutDetaching([$ppi->id]);
+    }
+
+    /**
+     * Seed 514 kabupaten/kota dari database/data/wilayah.json
+     * (diunduh sekali dari ibnux/data-indonesia, disimpan lokal agar
+     * tidak tergantung API/stabilitias koneksi saat dipakai).
+     */
+    protected function seedRegions()
+    {
+        if (!\Illuminate\Support\Facades\Schema::hasTable('regions')) {
+            $this->command->warn('Tabel regions belum ada — jalankan php artisan migrate dulu, lalu ulangi db:seed.');
+            return;
+        }
+        $path = database_path('data/wilayah.json');
+        if (!is_file($path)) {
+            $this->command->warn('File database/data/wilayah.json tidak ditemukan.');
+            return;
+        }
+        $list = json_decode(file_get_contents($path), true);
+        if (empty($list)) {
+            return;
+        }
+        $n = 0;
+        foreach ($list as $row) {
+            $nama = trim((string) ($row['nama'] ?? ''));
+            if ($nama === '') {
+                continue;
+            }
+            \App\Region::firstOrCreate(
+                ['nama' => $nama],
+                ['provinsi' => $row['provinsi'] ?? null]
+            );
+            $n++;
+        }
+        $this->command->info("Wilayah: {$n} baris diproses.");
     }
 }

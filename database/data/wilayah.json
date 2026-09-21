@@ -1,0 +1,2058 @@
+[
+    {
+        "nama": "Kab. Aceh Barat",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Aceh Barat Daya",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Aceh Besar",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Aceh Jaya",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Aceh Selatan",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Aceh Singkil",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Aceh Tamiang",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Aceh Tengah",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Aceh Tenggara",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Aceh Timur",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Aceh Utara",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Administrasi Kepulauan",
+        "provinsi": "Daerah Khusus Ibukota Jakarta"
+    },
+    {
+        "nama": "Kab. Agam",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Alor",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Asahan",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Asmat",
+        "provinsi": "Papua Selatan"
+    },
+    {
+        "nama": "Kab. Badung",
+        "provinsi": "Bali"
+    },
+    {
+        "nama": "Kab. Balangan",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Bandung",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Bandung Barat",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Banggai",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Banggai Kepulauan",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Banggai Laut",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Bangka",
+        "provinsi": "Kepulauan Bangka Belitung"
+    },
+    {
+        "nama": "Kab. Bangka Barat",
+        "provinsi": "Kepulauan Bangka Belitung"
+    },
+    {
+        "nama": "Kab. Bangka Selatan",
+        "provinsi": "Kepulauan Bangka Belitung"
+    },
+    {
+        "nama": "Kab. Bangka Tengah",
+        "provinsi": "Kepulauan Bangka Belitung"
+    },
+    {
+        "nama": "Kab. Bangkalan",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Bangli",
+        "provinsi": "Bali"
+    },
+    {
+        "nama": "Kab. Banjar",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Banjarnegara",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Bantaeng",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Bantul",
+        "provinsi": "Daerah Istimewa Yogyakarta"
+    },
+    {
+        "nama": "Kab. Banyuasin",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Banyumas",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Banyuwangi",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Barito Kuala",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Barito Selatan",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Barito Timur",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Barito Utara",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Barru",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Batang",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Batanghari",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kab. Batu Bara",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Bekasi",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Belitung",
+        "provinsi": "Kepulauan Bangka Belitung"
+    },
+    {
+        "nama": "Kab. Belitung Timur",
+        "provinsi": "Kepulauan Bangka Belitung"
+    },
+    {
+        "nama": "Kab. Belu",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Bener Meriah",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Bengkalis",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kab. Bengkayang",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Bengkulu Selatan",
+        "provinsi": "Bengkulu"
+    },
+    {
+        "nama": "Kab. Bengkulu Tengah",
+        "provinsi": "Bengkulu"
+    },
+    {
+        "nama": "Kab. Bengkulu Utara",
+        "provinsi": "Bengkulu"
+    },
+    {
+        "nama": "Kab. Berau",
+        "provinsi": "Kalimantan Timur"
+    },
+    {
+        "nama": "Kab. Biak Numfor",
+        "provinsi": "Papua"
+    },
+    {
+        "nama": "Kab. Bima",
+        "provinsi": "Nusa Tenggara Barat"
+    },
+    {
+        "nama": "Kab. Bintan",
+        "provinsi": "Kepulauan Riau"
+    },
+    {
+        "nama": "Kab. Bireuen",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Blitar",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Blora",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Boalemo",
+        "provinsi": "Gorontalo"
+    },
+    {
+        "nama": "Kab. Bogor",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Bojonegoro",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Bolaang Mongondow",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Bolaang Mongondow Sela",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Bolaang Mongondow Timu",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Bolaang Mongondow Utar",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Bombana",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Bondowoso",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Bone",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Bone Bolango",
+        "provinsi": "Gorontalo"
+    },
+    {
+        "nama": "Kab. Boven Digoel",
+        "provinsi": "Papua Selatan"
+    },
+    {
+        "nama": "Kab. Boyolali",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Brebes",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Buleleng",
+        "provinsi": "Bali"
+    },
+    {
+        "nama": "Kab. Bulukumba",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Bulungan",
+        "provinsi": "Kalimantan Utara"
+    },
+    {
+        "nama": "Kab. Bungo",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kab. Buol",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Buru",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kab. Buru Selatan",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kab. Buton",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Buton Selatan",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Buton Tengah",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Buton Utara",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Ciamis",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Cianjur",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Cilacap",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Cirebon",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Dairi",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Deiyai",
+        "provinsi": "Papua Tengah"
+    },
+    {
+        "nama": "Kab. Deli Serdang",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Demak",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Dharmasraya",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Dogiyai",
+        "provinsi": "Papua Tengah"
+    },
+    {
+        "nama": "Kab. Dompu",
+        "provinsi": "Nusa Tenggara Barat"
+    },
+    {
+        "nama": "Kab. Donggala",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Empat Lawang",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Ende",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Enrekang",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Fak Fak",
+        "provinsi": "Papua Barat"
+    },
+    {
+        "nama": "Kab. Flores Timur",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Garut",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Gayo Lues",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Gianyar",
+        "provinsi": "Bali"
+    },
+    {
+        "nama": "Kab. Gorontalo",
+        "provinsi": "Gorontalo"
+    },
+    {
+        "nama": "Kab. Gorontalo Utara",
+        "provinsi": "Gorontalo"
+    },
+    {
+        "nama": "Kab. Gowa",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Gresik",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Grobogan",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Gunung Mas",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Gunungkidul",
+        "provinsi": "Daerah Istimewa Yogyakarta"
+    },
+    {
+        "nama": "Kab. Halmahera Barat",
+        "provinsi": "Maluku Utara"
+    },
+    {
+        "nama": "Kab. Halmahera Selatan",
+        "provinsi": "Maluku Utara"
+    },
+    {
+        "nama": "Kab. Halmahera Tengah",
+        "provinsi": "Maluku Utara"
+    },
+    {
+        "nama": "Kab. Halmahera Timur",
+        "provinsi": "Maluku Utara"
+    },
+    {
+        "nama": "Kab. Halmahera Utara",
+        "provinsi": "Maluku Utara"
+    },
+    {
+        "nama": "Kab. Hulu Sungai Selatan",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Hulu Sungai Tengah",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Hulu Sungai Utara",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Humbang Hasundutan",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Indragiri Hilir",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kab. Indragiri Hulu",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kab. Indramayu",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Intan Jaya",
+        "provinsi": "Papua Tengah"
+    },
+    {
+        "nama": "Kab. Jayapura",
+        "provinsi": "Papua"
+    },
+    {
+        "nama": "Kab. Jayawijaya",
+        "provinsi": "Papua Pegunungan"
+    },
+    {
+        "nama": "Kab. Jember",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Jembrana",
+        "provinsi": "Bali"
+    },
+    {
+        "nama": "Kab. Jeneponto",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Jepara",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Jombang",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Kaimana",
+        "provinsi": "Papua Barat"
+    },
+    {
+        "nama": "Kab. Kampar",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kab. Kapuas",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Kapuas Hulu",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Karanganyar",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Karangasem",
+        "provinsi": "Bali"
+    },
+    {
+        "nama": "Kab. Karawang",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Karimun",
+        "provinsi": "Kepulauan Riau"
+    },
+    {
+        "nama": "Kab. Karo",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Katingan",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Kaur",
+        "provinsi": "Bengkulu"
+    },
+    {
+        "nama": "Kab. Kayong Utara",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Kebumen",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Kediri",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Keerom",
+        "provinsi": "Papua"
+    },
+    {
+        "nama": "Kab. Kendal",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Kep. Siau Tagulandang",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Kepahiang",
+        "provinsi": "Bengkulu"
+    },
+    {
+        "nama": "Kab. Kepulauan Anambas",
+        "provinsi": "Kepulauan Riau"
+    },
+    {
+        "nama": "Kab. Kepulauan Aru",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kab. Kepulauan Mentawai",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Kepulauan Meranti",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kab. Kepulauan Sangihe",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Kepulauan Selayar",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Kepulauan Sula",
+        "provinsi": "Maluku Utara"
+    },
+    {
+        "nama": "Kab. Kepulauan Talaud",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Kepulauan Tanimbar",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kab. Kepulauan Yapen",
+        "provinsi": "Papua"
+    },
+    {
+        "nama": "Kab. Kerinci",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kab. Ketapang",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Klaten",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Klungkung",
+        "provinsi": "Bali"
+    },
+    {
+        "nama": "Kab. Kolaka",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Kolaka Timur",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Kolaka Utara",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Konawe",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Konawe Kepulauan",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Konawe Selatan",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Konawe Utara",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Kotabaru",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Kotawaringin Barat",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Kotawaringin Timur",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Kuantan Singingi",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kab. Kubu Raya",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Kudus",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Kulon Progo",
+        "provinsi": "Daerah Istimewa Yogyakarta"
+    },
+    {
+        "nama": "Kab. Kuningan",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Kupang",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Kutai Barat",
+        "provinsi": "Kalimantan Timur"
+    },
+    {
+        "nama": "Kab. Kutai Kartanegara",
+        "provinsi": "Kalimantan Timur"
+    },
+    {
+        "nama": "Kab. Kutai Timur",
+        "provinsi": "Kalimantan Timur"
+    },
+    {
+        "nama": "Kab. Labuhanbatu",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Labuhanbatu Selatan",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Labuhanbatu Utara",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Lahat",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Lamandau",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Lamongan",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Lampung Barat",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Lampung Selatan",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Lampung Tengah",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Lampung Timur",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Lampung Utara",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Landak",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Langkat",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Lanny Jaya",
+        "provinsi": "Papua Pegunungan"
+    },
+    {
+        "nama": "Kab. Lebak",
+        "provinsi": "Banten"
+    },
+    {
+        "nama": "Kab. Lebong",
+        "provinsi": "Bengkulu"
+    },
+    {
+        "nama": "Kab. Lembata",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Lima Puluh Kota",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Lingga",
+        "provinsi": "Kepulauan Riau"
+    },
+    {
+        "nama": "Kab. Lombok Barat",
+        "provinsi": "Nusa Tenggara Barat"
+    },
+    {
+        "nama": "Kab. Lombok Tengah",
+        "provinsi": "Nusa Tenggara Barat"
+    },
+    {
+        "nama": "Kab. Lombok Timur",
+        "provinsi": "Nusa Tenggara Barat"
+    },
+    {
+        "nama": "Kab. Lombok Utara",
+        "provinsi": "Nusa Tenggara Barat"
+    },
+    {
+        "nama": "Kab. Lumajang",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Luwu",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Luwu Timur",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Luwu Utara",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Madiun",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Magelang",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Magetan",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Mahakam Ulu",
+        "provinsi": "Kalimantan Timur"
+    },
+    {
+        "nama": "Kab. Majalengka",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Majene",
+        "provinsi": "Sulawesi Barat"
+    },
+    {
+        "nama": "Kab. Malaka",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Malang",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Malinau",
+        "provinsi": "Kalimantan Utara"
+    },
+    {
+        "nama": "Kab. Maluku Barat Daya",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kab. Maluku Tengah",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kab. Maluku Tenggara",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kab. Mamasa",
+        "provinsi": "Sulawesi Barat"
+    },
+    {
+        "nama": "Kab. Mamberamo Raya",
+        "provinsi": "Papua"
+    },
+    {
+        "nama": "Kab. Mamberamo Tengah",
+        "provinsi": "Papua Pegunungan"
+    },
+    {
+        "nama": "Kab. Mamuju",
+        "provinsi": "Sulawesi Barat"
+    },
+    {
+        "nama": "Kab. Mamuju Tengah",
+        "provinsi": "Sulawesi Barat"
+    },
+    {
+        "nama": "Kab. Mandailing Natal",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Manggarai",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Manggarai Barat",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Manggarai Timur",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Manokwari",
+        "provinsi": "Papua Barat"
+    },
+    {
+        "nama": "Kab. Manokwari Selatan",
+        "provinsi": "Papua Barat"
+    },
+    {
+        "nama": "Kab. Mappi",
+        "provinsi": "Papua Selatan"
+    },
+    {
+        "nama": "Kab. Maros",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Maybrat",
+        "provinsi": "Papua Barat Daya"
+    },
+    {
+        "nama": "Kab. Melawi",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Mempawah",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Merangin",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kab. Merauke",
+        "provinsi": "Papua Selatan"
+    },
+    {
+        "nama": "Kab. Mesuji",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Mimika",
+        "provinsi": "Papua Tengah"
+    },
+    {
+        "nama": "Kab. Minahasa",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Minahasa Selatan",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Minahasa Tenggara",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Minahasa Utara",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kab. Mojokerto",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Morowali",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Morowali Utara",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Muara Enim",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Muaro Jambi",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kab. Mukomuko",
+        "provinsi": "Bengkulu"
+    },
+    {
+        "nama": "Kab. Muna",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Muna Barat",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Murung Raya",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Musi Banyuasin",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Musi Rawas",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Musi Rawas Utara",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Nabire",
+        "provinsi": "Papua Tengah"
+    },
+    {
+        "nama": "Kab. Nagan Raya",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Nagekeo",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Natuna",
+        "provinsi": "Kepulauan Riau"
+    },
+    {
+        "nama": "Kab. Nduga",
+        "provinsi": "Papua Pegunungan"
+    },
+    {
+        "nama": "Kab. Ngada",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Nganjuk",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Ngawi",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Nias",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Nias Barat",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Nias Selatan",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Nias Utara",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Nunukan",
+        "provinsi": "Kalimantan Utara"
+    },
+    {
+        "nama": "Kab. Ogan Ilir",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Ogan Komering Ilir",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Ogan Komering Ulu",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Ogan Komering Ulu Sela",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Ogan Komering Ulu Timu",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Pacitan",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Padang Lawas",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Padang Lawas Utara",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Padang Pariaman",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Pakpak Bharat",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Pamekasan",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Pandeglang",
+        "provinsi": "Banten"
+    },
+    {
+        "nama": "Kab. Pangandaran",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Pangkajene dan Kepulau",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Paniai",
+        "provinsi": "Papua Tengah"
+    },
+    {
+        "nama": "Kab. Parigi Moutong",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Pasaman",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Pasaman Barat",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Pasangkayu",
+        "provinsi": "Sulawesi Barat"
+    },
+    {
+        "nama": "Kab. Paser",
+        "provinsi": "Kalimantan Timur"
+    },
+    {
+        "nama": "Kab. Pasuruan",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Pati",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Pegunungan Arfak",
+        "provinsi": "Papua Barat"
+    },
+    {
+        "nama": "Kab. Pegunungan Bintang",
+        "provinsi": "Papua Pegunungan"
+    },
+    {
+        "nama": "Kab. Pekalongan",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Pelalawan",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kab. Pemalang",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Penajam Paser Utara",
+        "provinsi": "Kalimantan Timur"
+    },
+    {
+        "nama": "Kab. Penukal Abab Lematang",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kab. Pesawaran",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Pesisir Barat",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Pesisir Selatan",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Pidie",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Pidie Jaya",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Pinrang",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Pohuwato",
+        "provinsi": "Gorontalo"
+    },
+    {
+        "nama": "Kab. Polewali Mandar",
+        "provinsi": "Sulawesi Barat"
+    },
+    {
+        "nama": "Kab. Ponorogo",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Poso",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Pringsewu",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Probolinggo",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Pulang Pisau",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Pulau Morotai",
+        "provinsi": "Maluku Utara"
+    },
+    {
+        "nama": "Kab. Pulau Taliabu",
+        "provinsi": "Maluku Utara"
+    },
+    {
+        "nama": "Kab. Puncak",
+        "provinsi": "Papua Tengah"
+    },
+    {
+        "nama": "Kab. Puncak Jaya",
+        "provinsi": "Papua Tengah"
+    },
+    {
+        "nama": "Kab. Purbalingga",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Purwakarta",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Purworejo",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Raja Ampat",
+        "provinsi": "Papua Barat Daya"
+    },
+    {
+        "nama": "Kab. Rejang Lebong",
+        "provinsi": "Bengkulu"
+    },
+    {
+        "nama": "Kab. Rembang",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Rokan Hilir",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kab. Rokan Hulu",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kab. Rote Ndao",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Sabu Raijua",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Sambas",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Samosir",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Sampang",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Sanggau",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Sarmi",
+        "provinsi": "Papua"
+    },
+    {
+        "nama": "Kab. Sarolangun",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kab. Sekadau",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Seluma",
+        "provinsi": "Bengkulu"
+    },
+    {
+        "nama": "Kab. Semarang",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Seram Bagian Barat",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kab. Seram Bagian Timur",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kab. Serang",
+        "provinsi": "Banten"
+    },
+    {
+        "nama": "Kab. Serdang Bedagai",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Seruyan",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Siak",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kab. Sidenreng Rappang",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Sidoarjo",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Sigi",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Sijunjung",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Sikka",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Simalungun",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Simeulue",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kab. Sinjai",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Sintang",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kab. Situbondo",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Sleman",
+        "provinsi": "Daerah Istimewa Yogyakarta"
+    },
+    {
+        "nama": "Kab. Solok",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Solok Selatan",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Soppeng",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Sorong",
+        "provinsi": "Papua Barat Daya"
+    },
+    {
+        "nama": "Kab. Sorong Selatan",
+        "provinsi": "Papua Barat Daya"
+    },
+    {
+        "nama": "Kab. Sragen",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Subang",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Sukabumi",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Sukamara",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kab. Sukoharjo",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Sumba Barat",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Sumba Barat Daya",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Sumba Tengah",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Sumba Timur",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Sumbawa",
+        "provinsi": "Nusa Tenggara Barat"
+    },
+    {
+        "nama": "Kab. Sumbawa Barat",
+        "provinsi": "Nusa Tenggara Barat"
+    },
+    {
+        "nama": "Kab. Sumedang",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Sumenep",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Supiori",
+        "provinsi": "Papua"
+    },
+    {
+        "nama": "Kab. Tabalong",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Tabanan",
+        "provinsi": "Bali"
+    },
+    {
+        "nama": "Kab. Takalar",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Tambrauw",
+        "provinsi": "Papua Barat Daya"
+    },
+    {
+        "nama": "Kab. Tana Tidung",
+        "provinsi": "Kalimantan Utara"
+    },
+    {
+        "nama": "Kab. Tana Toraja",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Tanah Bumbu",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Tanah Datar",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kab. Tanah Laut",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Tangerang",
+        "provinsi": "Banten"
+    },
+    {
+        "nama": "Kab. Tanggamus",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Tanjung Jabung Barat",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kab. Tanjung Jabung Timur",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kab. Tapanuli Selatan",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Tapanuli Tengah",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Tapanuli Utara",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Tapin",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kab. Tasikmalaya",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kab. Tebo",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kab. Tegal",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Teluk Bintuni",
+        "provinsi": "Papua Barat"
+    },
+    {
+        "nama": "Kab. Teluk Wondama",
+        "provinsi": "Papua Barat"
+    },
+    {
+        "nama": "Kab. Temanggung",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Timor Tengah Selatan",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Timor Tengah Utara",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kab. Toba",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kab. Tojo Una Una",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Toli-Toli",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kab. Tolikara",
+        "provinsi": "Papua Pegunungan"
+    },
+    {
+        "nama": "Kab. Toraja Utara",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Trenggalek",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Tuban",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Tulang Bawang",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Tulang Bawang Barat",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Tulungagung",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kab. Wajo",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kab. Wakatobi",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kab. Waropen",
+        "provinsi": "Papua"
+    },
+    {
+        "nama": "Kab. Way Kanan",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kab. Wonogiri",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Wonosobo",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kab. Yahukimo",
+        "provinsi": "Papua Pegunungan"
+    },
+    {
+        "nama": "Kab. Yalimo",
+        "provinsi": "Papua Pegunungan"
+    },
+    {
+        "nama": "Kota Administrasi Jakarta Barat",
+        "provinsi": "Daerah Khusus Ibukota Jakarta"
+    },
+    {
+        "nama": "Kota Administrasi Jakarta Pusat",
+        "provinsi": "Daerah Khusus Ibukota Jakarta"
+    },
+    {
+        "nama": "Kota Administrasi Jakarta Selatan",
+        "provinsi": "Daerah Khusus Ibukota Jakarta"
+    },
+    {
+        "nama": "Kota Administrasi Jakarta Timur",
+        "provinsi": "Daerah Khusus Ibukota Jakarta"
+    },
+    {
+        "nama": "Kota Administrasi Jakarta Utara",
+        "provinsi": "Daerah Khusus Ibukota Jakarta"
+    },
+    {
+        "nama": "Kota Ambon",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kota Balikpapan",
+        "provinsi": "Kalimantan Timur"
+    },
+    {
+        "nama": "Kota Banda Aceh",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kota Bandar Lampung",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kota Bandung",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kota Banjar",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kota Banjarbaru",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kota Banjarmasin",
+        "provinsi": "Kalimantan Selatan"
+    },
+    {
+        "nama": "Kota Batam",
+        "provinsi": "Kepulauan Riau"
+    },
+    {
+        "nama": "Kota Batu",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kota Bau Bau",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kota Bekasi",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kota Bengkulu",
+        "provinsi": "Bengkulu"
+    },
+    {
+        "nama": "Kota Bima",
+        "provinsi": "Nusa Tenggara Barat"
+    },
+    {
+        "nama": "Kota Binjai",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kota Bitung",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kota Blitar",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kota Bogor",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kota Bontang",
+        "provinsi": "Kalimantan Timur"
+    },
+    {
+        "nama": "Kota Bukittinggi",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kota Cilegon",
+        "provinsi": "Banten"
+    },
+    {
+        "nama": "Kota Cimahi",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kota Cirebon",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kota Denpasar",
+        "provinsi": "Bali"
+    },
+    {
+        "nama": "Kota Depok",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kota Dumai",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kota Gorontalo",
+        "provinsi": "Gorontalo"
+    },
+    {
+        "nama": "Kota Gunungsitoli",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kota Jambi",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kota Jayapura",
+        "provinsi": "Papua"
+    },
+    {
+        "nama": "Kota Kediri",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kota Kendari",
+        "provinsi": "Sulawesi Tenggara"
+    },
+    {
+        "nama": "Kota Kotamobagu",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kota Kupang",
+        "provinsi": "Nusa Tenggara Timur"
+    },
+    {
+        "nama": "Kota Langsa",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kota Lhokseumawe",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kota Lubuk Linggau",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kota Madiun",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kota Magelang",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kota Makassar",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kota Malang",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kota Manado",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kota Mataram",
+        "provinsi": "Nusa Tenggara Barat"
+    },
+    {
+        "nama": "Kota Medan",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kota Metro",
+        "provinsi": "Lampung"
+    },
+    {
+        "nama": "Kota Mojokerto",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kota Padang",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kota Padang Panjang",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kota Padangsidimpuan",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kota Pagar Alam",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kota Palangkaraya",
+        "provinsi": "Kalimantan Tengah"
+    },
+    {
+        "nama": "Kota Palembang",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kota Palopo",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kota Palu",
+        "provinsi": "Sulawesi Tengah"
+    },
+    {
+        "nama": "Kota Pangkal Pinang",
+        "provinsi": "Kepulauan Bangka Belitung"
+    },
+    {
+        "nama": "Kota Parepare",
+        "provinsi": "Sulawesi Selatan"
+    },
+    {
+        "nama": "Kota Pariaman",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kota Pasuruan",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kota Payakumbuh",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kota Pekalongan",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kota Pekanbaru",
+        "provinsi": "Riau"
+    },
+    {
+        "nama": "Kota Pematangsiantar",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kota Pontianak",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kota Prabumulih",
+        "provinsi": "Sumatera Selatan"
+    },
+    {
+        "nama": "Kota Probolinggo",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kota Sabang",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kota Salatiga",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kota Samarinda",
+        "provinsi": "Kalimantan Timur"
+    },
+    {
+        "nama": "Kota Sawahlunto",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kota Semarang",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kota Serang",
+        "provinsi": "Banten"
+    },
+    {
+        "nama": "Kota Sibolga",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kota Singkawang",
+        "provinsi": "Kalimantan Barat"
+    },
+    {
+        "nama": "Kota Solok",
+        "provinsi": "Sumatera Barat"
+    },
+    {
+        "nama": "Kota Sorong",
+        "provinsi": "Papua Barat Daya"
+    },
+    {
+        "nama": "Kota Subulussalam",
+        "provinsi": "Aceh"
+    },
+    {
+        "nama": "Kota Sukabumi",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kota Sungai Penuh",
+        "provinsi": "Jambi"
+    },
+    {
+        "nama": "Kota Surabaya",
+        "provinsi": "Jawa Timur"
+    },
+    {
+        "nama": "Kota Surakarta",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kota Tangerang",
+        "provinsi": "Banten"
+    },
+    {
+        "nama": "Kota Tangerang Selatan",
+        "provinsi": "Banten"
+    },
+    {
+        "nama": "Kota Tanjung Pinang",
+        "provinsi": "Kepulauan Riau"
+    },
+    {
+        "nama": "Kota Tanjungbalai",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kota Tarakan",
+        "provinsi": "Kalimantan Utara"
+    },
+    {
+        "nama": "Kota Tasikmalaya",
+        "provinsi": "Jawa Barat"
+    },
+    {
+        "nama": "Kota Tebing Tinggi",
+        "provinsi": "Sumatera Utara"
+    },
+    {
+        "nama": "Kota Tegal",
+        "provinsi": "Jawa Tengah"
+    },
+    {
+        "nama": "Kota Ternate",
+        "provinsi": "Maluku Utara"
+    },
+    {
+        "nama": "Kota Tidore Kepulauan",
+        "provinsi": "Maluku Utara"
+    },
+    {
+        "nama": "Kota Tomohon",
+        "provinsi": "Sulawesi Utara"
+    },
+    {
+        "nama": "Kota Tual",
+        "provinsi": "Maluku"
+    },
+    {
+        "nama": "Kota Yogyakarta",
+        "provinsi": "Daerah Istimewa Yogyakarta"
+    }
+]

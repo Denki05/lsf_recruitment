@@ -9,59 +9,74 @@ use Carbon\Carbon;
 /**
  * Data TES screening kecocokan (bukan data produksi).
  * BERJALAN MANUAL SAJA: php artisan db:seed --class=ScreeningTestSeeder
- * - Mengisi bahan screening 3 loker (tags/requirement/SIM) bila kosong.
- * - Membuat 5 pelamar tes: cocok / sebagian / kurang / DOC / beda posisi.
+ * - Idempoten: hapus dulu baris tes lama (@contoh.id), lalu buat 12 baru.
+ * - 12 pelamar tersebar di 3 loker utama, umur/gaji/pendidikan/SIM/lembur
+ *   bervariasi agar filter screening bisa didemo.
  * Hapus data tes: DELETE FROM applicants WHERE email LIKE '%@contoh.id';
  */
 class ScreeningTestSeeder extends Seeder
 {
     public function run()
     {
-        $positions = Position::orderBy('id')->take(3)->get();
-        if ($positions->count() < 1) {
-            $this->command->error('Isi tabel positions dulu.');
+        $byTitle = function ($title) {
+            return Position::where('title', $title)->first() ?: Position::orderBy('id')->first();
+        };
+        $itSupport = $byTitle('IT Application Support');
+        $stafIt = $byTitle('Staf Information Technology');
+        $gudang = $byTitle('Koordinator Gudang & GA');
+        if (!$itSupport || !$stafIt || !$gudang) {
+            $this->command->error('Isi tabel positions dulu (3 loker utama).');
             return;
         }
 
-        // Bahan screening tes (hanya diisi bila kosong — tidak menimpa editan)
-        $materials = [
-            ['gudang, forklift:3, stock opname:2', "Min. pengalaman 2 tahun di logistik\nWajib SIM B aktif", 'B'],
-            ['selling:2, negosiasi:2, target pasar:3', "Min. pengalaman 3 tahun sebagai sales\nWajib SIM A aktif", 'A'],
-            ['digital marketing, SEO, konten', "Min. pengalaman 3 tahun di marketing", null],
-        ];
-        foreach ($positions as $i => $pos) {
-            $m = $materials[$i % count($materials)];
-            $pos->update([
-                'skill_tags' => $pos->skill_tags ?: $m[0],
-                'requirements' => $pos->requirements ?: $m[1],
-                'syarat_sim' => $pos->syarat_sim ?: $m[2],
-            ]);
-        }
-
+        // Bersihkan tes lama agar bisa dijalankan ulang tanpa ganda
+        Applicant::where('email', 'like', '%@contoh.id')->delete();
         Storage::disk('public')->makeDirectory('lamaran');
 
+        // [nama, jk, hp, domisili, sim, posisi, cv_text/null, file, status, hari_lalu, lahir, gaji, didik, lembur]
         $tests = [
-            // [nama, jk, hp, domisili, sim, posisi_idx, teks_cv_atau_null, nama_file, status, hari_lalu]
-            ['Rina Cocok', 'Perempuan', '081200000011', 'Surabaya', 'B', 0,
-                'Rina pengalaman 4 tahun di gudang logistik terbiasa forklift dan stock opname memiliki SIM B aktif',
-                'CV_Rina.pdf', 'Baru', 0],
-            ['Agus Sebagian', 'Laki-laki', '081200000022', 'Gresik', 'Tidak Punya', 0,
-                'Agus pengalaman 1 tahun di gudang logistik administrasi perkantoran umum',
-                'CV_Agus.pdf', 'Seleksi', 1],
-            ['Dewi Kurang', 'Perempuan', '081200000033', 'Malang', 'Tidak Punya', 0,
-                'Dewi lulusan desain grafis mahir photoshop ilustrator pemasaran konten kreatif media sosial',
-                'CV_Dewi.pdf', 'Baru', 2],
-            ['Budi Doc', 'Laki-laki', '081200000044', 'Sidoarjo', 'A', 0,
-                null, 'CV_Budi.doc', 'Baru', 3],
-            ['Sinta Sales', 'Perempuan', '081200000055', 'Jakarta', 'A', 1,
+            ['Rina Cocok', 'Perempuan', '081200000011', 'Surabaya', 'B', 'it',
+                'Rina pengalaman 4 tahun application support helpdesk troubleshooting aplikasi error dukungan pengguna',
+                'CV_Rina.pdf', 'Baru', 0, '1998-05-12', 5000000, 'D3', true],
+            ['Budi Doc', 'Laki-laki', '081200000044', 'Sidoarjo', 'A', 'it',
+                null, 'CV_Budi.doc', 'Baru', 3, '1990-11-30', 7000000, 'SMP', true],
+            ['Fajar Nugroho', 'Laki-laki', '081200000066', 'Surabaya', 'C', 'it',
+                'Fajar fresh graduate sistem informasi magang helpdesk troubleshooting komputer jaringan dasar',
+                'CV_Fajar.pdf', 'Baru', 1, '2002-03-08', 4000000, 'D4/S1', false],
+            ['Maya Putri', 'Perempuan', '081200000077', 'Sidoarjo', 'Tidak Punya', 'it',
+                'Maya pengalaman akuntansi keuangan laporan pajak mahir spreadsheet administrasi perkantoran',
+                'CV_Maya.pdf', 'Baru', 2, '1999-12-01', 4500000, 'D3', false],
+            ['Dimas Prasetyo', 'Laki-laki', '081200000088', 'Surabaya', 'C', 'staf',
+                'Dimas pengalaman 3 tahun database administrasi sistem informasi troubleshooting jaringan ERP implementasi migrasi data',
+                'CV_Dimas.pdf', 'Seleksi', 0, '1994-06-17', 5500000, 'D4/S1', true],
+            ['Lina Marlina', 'Perempuan', '081200000099', 'Gresik', 'Tidak Punya', 'staf',
+                'Lina pengalaman support ERP bantuan pengguna pengujian sistem dokumentasi teknis inventaris aset',
+                'CV_Lina.pdf', 'Baru', 1, '1997-01-25', 4800000, 'D3', true],
+            ['Eko Saputra', 'Laki-laki', '081200000100', 'Mojokerto', 'C', 'staf',
+                'Eko teknisi jaringan instalasi konfigurasi perangkat keras printer pemeliharaan komputer dasar',
+                'CV_Eko.pdf', 'Baru', 4, '1991-04-11', 5200000, 'SMA/SMK', false],
+            ['Sinta Sales', 'Perempuan', '081200000055', 'Jakarta', 'A', 'staf',
                 'Sinta pengalaman 5 tahun selling negosiasi target pasar luas memiliki SIM A aktif kendaraan mobil',
-                'CV_Sinta.pdf', 'Interview', 1],
+                'CV_Sinta.pdf', 'Interview', 1, '1993-07-15', 8000000, 'D4/S1', true],
+            ['Hendra Gunawan', 'Laki-laki', '081200000111', 'Surabaya', 'B', 'gudang',
+                'Hendra pengalaman 5 tahun gudang logistik forklift stock opname bongkar muat shift memiliki SIM B aktif',
+                'CV_Hendra.pdf', 'Baru', 0, '1989-08-19', 6000000, 'SMA/SMK', true],
+            ['Agus Sebagian', 'Laki-laki', '081200000022', 'Gresik', 'Tidak Punya', 'gudang',
+                'Agus pengalaman 1 tahun di gudang logistik administrasi perkantoran umum',
+                'CV_Agus.pdf', 'Seleksi', 1, '1995-09-03', 4500000, 'SMA/SMK', false],
+            ['Ratna Sari', 'Perempuan', '081200000122', 'Surabaya', 'Tidak Punya', 'gudang',
+                'Ratna pengalaman administrasi arsip data entry general affair perizinan operasional kantor',
+                'CV_Ratna.pdf', 'Baru', 2, '1996-10-05', 4200000, 'D3', false],
+            ['Dewi Kurang', 'Perempuan', '081200000033', 'Malang', 'Tidak Punya', 'gudang',
+                'Dewi lulusan desain grafis mahir photoshop ilustrator pemasaran konten kreatif media sosial',
+                'CV_Dewi.pdf', 'Baru', 5, '2001-02-20', 3500000, 'D4/S1', false],
         ];
+        $posMap = ['it' => $itSupport, 'staf' => $stafIt, 'gudang' => $gudang];
 
         foreach ($tests as $i => $t) {
-            [$nama, $jk, $hp, $dom, $sim, $pIdx, $cvText, $fname, $status, $days] = $t;
-            $pos = $positions[$pIdx % $positions->count()];
-            $date = Carbon::now()->subDays($days)->setTime(9 + $i, 10);
+            [$nama, $jk, $hp, $dom, $sim, $pKey, $cvText, $fname, $status, $days, $lahir, $gaji, $didik, $lembur] = $t;
+            $pos = $posMap[$pKey];
+            $date = Carbon::now()->subDays($days)->setTime(9 + ($i % 8), 10);
             $stored = 'lamaran/tes_cv_' . ($i + 1) . '_' . pathinfo($fname, PATHINFO_EXTENSION);
 
             if ($cvText !== null) {
@@ -78,9 +93,13 @@ class ScreeningTestSeeder extends Seeder
                 'position_id' => $pos->id,
                 'nama_lengkap' => $nama,
                 'jenis_kelamin' => $jk,
+                'tanggal_lahir' => $lahir,
                 'no_hp' => $hp,
                 'email' => strtolower(str_replace(' ', '.', $nama)) . '@contoh.id',
                 'domisili' => $dom,
+                'expected_salary' => $gaji,
+                'education' => $didik,
+                'willing_overtime' => $lembur,
                 'sim' => $sim,
                 'file_path' => $stored,
                 'file_original' => $fname,
@@ -92,7 +111,7 @@ class ScreeningTestSeeder extends Seeder
             ]);
         }
 
-        $this->command->info('5 data tes screening dibuat.');
+        $this->command->info('12 data tes screening dibuat.');
     }
 
     /** PDF minimal valid ber-teks (untuk dites pdfparser). */

@@ -48,6 +48,12 @@ class User extends Authenticatable
         return (bool) $this->is_superadmin;
     }
 
+    /** Label peran: Manajer/Developer (semua cabang) vs Admin/HRD (cabang sendiri). */
+    public function roleLabel()
+    {
+        return $this->isSuperadmin() ? 'Manajer/Developer' : 'Admin/HRD';
+    }
+
     /** Daftar branch_id yang boleh diakses user ini. Superadmin = semua. */
     public function accessibleBranchIds()
     {

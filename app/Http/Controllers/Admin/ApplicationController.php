@@ -15,6 +15,47 @@ class ApplicationController extends Controller
     public function index(Request $request)
     {
         $positions = \App\Services\BranchAccess::scopePositions(Position::with('branch')->orderBy('title'))->get();
+        $query = $this->filteredQuery($request);
+        $perPage = $this->perPage($request);
+
+        // Urut skor AI (level DB, null di bawah) atau skor keyword (dihitung per baris)
+        if ($request->input('sort') === 'ai') {
+            $query->orderByRaw('ai_score IS NULL, ai_score DESC');
+            $applicants = $query->paginate($perPage)->appends($request->query());
+        } elseif ($request->input('sort') === 'skor') {
+            $svc = new \App\Services\CvScreening();
+            $all = $query->get()->map(function ($a) use ($svc) {
+                try {
+                    $a->skor = $svc->score($a)['score'];
+                } catch (\Exception $e) {
+                    $a->skor = null;
+                }
+                return $a;
+            })->sortByDesc(function ($a) {
+                return $a->skor === null ? -1 : $a->skor;
+            })->values();
+            $applicants = $this->paginateManual($all, $request, $perPage);
+        } else {
+            $applicants = $query->paginate($perPage)->appends($request->query());
+        }
+
+        // Hot reload: request AJAX hanya me-render ulang daftar (tanpa reload halaman)
+        if ($request->ajax()) {
+            return view('admin.applications.partials.list', compact('applicants', 'positions'))->render();
+        }
+
+        return view('admin.applications.index', compact('applicants', 'positions'));
+    }
+
+    /** 10 data per halaman agar pas 1 layar tanpa scroll panjang. */
+    protected function perPage(Request $request)
+    {
+        return 10;
+    }
+
+    /** Query lamaran sesudah scope cabang + semua filter/screening (tanpa ordering). */
+    protected function filteredQuery(Request $request)
+    {
         $query = \App\Services\BranchAccess::scopeApplicants(Applicant::with(['position.branch'])->latest());
 
         if ($request->filled('q')) {
@@ -45,15 +86,25 @@ class ApplicationController extends Controller
         } elseif ($request->input('lembur') === '0') {
             $query->where('willing_overtime', false);
         }
-        // Screening: range gaji (permintaan gaji pelamar)
-        if ($request->filled('gaji_min')) {
-            $query->where('expected_salary', '>=', (int) $request->gaji_min);
+        // Screening: range gaji (preset select2 "min-maks", fallback input manual)
+        if ($request->filled('gaji_range') && strpos($request->gaji_range, '-') !== false) {
+            [$gmin, $gmax] = array_map('intval', explode('-', $request->gaji_range, 2));
+            $query->where('expected_salary', '>=', $gmin)->where('expected_salary', '<=', $gmax);
+        } else {
+            if ($request->filled('gaji_min')) {
+                $query->where('expected_salary', '>=', (int) $request->gaji_min);
+            }
+            if ($request->filled('gaji_max')) {
+                $query->where('expected_salary', '<=', (int) $request->gaji_max);
+            }
         }
-        if ($request->filled('gaji_max')) {
-            $query->where('expected_salary', '<=', (int) $request->gaji_max);
-        }
-        // Screening: umur (dihitung per hari ini dari tanggal_lahir)
-        if ($request->filled('umur_min') || $request->filled('umur_maks')) {
+        // Screening: umur (preset select2 "min-maks", dihitung per hari ini dari tanggal_lahir)
+        if ($request->filled('umur_range') && strpos($request->umur_range, '-') !== false) {
+            [$umin, $umaks] = array_map('intval', explode('-', $request->umur_range, 2));
+            $query->whereNotNull('tanggal_lahir')
+                ->whereDate('tanggal_lahir', '<=', now()->subYears($umin)->toDateString())
+                ->whereDate('tanggal_lahir', '>=', now()->subYears($umaks + 1)->addDay()->toDateString());
+        } elseif ($request->filled('umur_min') || $request->filled('umur_maks')) {
             $query->whereNotNull('tanggal_lahir');
             if ($request->filled('umur_min')) {
                 $query->whereDate('tanggal_lahir', '<=', now()->subYears((int) $request->umur_min)->toDateString());
@@ -63,28 +114,7 @@ class ApplicationController extends Controller
             }
         }
 
-        // Urut skor AI (level DB, null di bawah) atau skor keyword (dihitung per baris)
-        if ($request->input('sort') === 'ai') {
-            $query->orderByRaw('ai_score IS NULL, ai_score DESC');
-            $applicants = $query->paginate(15)->appends($request->query());
-        } elseif ($request->input('sort') === 'skor') {
-            $svc = new \App\Services\CvScreening();
-            $all = $query->get()->map(function ($a) use ($svc) {
-                try {
-                    $a->skor = $svc->score($a)['score'];
-                } catch (\Exception $e) {
-                    $a->skor = null;
-                }
-                return $a;
-            })->sortByDesc(function ($a) {
-                return $a->skor === null ? -1 : $a->skor;
-            })->values();
-            $applicants = $this->paginateManual($all, $request);
-        } else {
-            $applicants = $query->paginate(15)->appends($request->query());
-        }
-
-        return view('admin.applications.index', compact('applicants', 'positions'));
+        return $query;
     }
 
     protected function paginateManual($items, Request $request, $perPage = 15)
@@ -113,6 +143,24 @@ class ApplicationController extends Controller
             'updated_at' => now(),
         ]);
         return back()->with('success', count($request->ids) . ' lamaran diubah ke ' . $request->status . '.');
+    }
+
+    /**
+     * Ubah status SEMUA hasil filter+screening aktif (tanpa centang satu-satu).
+     * Param "status" = filter (boleh kosong), "target_status" = status tujuan.
+     * Dibedakan agar filter status tidak tertabrak status tujuan.
+     * Scope cabang + filter sama persis dengan daftar. Selalu JSON (dipakai fetch).
+     */
+    public function bulkFiltered(Request $request)
+    {
+        $request->validate([
+            'target_status' => 'required|in:Baru,Seleksi,Interview,Diterima,Ditolak',
+        ]);
+        $count = $this->filteredQuery($request)->update([
+            'status' => $request->target_status,
+            'updated_at' => now(),
+        ]);
+        return response()->json(['ok' => true, 'count' => $count, 'status' => $request->target_status]);
     }
 
     /** Bandingkan 2-4 kandidat berdampingan (skor keyword + AI + data). */
@@ -250,6 +298,11 @@ class ApplicationController extends Controller
             }
         }
 
+        // Aksi kilat dari kartu (AJAX): balas JSON agar daftar bisa refresh tanpa reload
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['ok' => true, 'status' => $applicant->status, 'nama' => $applicant->nama_lengkap]);
+        }
+
         return back()->with('success', 'Status lamaran diperbarui.');
     }
 
@@ -274,21 +327,9 @@ class ApplicationController extends Controller
 
     public function export(Request $request)
     {
-        // Export CSV (bisa dibuka di Excel) — tanpa dependency tambahan agar stabil di PHP 7.3
-        $query = \App\Services\BranchAccess::scopeApplicants(Applicant::with('position.branch')->orderBy('created_at', 'desc'));
-        if ($request->filled('position_id')) $query->where('position_id', $request->position_id);
-        if ($request->filled('status')) $query->where('status', $request->status);
-        if ($request->filled('sim')) $query->where('sim', $request->sim);
-        if ($request->filled('education')) $query->where('education', $request->education);
-        if ($request->input('lembur') === '1') $query->where('willing_overtime', true);
-        elseif ($request->input('lembur') === '0') $query->where('willing_overtime', false);
-        if ($request->filled('gaji_min')) $query->where('expected_salary', '>=', (int) $request->gaji_min);
-        if ($request->filled('gaji_max')) $query->where('expected_salary', '<=', (int) $request->gaji_max);
-        if ($request->filled('umur_min') || $request->filled('umur_maks')) {
-            $query->whereNotNull('tanggal_lahir');
-            if ($request->filled('umur_min')) $query->whereDate('tanggal_lahir', '<=', now()->subYears((int) $request->umur_min)->toDateString());
-            if ($request->filled('umur_maks')) $query->whereDate('tanggal_lahir', '>=', now()->subYears((int) $request->umur_maks + 1)->addDay()->toDateString());
-        }
+        // Export CSV (bisa dibuka di Excel) — tanpa dependency tambahan agar stabil di PHP 7.3.
+        // Mengikuti filter+screening yang sedang aktif (sama dengan daftar).
+        $query = $this->filteredQuery($request)->orderBy('created_at', 'desc');
         $rows = $query->get();
 
         $filename = 'lamaran_' . date('Ymd_His') . '.csv';

@@ -28,6 +28,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/lamaran', 'Admin\ApplicationController@index')->name('applications.index');
     Route::get('/lamaran/banding', 'Admin\ApplicationController@compare')->name('applications.compare');
     Route::post('/lamaran/bulk-status', 'Admin\ApplicationController@bulkStatus')->name('applications.bulk');
+    Route::post('/lamaran/bulk-filtered', 'Admin\ApplicationController@bulkFiltered')->name('applications.bulkFiltered');
     Route::get('/lamaran/export', 'Admin\ApplicationController@export')->name('applications.export');
     Route::get('/lamaran/{id}', 'Admin\ApplicationController@show')->name('applications.show');
     Route::post('/lamaran/{id}/status', 'Admin\ApplicationController@updateStatus')->name('applications.status');

@@ -8,7 +8,7 @@
     @foreach($users as $u)<tr>
       <td><strong>{{ $u->name }}</strong></td>
       <td>{{ $u->email }}</td>
-      <td>{!! $u->is_superadmin ? '<span class="badge badge-danger">Superadmin</span>' : '<span class="badge badge-info">Admin cabang</span>' !!}</td>
+      <td>{!! $u->is_superadmin ? '<span class="badge badge-danger">Manajer/Developer</span><br><small class="text-muted">semua cabang</small>' : '<span class="badge badge-info">Admin/HRD</span><br><small class="text-muted">cabang sendiri</small>' !!}</td>
       <td><small>{{ $u->is_superadmin ? 'Semua cabang' : ($u->branches->pluck('name')->implode(', ') ?: '-') }}</small></td>
       <td class="text-nowrap"><a href="{{ route('admin.users.edit', $u->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
         <form method="POST" action="{{ route('admin.users.destroy', $u->id) }}" class="d-inline" onsubmit="return confirm('Hapus login ini?')">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger">Hapus</button></form></td>

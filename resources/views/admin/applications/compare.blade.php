@@ -9,7 +9,7 @@
     <tr><th>Posisi</th>@foreach($data as $d)<td><small>{{ $d['applicant']->position->full_title ?? '-' }}</small></td>@endforeach</tr>
     <tr><th>Status</th>@foreach($data as $d)<td><span class="badge badge-info badge-status">{{ $d['applicant']->status }}</span></td>@endforeach</tr>
     <tr><th>Skor keyword</th>@foreach($data as $d)<td><strong>{{ is_null($d['skor']) ? '-' : $d['skor'] . '%' }}</strong></td>@endforeach</tr>
-    <tr><th>Skor AI</th>@foreach($data as $d)<td><strong>{{ is_null($d['applicant']->ai_score) ? '-' : $d['applicant']->ai_score . '%' }}</strong></td>@endforeach</tr>
+    @if(config('recruitment.ai_enabled'))<tr><th>Skor AI</th>@foreach($data as $d)<td><strong>{{ is_null($d['applicant']->ai_score) ? '-' : $d['applicant']->ai_score . '%' }}</strong></td>@endforeach</tr>@endif
     <tr><th>HP</th>@foreach($data as $d)<td><small>{{ $d['applicant']->no_hp }}</small></td>@endforeach</tr>
     <tr><th>Domisili</th>@foreach($data as $d)<td><small>{{ $d['applicant']->domisili ?: '-' }}</small></td>@endforeach</tr>
     <tr><th>SIM</th>@foreach($data as $d)<td><small>{{ $d['applicant']->sim ?: '-' }}</small></td>@endforeach</tr>

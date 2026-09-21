@@ -45,6 +45,7 @@
   @endif
   @if(!empty($screening['note']))<div style="font-size:12px;color:var(--muted)" class="mt-1"><i class="bi bi-info-circle"></i> {{ $screening['note'] }}</div>@endif
 </div>
+@if(config('recruitment.ai_enabled'))
 <div class="content-card p-2 mb-2" style="border-left:3px solid #6f42c1">
   <div class="d-flex justify-content-between align-items-center">
     <h6 class="font-weight-bold mb-0"><i class="bi bi-stars"></i> Evaluasi AI <small style="color:var(--muted)">(OpenRouter, saran — bukan keputusan)</small></h6>
@@ -69,6 +70,7 @@
   @endif
   @endif
 </div>
+@endif
 @if(count($history))
 <div class="content-card p-2 mb-2">
   <h6 class="font-weight-bold">Riwayat Pelamar Ini <small style="color:var(--muted)">(no HP sama)</small></h6>
