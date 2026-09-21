@@ -10,7 +10,7 @@ class Applicant extends Model
         'position_id', 'nama_lengkap', 'nama_panggilan', 'tempat_lahir', 'tanggal_lahir',
         'jenis_kelamin', 'no_ktp', 'alamat_ktp', 'alamat_sekarang', 'no_hp', 'email', 'domisili',
         'expected_salary', 'willing_overtime', 'education', 'sosmed',
-        'status_pernikahan', 'agama', 'kendaraan', 'sim',
+        'status_pernikahan', 'agama', 'kendaraan', 'sim', 'pengalaman_kerja',
         'file_path', 'file_original', 'file_mime', 'file_size',
         'status', 'catatan_admin', 'ai_consent',
         'ai_score', 'ai_summary', 'ai_strengths', 'ai_gaps', 'ai_evaluated_at',
@@ -59,5 +59,10 @@ class Applicant extends Model
         $nama = preg_replace('/[^A-Za-z0-9]+/', '_', $this->nama_lengkap);
         $posisi = $this->position ? preg_replace('/[^A-Za-z0-9]+/', '_', $this->position->title) : 'Posisi';
         return trim($nama, '_') . '-' . trim($posisi, '_') . '-' . $this->created_at->format('Ymd_His') . '.' . $ext;
+    }
+
+    public function statusLogs()
+    {
+        return $this->hasMany(ApplicantStatusLog::class)->orderBy('id', 'desc');
     }
 }

@@ -13,6 +13,7 @@
     <tr><th>HP</th>@foreach($data as $d)<td><small>{{ $d['applicant']->no_hp }}</small></td>@endforeach</tr>
     <tr><th>Domisili</th>@foreach($data as $d)<td><small>{{ $d['applicant']->domisili ?: '-' }}</small></td>@endforeach</tr>
     <tr><th>SIM</th>@foreach($data as $d)<td><small>{{ $d['applicant']->sim ?: '-' }}</small></td>@endforeach</tr>
+    <tr><th>Pengalaman</th>@foreach($data as $d)<td><small>{{ \Illuminate\Support\Str::limit($d['applicant']->pengalaman_kerja ?: '-', 160) }}</small></td>@endforeach</tr>
     <tr><th>Masuk</th>@foreach($data as $d)<td><small>{{ $d['applicant']->created_at->format('d/m/Y') }}</small></td>@endforeach</tr>
   </table></div>
 </div>

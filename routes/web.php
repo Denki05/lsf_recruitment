@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'JobsController@index')->name('jobs.index');
 Route::get('/c/{branch}', 'JobsController@branch')->name('jobs.branch');
 Route::get('/loker/{id}', 'JobsController@show')->name('jobs.show')->where('id', '[0-9]+');
-Route::get('/lamaran/sukses/{id}', 'ApplicationController@success')->name('lamaran.sukses');
+Route::get('/lamaran/sukses', 'ApplicationController@success')->name('lamaran.sukses');
 Route::get('/lamaran/{position?}', 'ApplicationController@create')->name('lamaran.form')->where('position', '[0-9]+');
-Route::post('/lamaran', 'ApplicationController@store')->name('lamaran.store');
+Route::post('/lamaran', 'ApplicationController@store')->middleware('throttle:10,1')->name('lamaran.store');
 
 // Admin auth
 Route::get('/admin/login', 'Admin\LoginController@showLogin')->name('admin.login');
@@ -35,6 +35,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::post('/lamaran/{id}/ai', 'Admin\ApplicationController@evaluateAi')->name('applications.ai');
     Route::post('/lamaran/{id}/ai-reuse', 'Admin\ApplicationController@reuseAi')->name('applications.aiReuse');
     Route::get('/lamaran/{id}/download', 'Admin\ApplicationController@download')->name('applications.download');
+    Route::get('/lamaran/{id}/preview', 'Admin\\ApplicationController@preview')->name('applications.preview');
     Route::delete('/lamaran/{id}', 'Admin\ApplicationController@destroy')->name('applications.destroy');
 
     Route::post('/cabang/switch', 'Admin\BranchController@switch')->name('branch.switch');

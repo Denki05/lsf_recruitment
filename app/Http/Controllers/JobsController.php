@@ -25,7 +25,12 @@ class JobsController extends Controller
     /** Daftar loker 1 cabang (link share per cabang). */
     public function branch($branch)
     {
-        $b = Branch::active()->where('id', $branch)->orWhere('name', $branch)->first();
+        $b = Branch::active()->where(function ($q) use ($branch) {
+            $q->where('name', $branch);
+            if (ctype_digit((string) $branch)) {
+                $q->orWhere('id', $branch);
+            }
+        })->first();
         if (!$b) {
             // coba cari case-insensitive by name
             $b = Branch::active()->get()->first(function ($x) use ($branch) {

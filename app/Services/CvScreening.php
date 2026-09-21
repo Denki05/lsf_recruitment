@@ -178,9 +178,18 @@ class CvScreening
         return ['text' => '', 'partial' => true, 'note' => 'Berkas bukan PDF/DOCX/ZIP berteks — nilai dari field SIM saja.'];
     }
 
+    /** Batas ukuran isi file setelah di-ekstrak dari ZIP/DOCX (anti zip bomb). */
+    const MAX_UNZIPPED_BYTES = 15 * 1024 * 1024;
+
+    protected function zipEntryIsSafe(\ZipArchive $zip, $name)
+    {
+        $stat = $zip->statName($name);
+        return $stat && $stat['size'] <= self::MAX_UNZIPPED_BYTES;
+    }
+
     protected function fullPath(Applicant $applicant)
     {
-        $full = Storage::disk('public')->path($applicant->file_path);
+        $full = Storage::disk('local')->path($applicant->file_path);
         if (!is_file($full) || filesize($full) > 8 * 1024 * 1024) {
             return null;
         }
@@ -210,7 +219,9 @@ class CvScreening
             if ($zip->open($full) !== true) {
                 return '';
             }
-            $xml = $zip->getFromName('word/document.xml');
+            $xml = $this->zipEntryIsSafe($zip, 'word/document.xml')
+                ? $zip->getFromName('word/document.xml', self::MAX_UNZIPPED_BYTES)
+                : false;
             $zip->close();
             if (!$xml) {
                 return '';
@@ -232,10 +243,16 @@ class CvScreening
             if ($zip->open($full) !== true) {
                 return '';
             }
+
+            if ($zip->numFiles > 100) { // arsip mencurigakan
+                $zip->close();
+                return '';
+            }
+
             $target = null;
             for ($i = 0; $i < $zip->numFiles; $i++) {
                 $name = $zip->getNameIndex($i);
-                if (strtolower(pathinfo($name, PATHINFO_EXTENSION)) === 'pdf') {
+                if (strtolower(pathinfo($name, PATHINFO_EXTENSION)) === 'pdf' && $this->zipEntryIsSafe($zip, $name)) {
                     $target = $name;
                     break;
                 }
@@ -245,7 +262,7 @@ class CvScreening
                 return '';
             }
             $tmp = tempnam(sys_get_temp_dir(), 'cvzip') . '.pdf';
-            file_put_contents($tmp, $zip->getFromName($target));
+            file_put_contents($tmp, $zip->getFromName($target, self::MAX_UNZIPPED_BYTES));
             $zip->close();
             $parser = new \Smalot\PdfParser\Parser();
             $text = trim(preg_replace('/\s+/', ' ', $parser->parseFile($tmp)->getText()));

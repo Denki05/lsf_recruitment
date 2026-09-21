@@ -138,10 +138,12 @@ class ApplicationController extends Controller
         if (count($allowed) !== count($request->ids)) {
             abort(403, 'Ada lamaran di luar cabang Anda.');
         }
+        $rows = Applicant::whereIn('id', $allowed)->get(['id', 'status']);
         Applicant::whereIn('id', $allowed)->update([
             'status' => $request->status,
             'updated_at' => now(),
         ]);
+        \App\ApplicantStatusLog::recordMany($rows, $request->status);
         return back()->with('success', count($request->ids) . ' lamaran diubah ke ' . $request->status . '.');
     }
 
@@ -156,10 +158,12 @@ class ApplicationController extends Controller
         $request->validate([
             'target_status' => 'required|in:Baru,Seleksi,Interview,Diterima,Ditolak',
         ]);
+        $rows = $this->filteredQuery($request)->setEagerLoads([])->get(['id', 'status']);
         $count = $this->filteredQuery($request)->update([
             'status' => $request->target_status,
             'updated_at' => now(),
         ]);
+        \App\ApplicantStatusLog::recordMany($rows, $request->target_status);
         return response()->json(['ok' => true, 'count' => $count, 'status' => $request->target_status]);
     }
 
@@ -215,11 +219,11 @@ class ApplicationController extends Controller
 
     public function show($id)
     {
-        $applicant = Applicant::with('position')->findOrFail($id);
+        $applicant = Applicant::with(['position', 'statusLogs.user'])->findOrFail($id);
         \App\Services\BranchAccess::ensureApplicantAccess($applicant);
         $zipList = [];
         if (strtolower(pathinfo($applicant->file_original, PATHINFO_EXTENSION)) === 'zip') {
-            $full = Storage::disk('public')->path($applicant->file_path);
+            $full = Storage::disk('local')->path($applicant->file_path);
             if (is_file($full)) {
                 $zip = new \ZipArchive();
                 if ($zip->open($full) === true) {
@@ -284,8 +288,12 @@ class ApplicationController extends Controller
         $old = $applicant->status;
         \App\Services\BranchAccess::ensureApplicantAccess($applicant);
         $applicant->status = $request->status;
-        $applicant->catatan_admin = $request->catatan_admin;
+        if ($request->has('catatan_admin')) {
+            $applicant->catatan_admin = $request->catatan_admin;
+        }
         $applicant->save();
+
+        \App\ApplicantStatusLog::record($applicant->id, $old, $applicant->status, $request->catatan_admin);
 
         if ($request->boolean('kirim_email') && $old !== $request->status) {
             // Email pelamar: butuh kolom email? form tidak meminta email, jadi kirim hanya jika sosmed berisi email
@@ -310,17 +318,48 @@ class ApplicationController extends Controller
     {
         $applicant = Applicant::with('position')->findOrFail($id);
         \App\Services\BranchAccess::ensureApplicantAccess($applicant);
-        if (!Storage::disk('public')->exists($applicant->file_path)) {
+        if (!Storage::disk('local')->exists($applicant->file_path)) {
             abort(404, 'File tidak ditemukan.');
         }
-        return Storage::disk('public')->download($applicant->file_path, $applicant->download_name);
+        return Storage::disk('local')->download($applicant->file_path, $applicant->download_name);
+    }
+
+    /** Tampilkan PDF inline di browser (untuk preview di halaman detail). */
+    public function preview($id)
+    {
+        $applicant = Applicant::findOrFail($id);
+        \App\Services\BranchAccess::ensureApplicantAccess($applicant);
+
+        $disk = Storage::disk('local');
+        $isPdf = strtolower(pathinfo($applicant->file_original, PATHINFO_EXTENSION)) === 'pdf';
+        if (!$isPdf || !$disk->exists($applicant->file_path)) {
+            abort(404);
+        }
+
+        // Jangan percaya ekstensi: pastikan isinya benar-benar PDF
+        $full = $disk->path($applicant->file_path);
+        $fh = fopen($full, 'rb');
+        $magic = $fh ? fread($fh, 5) : '';
+        if ($fh) {
+            fclose($fh);
+        }
+        if ($magic !== '%PDF-') {
+            abort(404);
+        }
+
+        return response()->file($full, [
+            'Content-Type'           => 'application/pdf',
+            'Content-Disposition'    => 'inline; filename="cv-' . $applicant->id . '.pdf"',
+            'X-Content-Type-Options' => 'nosniff',
+            'Cache-Control'          => 'private, no-store',
+        ]);
     }
 
     public function destroy($id)
     {
         $applicant = Applicant::findOrFail($id);
         \App\Services\BranchAccess::ensureApplicantAccess($applicant->load('position'));
-        Storage::disk('public')->delete($applicant->file_path);
+        Storage::disk('local')->delete($applicant->file_path);
         $applicant->delete();
         return redirect()->route('admin.applications.index')->with('success', 'Data lamaran dihapus.');
     }
@@ -339,9 +378,9 @@ class ApplicationController extends Controller
             $out = fopen('php://output', 'w');
             // BOM agar Excel baca UTF-8 dengan benar
             fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($out, ['Tanggal', 'Nama Lengkap', 'Tgl Lahir', 'Umur', 'JK', 'HP', 'Email', 'Domisili', 'Pendidikan', 'Gaji Diminta', 'Lembur', 'SIM', 'Cabang', 'Posisi', 'Lokasi', 'Status Lamaran']);
+            fputcsv($out, ['Tanggal', 'Nama Lengkap', 'Tgl Lahir', 'Umur', 'JK', 'HP', 'Email', 'Domisili', 'Pendidikan', 'Gaji Diminta', 'Lembur', 'SIM', 'Pengalaman Kerja', 'Cabang', 'Posisi', 'Lokasi', 'Status Lamaran']);
             foreach ($rows as $r) {
-                fputcsv($out, [
+                fputcsv($out, array_map([$this, 'csvSafe'], [
                     $r->created_at->format('Y-m-d H:i'),
                     $r->nama_lengkap,
                     $r->tanggal_lahir ? $r->tanggal_lahir->format('Y-m-d') : '-',
@@ -351,13 +390,23 @@ class ApplicationController extends Controller
                     $r->education ?: '-', $r->expected_salary !== null ? $r->expected_salary : '-',
                     $r->willing_overtime ? 'Ya' : 'Tidak',
                     $r->sim ?: '-',
+                    $r->pengalaman_kerja ?: '-',
                     $r->position && $r->position->branch ? $r->position->branch->name : '-',
                     $r->position->title ?? '-', $r->position->location ?? '-', $r->status,
-                ]);
+                ]));
             }
             fclose($out);
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    /** Cegah formula injection di Excel: sel berawalan = + - @ diberi tanda petik. */
+    protected function csvSafe($v)
+    {
+        if (is_string($v) && $v !== '' && $v !== '-' && preg_match('/^[=+\-@\t\r]/', $v)) {
+            return "'" . $v;
+        }
+        return $v;
     }
 }

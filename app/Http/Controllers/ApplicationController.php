@@ -22,11 +22,28 @@ class ApplicationController extends Controller
             }
         }
         $educations = \App\Applicant::EDUCATION_LEVELS;
+        session(['form_loaded_at' => time()]);
         return view('public.form', compact('positions', 'selectedPosition', 'educations'));
     }
 
     public function store(Request $request)
     {
+        // Anti-bot: honeypot harus kosong + form tidak boleh terkirim < 3 detik
+        if ($request->filled('website')) {
+            return redirect()->route('jobs.index');
+        }
+        $loadedAt = session('form_loaded_at');
+        if ($loadedAt && (time() - $loadedAt) < 3) {
+            return back()->withErrors(['form' => 'Form terkirim terlalu cepat. Silakan coba lagi.'])->withInput();
+        }
+
+        // Rapikan no HP: buang spasi/strip, awalan +62/62 menjadi 0 (agar deteksi duplikat konsisten)
+        if ($request->filled('no_hp')) {
+            $hp = preg_replace('/[^0-9+]/', '', $request->input('no_hp'));
+            $hp = preg_replace('/^(\+62|62)/', '0', $hp);
+            $request->merge(['no_hp' => $hp]);
+        }
+
         // Tahap 1: form cepat (identitas minimal + SIM + CV)
         $validated = $request->validate([
             'nama_lengkap' => 'required|string|max:100',
@@ -39,6 +56,8 @@ class ApplicationController extends Controller
             'education' => 'required|in:SD,SMP,SMA/SMK,D3,D4/S1,S2,S3',
             'willing_overtime' => 'nullable|boolean',
             'sim' => 'required|in:A,B,C,A dan C,Tidak Punya',
+            'belum_berpengalaman' => 'nullable|boolean',
+            'pengalaman_kerja' => 'required_without:belum_berpengalaman|nullable|string|max:3500',
             'position_id' => 'required|exists:positions,id',
             'berkas' => 'required|file|mimes:pdf,doc,docx,zip|max:5120',
             'ai_consent' => 'required|accepted',
@@ -46,19 +65,34 @@ class ApplicationController extends Controller
             'berkas.max' => 'Ukuran file maksimal 5 MB.',
             'berkas.mimes' => 'File harus PDF / DOC / DOCX / ZIP.',
             'ai_consent.accepted' => 'Anda harus menyetujui pemrosesan data untuk melamar.',
+            'pengalaman_kerja.required_without' => 'Pengalaman kerja wajib diisi, atau centang "Saya belum punya pengalaman kerja".',
+            'pengalaman_kerja.max' => 'Pengalaman kerja terlalu panjang (maks. sekitar 3000 karakter).',
             'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
             'expected_salary.required' => 'Permintaan gaji wajib diisi.',
             'education.required' => 'Jenjang pendidikan wajib dipilih.',
         ]);
 
-        $position = Position::findOrFail($validated['position_id']);
-        if (!$position->is_active) {
+        $position = Position::with('branch')->findOrFail($validated['position_id']);
+        if (!$position->is_active || !optional($position->branch)->is_active) {
             return back()->withErrors(['position_id' => 'Lowongan ini sudah ditutup.'])->withInput();
+        }
+
+        // Cegah lamaran ganda: no HP + posisi yang sama dalam 30 hari terakhir
+        $sudahMelamar = Applicant::where('position_id', $position->id)
+            ->where('no_hp', $validated['no_hp'])
+            ->where('created_at', '>=', now()->subDays(30))
+            ->exists();
+        if ($sudahMelamar) {
+            return back()->withErrors(['no_hp' => 'Nomor HP ini sudah melamar posisi tersebut dalam 30 hari terakhir. Mohon tunggu kabar dari tim HRD.'])->withInput();
         }
 
         $file = $request->file('berkas');
         // Simpan dengan nama acak di disk (aman), nama cantik dipakai saat download
-        $storedPath = $file->store('lamaran', 'public');
+        $storedPath = $file->store('lamaran', 'local');
+
+        $pengalaman = $request->boolean('belum_berpengalaman')
+            ? 'Belum memiliki pengalaman kerja.'
+            : trim($validated['pengalaman_kerja'] ?? '');
 
         $applicant = Applicant::create([
             'position_id' => $position->id,
@@ -72,6 +106,7 @@ class ApplicationController extends Controller
             'education' => $validated['education'],
             'willing_overtime' => $request->boolean('willing_overtime'),
             'sim' => $validated['sim'],
+            'pengalaman_kerja' => $pengalaman,
             'ai_consent' => true,
             'file_path' => $storedPath,
             'file_original' => $file->getClientOriginalName(),
@@ -90,12 +125,17 @@ class ApplicationController extends Controller
             \Log::warning('Gagal kirim email lamaran: ' . $e->getMessage());
         }
 
-        return redirect()->route('lamaran.sukses', $applicant->id);
+        $request->session()->put('last_applicant_id', $applicant->id);
+        return redirect()->route('lamaran.sukses');
     }
 
-    public function success($id)
+    public function success()
     {
-        $applicant = Applicant::with('position')->findOrFail($id);
+        $id = session('last_applicant_id');
+        if (!$id) {
+            return redirect()->route('jobs.index');
+        }
+        $applicant = Applicant::with('position.branch')->findOrFail($id);
         return view('public.success', compact('applicant'));
     }
 }

@@ -61,7 +61,11 @@ class Position extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+        // Loker tampil hanya jika loker aktif DAN cabangnya aktif
+        return $query->where('is_active', true)
+            ->whereHas('branch', function ($q) {
+                $q->where('is_active', true);
+            });
     }
 
     /**

@@ -5,6 +5,10 @@
 <div class="mb-2"><a href="{{ route('jobs.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Semua Lowongan</a></div>
 <form method="POST" action="{{ route('lamaran.store') }}" enctype="multipart/form-data" id="lamaranForm">
 @csrf
+<div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+  <label for="website">Jangan diisi</label>
+  <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+</div>
 <p class="step-desc">Isi singkat (< 2 menit) + upload CV. Data lengkap diminta lagi bila Anda dipanggil.</p>
 <div class="form-row">
   <div class="form-group col-md-6"><label class="required">Nama Lengkap</label><input name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap') }}" required maxlength="100"></div>
@@ -31,6 +35,23 @@
   @endif</div>
   <div class="form-group col-md-4"><label class="required">SIM</label><select name="sim" class="form-control" required><option value="">-- pilih --</option>@foreach(['A','B','C','A dan C','Tidak Punya'] as $s)<option {{ old('sim')==$s?'selected':'' }}>{{ $s }}</option>@endforeach</select></div>
 </div>
+
+<div class="form-group">
+  <div class="d-flex justify-content-between align-items-end flex-wrap" style="gap:4px">
+    <label class="required mb-1" for="pengalaman">Pengalaman Kerja</label>
+    <button type="button" id="btnFormat" class="btn btn-link btn-sm p-0" style="font-size:12px"><i class="bi bi-magic"></i> Isi dengan format contoh</button>
+  </div>
+  <textarea name="pengalaman_kerja" id="pengalaman" rows="6" maxlength="3000" class="form-control" style="font-size:13.5px" placeholder="Contoh:&#10;1. PT ABC – Staff Gudang (2021–2024)&#10;   Tugas: cek stok, input barang masuk/keluar, operasikan forklift.&#10;2. Toko XYZ – Kasir (2019–2021)&#10;   Tugas: melayani pembeli, rekap kas harian." required>{{ old('pengalaman_kerja') }}</textarea>
+  <div class="d-flex justify-content-between mt-1" style="font-size:11.5px;color:#6c757d">
+    <span>Tulis per pengalaman: perusahaan – jabatan – periode – tugas utama.</span>
+    <span id="pengalamanCount">0/3000</span>
+  </div>
+  <div class="form-check mt-1">
+    <input type="checkbox" name="belum_berpengalaman" value="1" id="belumPengalaman" class="form-check-input" {{ old('belum_berpengalaman') ? 'checked' : '' }}>
+    <label class="form-check-label" for="belumPengalaman" style="font-size:13px">Saya belum punya pengalaman kerja</label>
+  </div>
+</div>
+
 <div class="form-group"><label class="required">Upload CV (PDF/DOC/DOCX/ZIP, maks 5 MB)</label>
   <div class="dropzone" id="dropzone">
     <div class="dz-icon"><i class="bi bi-cloud-arrow-up-fill"></i></div>
@@ -67,6 +88,25 @@ dropzone.addEventListener('drop', function(e){
 document.getElementById('lamaranForm').addEventListener('submit', function(e){
   if(!berkasInput.files.length){ e.preventDefault(); alert('Silakan upload CV dulu (klik atau seret file ke kotak upload).'); return; }
 });
+
+var pk = document.getElementById('pengalaman');
+var belum = document.getElementById('belumPengalaman');
+var cnt = document.getElementById('pengalamanCount');
+var btnFormat = document.getElementById('btnFormat');
+function updPk(){ cnt.textContent = pk.value.length + '/3000'; }
+function togglePk(){
+  pk.disabled = belum.checked;
+  pk.required = !belum.checked;
+  btnFormat.disabled = belum.checked;
+}
+pk.addEventListener('input', updPk);
+belum.addEventListener('change', togglePk);
+btnFormat.addEventListener('click', function(){
+  if (pk.value.trim() !== '' && !confirm('Isi yang sudah ada akan diganti dengan format contoh. Lanjutkan?')) { return; }
+  pk.value = "1. Nama perusahaan: \n   Jabatan: \n   Periode (bln/thn - bln/thn): \n   Tugas utama: \n\n2. Nama perusahaan: \n   Jabatan: \n   Periode: \n   Tugas utama: ";
+  updPk(); pk.focus();
+});
+updPk(); togglePk();
 </script>
 @endpush
 @endsection
