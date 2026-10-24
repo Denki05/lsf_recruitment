@@ -46,10 +46,22 @@ class JobsController extends Controller
         return view('public.jobs', compact('positions', 'branches', 'selectedBranch'));
     }
 
-    /** Detail 1 loker: card lengkap + link share sendiri + tombol lamar. */
+    /** Detail 1 loker via ID (URL kanonis). */
     public function show($id)
     {
         $position = Position::with('branch')->withCount('applicants')->active()->findOrFail($id);
+        return $this->detail($position);
+    }
+
+    /** Detail 1 loker via URL pendek share, cth. /mm. */
+    public function short($slug)
+    {
+        $position = Position::with('branch')->withCount('applicants')->active()->where('slug', $slug)->firstOrFail();
+        return $this->detail($position);
+    }
+
+    protected function detail(Position $position)
+    {
         $others = Position::with('branch')->active()
             ->where('branch_id', $position->branch_id)
             ->where('id', '<>', $position->id)

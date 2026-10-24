@@ -44,3 +44,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     Route::resource('loker', 'Admin\PositionController')->names('positions')->except(['show']);
 });
+
+// URL pendek share lowongan (cth. /mm). Wajib di paling bawah agar tidak
+// menimpa route lain yang sudah terdaftar di atas.
+Route::get('/{slug}', 'JobsController@short')->name('jobs.short')->where('slug', '[A-Za-z0-9-]+');

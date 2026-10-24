@@ -55,9 +55,7 @@ class MassApplicantSeeder extends Seeder
         }
 
         $titles = [
-            'it'     => 'IT Application Support',
-            'staf'   => 'Staf Information Technology',
-            'gudang' => 'Koordinator Gudang & GA',
+            'mm' => 'Manajer Marketing',
         ];
         $pos = [];
         foreach ($titles as $k => $title) {
@@ -75,7 +73,7 @@ class MassApplicantSeeder extends Seeder
         $now = Carbon::now();
 
         for ($i = 1; $i <= $total; $i++) {
-            $key  = $this->weighted(['it' => 35, 'staf' => 30, 'gudang' => 35]);
+            $key  = $this->weighted(['mm' => 100]);
             $prof = $profiles[$key];
 
             // ~6%: orang yang sama melamar loker lain (untuk "Riwayat Pelamar Ini")
@@ -203,32 +201,14 @@ class MassApplicantSeeder extends Seeder
     protected function profiles()
     {
         return [
-            'it' => [
-                'age' => [21, 38], 'salary' => 5500000, 'overtime' => 55,
-                'edu' => ['SMA/SMK' => 15, 'D3' => 30, 'D4/S1' => 45, 'S2' => 5],
-                'sim' => ['Tidak Punya' => 30, 'C' => 40, 'A' => 10, 'B' => 15, 'A dan C' => 5],
-                'strong' => ['application support', 'helpdesk', 'troubleshooting aplikasi', 'dukungan pengguna', 'ticketing', 'sql dasar', 'instalasi software', 'remote support', 'dokumentasi teknis', 'sistem informasi', 'uat testing', 'jaringan dasar'],
-                'weak' => ['microsoft office', 'administrasi perkantoran', 'data entry', 'instalasi windows', 'komputer dasar'],
-                'jobs' => ['IT Support', 'Helpdesk Staff', 'Application Support', 'Admin Sistem', 'Teknisi Komputer'],
-                'tasks' => ['menangani tiket keluhan pengguna', 'troubleshooting error aplikasi', 'instalasi dan update software', 'remote support karyawan', 'membuat dokumentasi panduan pengguna', 'memonitor performa aplikasi'],
-            ],
-            'staf' => [
-                'age' => [21, 38], 'salary' => 5000000, 'overtime' => 50,
-                'edu' => ['SMA/SMK' => 15, 'D3' => 30, 'D4/S1' => 45, 'S2' => 5],
-                'sim' => ['Tidak Punya' => 30, 'C' => 40, 'A' => 10, 'B' => 15, 'A dan C' => 5],
-                'strong' => ['administrasi database', 'sql server', 'mysql', 'erp', 'jaringan lan wan', 'troubleshooting hardware', 'sistem informasi', 'backup restore data', 'inventaris aset it', 'server windows', 'migrasi data', 'dukungan teknis komputer'],
-                'weak' => ['microsoft office', 'administrasi perkantoran', 'data entry', 'instalasi windows', 'komputer dasar'],
-                'jobs' => ['IT Staff', 'Teknisi Jaringan', 'Database Admin Junior', 'Staff ERP', 'IT Support'],
-                'tasks' => ['administrasi dan backup database', 'konfigurasi jaringan kantor', 'perawatan hardware dan printer', 'support pengguna ERP', 'inventaris aset IT', 'migrasi dan validasi data'],
-            ],
-            'gudang' => [
-                'age' => [23, 45], 'salary' => 6000000, 'overtime' => 70,
-                'edu' => ['SMP' => 8, 'SMA/SMK' => 60, 'D3' => 17, 'D4/S1' => 15],
-                'sim' => ['B' => 55, 'C' => 15, 'A' => 5, 'Tidak Punya' => 25],
-                'strong' => ['gudang', 'forklift', 'stock opname', 'logistik', 'bongkar muat', 'inventaris barang', 'admin gudang', 'general affair', 'sistem fifo', 'picking packing', 'pengiriman barang', 'sim b aktif', 'kerja shift'],
-                'weak' => ['administrasi', 'pengarsipan', 'kebersihan kantor', 'keamanan gedung', 'kasir toko'],
-                'jobs' => ['Staff Gudang', 'Admin Gudang', 'Checker Gudang', 'Operator Forklift', 'Koordinator Logistik', 'Supervisor Gudang'],
-                'tasks' => ['cek stok barang masuk dan keluar', 'operasikan forklift', 'stock opname bulanan', 'atur tata letak gudang', 'koordinasi pengiriman barang', 'input data inventaris', 'pengawasan shift gudang'],
+            'mm' => [
+                'age' => [28, 45], 'salary' => 15000000, 'overtime' => 30,
+                'edu' => ['SMA/SMK' => 5, 'D3' => 15, 'D4/S1' => 60, 'S2' => 20],
+                'sim' => ['Tidak Punya' => 30, 'A' => 50, 'C' => 10, 'B' => 10],
+                'strong' => ['strategi pemasaran', 'digital marketing', 'brand management', 'riset pasar', 'kepemimpinan tim', 'penyusunan anggaran', 'campaign management', 'pertumbuhan penjualan', 'social media marketing', 'kpi marketing', 'b2b marketing', 'customer acquisition'],
+                'weak' => ['microsoft office', 'administrasi perkantoran', 'data entry', 'desain grafis', 'kasir'],
+                'jobs' => ['Marketing Manager', 'Brand Manager', 'Digital Marketing Manager', 'Head of Marketing', 'Marketing Supervisor'],
+                'tasks' => ['menyusun strategi pemasaran', 'memimpin tim marketing', 'mengelola anggaran kampanye', 'analisis pasar dan kompetitor', 'mengukur KPI pemasaran', 'mengembangkan brand awareness'],
             ],
         ];
     }
@@ -287,7 +267,7 @@ class MassApplicantSeeder extends Seeder
 
     protected function newPerson($prof, $key)
     {
-        $female = $this->chance($key === 'gudang' ? 25 : 40);
+        $female = $this->chance(40);
         $pool = $female ? $this->fFirst : $this->mFirst;
         $first = $this->pick($pool);
         $mid = $this->chance(45) ? ' ' . $this->pick($pool) : '';

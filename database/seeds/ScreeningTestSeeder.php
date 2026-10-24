@@ -10,7 +10,7 @@ use Carbon\Carbon;
  * Data TES screening kecocokan (bukan data produksi).
  * BERJALAN MANUAL SAJA: php artisan db:seed --class=ScreeningTestSeeder
  * - Idempoten: hapus dulu baris tes lama (@contoh.id), lalu buat 12 baru.
- * - 12 pelamar tersebar di 3 loker utama, umur/gaji/pendidikan/SIM/lembur
+ * - 12 pelamar tes pada loker Manajer Marketing, umur/gaji/pendidikan/SIM/lembur
  *   bervariasi agar filter screening bisa didemo.
  * Hapus data tes: DELETE FROM applicants WHERE email LIKE '%@contoh.id';
  */
@@ -18,14 +18,9 @@ class ScreeningTestSeeder extends Seeder
 {
     public function run()
     {
-        $byTitle = function ($title) {
-            return Position::where('title', $title)->first() ?: Position::orderBy('id')->first();
-        };
-        $itSupport = $byTitle('IT Application Support');
-        $stafIt = $byTitle('Staf Information Technology');
-        $gudang = $byTitle('Koordinator Gudang & GA');
-        if (!$itSupport || !$stafIt || !$gudang) {
-            $this->command->error('Isi tabel positions dulu (3 loker utama).');
+        $mm = Position::where('title', 'Manajer Marketing')->first() ?: Position::orderBy('id')->first();
+        if (!$mm) {
+            $this->command->error('Isi tabel positions dulu (loker Manajer Marketing).');
             return;
         }
 
@@ -75,7 +70,7 @@ class ScreeningTestSeeder extends Seeder
                 'Dewi lulusan desain grafis mahir photoshop ilustrator pemasaran konten kreatif media sosial',
                 'CV_Dewi.pdf', 'Baru', 5, '2001-02-20', 3500000, 'D4/S1', false],
         ];
-        $posMap = ['it' => $itSupport, 'staf' => $stafIt, 'gudang' => $gudang];
+        $posMap = ['it' => $mm, 'staf' => $mm, 'gudang' => $mm];
 
         foreach ($tests as $i => $t) {
             [$nama, $jk, $hp, $dom, $sim, $pKey, $cvText, $fname, $status, $days, $lahir, $gaji, $didik, $lembur] = $t;

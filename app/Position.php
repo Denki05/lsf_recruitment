@@ -3,12 +3,46 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Position extends Model
 {
-    protected $fillable = ['branch_id', 'title', 'location', 'gaji', 'pendidikan_minimal', 'usia_min', 'usia_maks', 'butuh_lembur', 'syarat_sim', 'description', 'requirements', 'skill_tags', 'is_active'];
+    protected $fillable = ['branch_id', 'title', 'slug', 'location', 'gaji', 'pendidikan_minimal', 'usia_min', 'usia_maks', 'butuh_lembur', 'syarat_sim', 'description', 'requirements', 'skill_tags', 'is_active'];
 
     protected $casts = ['is_active' => 'boolean', 'butuh_lembur' => 'boolean'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (Position $position) {
+            $position->slug = static::uniqueSlug($position->slug ?: $position->title, $position->id);
+        });
+    }
+
+    /** Slug unik untuk URL share pendek, mis. "mm" atau "manajer-marketing". */
+    public static function uniqueSlug($value, $ignoreId = null)
+    {
+        $base = Str::slug((string) $value) ?: 'loker';
+        if (in_array($base, ['admin', 'lamaran', 'loker', 'c', 'api'], true)) {
+            $base = 'loker-' . $base;
+        }
+        $slug = $base;
+        $i = 2;
+        while (static::where('slug', $slug)
+            ->when($ignoreId, function ($q) use ($ignoreId) {
+                $q->where('id', '<>', $ignoreId);
+            })
+            ->exists()) {
+            $slug = $base . '-' . $i++;
+        }
+        return $slug;
+    }
+
+    public function getShareUrlAttribute()
+    {
+        return $this->slug ? route('jobs.short', $this->slug) : route('jobs.show', $this->id);
+    }
 
     public function branch()
     {

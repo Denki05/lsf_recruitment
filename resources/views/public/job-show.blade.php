@@ -1,7 +1,20 @@
 @extends('layouts.public')
+@php
+$shareUrl = $position->share_url;
+$shareText = $position->title . ' — ' . ($position->branch ? $position->branch->name : 'LSF');
+$metaDescription = \Illuminate\Support\Str::limit(trim(strip_tags($position->description ?: implode(' ', $position->requirement_list))), 160);
+@endphp
 @section('title', $position->title . ' | LSF')
 @section('hero_title', $position->branch ? $position->branch->name : 'Recruitment')
 @section('hero_sub', $position->title . ' — ' . $position->location)
+
+@push('meta')
+<meta name="description" content="{{ $metaDescription }}">
+<meta property="og:title" content="{{ $shareText }}">
+<meta property="og:description" content="{{ $metaDescription }}">
+<meta property="og:url" content="{{ $shareUrl }}">
+<meta property="og:type" content="website">
+@endpush
 
 @section('content')
 <style>
@@ -41,6 +54,12 @@
   /* Other Jobs */
   .other-job-card { border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; display: block; color: inherit; transition: all 0.2s; }
   .other-job-card:hover { border-color: #0f4c81; background: #f8fafc; text-decoration: none; color: inherit; transform: translateY(-2px); }
+
+  /* Share */
+  .share-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px; }
+  .share-label { font-size: 12.5px; font-weight: 800; color: #1e293b; display: block; margin-bottom: 5px; }
+  .share-url { font-size: 12.5px; color: #0f4c81; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 10px; word-break: break-all; }
+  .share-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 </style>
 
 <div class="job-container">
@@ -114,6 +133,18 @@
         <i class="bi bi-send-fill mr-1"></i> Lamar Posisi Ini
       </a>
       <span class="text-muted" style="font-size: 12.5px;"><i class="bi bi-lightning-charge-fill text-warning"></i> Lamaran Cepat (< 2 Menit)</span>
+    </div>
+  </div>
+
+  <!-- SHARE LINK PENDEK -->
+  <div class="content-card share-card">
+    <div>
+      <span class="share-label"><i class="bi bi-share-fill text-secondary mr-1"></i> Bagikan lowongan ini</span>
+      <span class="share-url" id="shareUrl">{{ $shareUrl }}</span>
+    </div>
+    <div class="share-actions">
+      <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="shareUrl"><i class="bi bi-clipboard"></i> Salin Link</button>
+      <a href="https://wa.me/?text={{ rawurlencode($shareText . ' ' . $shareUrl) }}" target="_blank" rel="noopener" class="btn btn-sm btn-success"><i class="bi bi-whatsapp"></i> WhatsApp</a>
     </div>
   </div>
 
@@ -197,6 +228,36 @@
       more.textContent = hidden ? 'Sembunyikan ▴' : '+' + extras.length + ' Tampilkan Semua ▾';
     });
   }
+})();
+
+(function(){
+  document.querySelectorAll('[data-copy-target]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var el = document.getElementById(btn.getAttribute('data-copy-target'));
+      if(!el) return;
+      var text = el.textContent.trim();
+      var done = function(){
+        var old = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check2"></i> Tersalin';
+        setTimeout(function(){ btn.innerHTML = old; }, 1600);
+      };
+      var fallback = function(){
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch(e) {}
+        document.body.removeChild(ta);
+      };
+      if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(text).then(done).catch(fallback);
+      } else {
+        fallback();
+      }
+    });
+  });
 })();
 </script>
 @endpush

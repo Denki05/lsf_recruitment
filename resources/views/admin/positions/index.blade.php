@@ -15,9 +15,40 @@
       <td><span class="badge badge-primary">{{ $p->applicants_count }}</span></td>
       <td class="text-nowrap"><a href="{{ route('admin.positions.edit', $p->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
         <a href="{{ route('jobs.show', $p->id) }}" target="_blank" class="btn btn-sm btn-outline-info" title="Buka detail publik">Detail</a>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="navigator.clipboard&&navigator.clipboard.writeText('{{ route('jobs.show', $p->id) }}');this.textContent='Tersalin!';" title="Salin link share 1 loker">Link</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-copy-link="{{ $p->share_url }}" title="Salin link share pendek">Link</button>
         <form method="POST" action="{{ route('admin.positions.destroy', $p->id) }}" class="d-inline" onsubmit="return confirm('Hapus loker ini?')">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger">Hapus</button></form></td>
     </tr>@endforeach
   </table></div>
 </div>
+@push('scripts')
+<script>
+(function(){
+  document.querySelectorAll('[data-copy-link]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var text = btn.getAttribute('data-copy-link');
+      var done = function(){
+        var old = btn.textContent;
+        btn.textContent = 'Tersalin!';
+        setTimeout(function(){ btn.textContent = old; }, 1600);
+      };
+      var fallback = function(){
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch(e) {}
+        document.body.removeChild(ta);
+      };
+      if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(text).then(done).catch(fallback);
+      } else {
+        fallback();
+      }
+    });
+  });
+})();
+</script>
+@endpush
 @endsection
