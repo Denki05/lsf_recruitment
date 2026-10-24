@@ -261,13 +261,24 @@ class CvScreening
                 $zip->close();
                 return '';
             }
-            $tmp = tempnam(sys_get_temp_dir(), 'cvzip') . '.pdf';
-            file_put_contents($tmp, $zip->getFromName($target, self::MAX_UNZIPPED_BYTES));
+            $content = $zip->getFromName($target, self::MAX_UNZIPPED_BYTES);
             $zip->close();
-            $parser = new \Smalot\PdfParser\Parser();
-            $text = trim(preg_replace('/\s+/', ' ', $parser->parseFile($tmp)->getText()));
-            @unlink($tmp);
-            return $text;
+            if ($content === false || $content === '') {
+                return '';
+            }
+            $base = tempnam(sys_get_temp_dir(), 'cvzip');
+            $tmp = $base . '.pdf';
+            try {
+                file_put_contents($tmp, $content);
+                $parser = new \Smalot\PdfParser\Parser();
+                $text = trim(preg_replace('/\s+/', ' ', $parser->parseFile($tmp)->getText()));
+                return $text;
+            } catch (\Exception $e) {
+                return '';
+            } finally {
+                @unlink($tmp);
+                @unlink($base);
+            }
         } catch (\Exception $e) {
             return '';
         }

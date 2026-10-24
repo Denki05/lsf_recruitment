@@ -22,6 +22,9 @@ class Applicant extends Model
         'ai_consent' => 'boolean',
         'willing_overtime' => 'boolean',
         'ai_evaluated_at' => 'datetime',
+        'tanggal_lahir' => 'date',
+        'expected_salary' => 'integer',
+        'ai_score' => 'integer',
     ];
 
     protected $dates = ['tanggal_lahir'];
@@ -55,10 +58,12 @@ class Applicant extends Model
 
     public function getDownloadNameAttribute()
     {
-        $ext = pathinfo($this->file_original, PATHINFO_EXTENSION);
-        $nama = preg_replace('/[^A-Za-z0-9]+/', '_', $this->nama_lengkap);
+        $ext = strtolower(pathinfo($this->file_original, PATHINFO_EXTENSION));
+        $ext = in_array($ext, ['pdf', 'doc', 'docx', 'zip'], true) ? $ext : 'bin';
+        $nama = preg_replace('/[^A-Za-z0-9]+/', '_', $this->nama_lengkap ?: 'pelamar');
         $posisi = $this->position ? preg_replace('/[^A-Za-z0-9]+/', '_', $this->position->title) : 'Posisi';
-        return trim($nama, '_') . '-' . trim($posisi, '_') . '-' . $this->created_at->format('Ymd_His') . '.' . $ext;
+        $waktu = optional($this->created_at)->format('Ymd_His') ?: date('Ymd_His');
+        return trim($nama, '_') . '-' . trim($posisi, '_') . '-' . $waktu . '.' . $ext;
     }
 
     public function statusLogs()

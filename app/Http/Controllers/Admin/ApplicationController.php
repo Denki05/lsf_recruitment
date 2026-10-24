@@ -197,6 +197,9 @@ class ApplicationController extends Controller
     /** Salin evaluasi AI terakhir pelamar yang sama (tanpa hit API). */
     public function reuseAi($id)
     {
+        if (!config('recruitment.ai_enabled')) {
+            abort(404);
+        }
         $applicant = Applicant::findOrFail($id);
         \App\Services\BranchAccess::ensureApplicantAccess($applicant->load('position'));
         $prev = Applicant::where('id', '<>', $id)
@@ -225,13 +228,26 @@ class ApplicationController extends Controller
         if (strtolower(pathinfo($applicant->file_original, PATHINFO_EXTENSION)) === 'zip') {
             $full = Storage::disk('local')->path($applicant->file_path);
             if (is_file($full)) {
-                $zip = new \ZipArchive();
-                if ($zip->open($full) === true) {
-                    for ($i = 0; $i < $zip->numFiles; $i++) {
-                        $stat = $zip->statIndex($i);
-                        $zipList[] = $stat['name'] . ' (' . number_format($stat['size'] / 1024, 1) . ' KB)';
+                try {
+                    $zip = new \ZipArchive();
+                    if ($zip->open($full) === true) {
+                        // Batasi agar ZIP berisi ribuan entri tidak bikin DoS halaman detail
+                        if ($zip->numFiles <= 100) {
+                            $count = min($zip->numFiles, 20);
+                            for ($i = 0; $i < $count; $i++) {
+                                $stat = $zip->statIndex($i);
+                                if ($stat && isset($stat['name'])) {
+                                    $zipList[] = $stat['name'] . ' (' . number_format(($stat['size'] ?? 0) / 1024, 1) . ' KB)';
+                                }
+                            }
+                            if ($zip->numFiles > $count) {
+                                $zipList[] = '... + ' . ($zip->numFiles - $count) . ' file lain';
+                            }
+                        }
+                        $zip->close();
                     }
-                    $zip->close();
+                } catch (\Exception $e) {
+                    $zipList = [];
                 }
             }
         }
@@ -254,6 +270,9 @@ class ApplicationController extends Controller
     /** Jalankan evaluasi AI (on-demand, hasil di-cache di DB). */
     public function evaluateAi($id)
     {
+        if (!config('recruitment.ai_enabled')) {
+            abort(404);
+        }
         $applicant = Applicant::with('position')->findOrFail($id);
         \App\Services\BranchAccess::ensureApplicantAccess($applicant);
         if (!$applicant->ai_consent) {

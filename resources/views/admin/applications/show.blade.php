@@ -282,6 +282,20 @@
 @push('scripts')
 <script>
 (function () {
+  var btn = document.getElementById('btnPreview');
+  if (btn) {
+    btn.addEventListener('click', function () {
+      var url = btn.getAttribute('data-url');
+      var frame = document.getElementById('cvFrame');
+      if (frame && url) frame.src = url;
+      if (window.jQuery && jQuery('#cvModal').modal) {
+        jQuery('#cvModal').modal('show');
+      } else {
+        var m = document.getElementById('cvModal');
+        if (m) { m.classList.add('show'); m.style.display = 'block'; }
+      }
+    });
+  }
   document.querySelectorAll('.dt-copy').forEach(function (b) {
     b.addEventListener('click', function () {
       var t = b.getAttribute('data-copy');

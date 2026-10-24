@@ -17,8 +17,8 @@ Route::get('/lamaran/{position?}', 'ApplicationController@create')->name('lamara
 Route::post('/lamaran', 'ApplicationController@store')->middleware('throttle:10,1')->name('lamaran.store');
 
 // Admin auth
-Route::get('/admin/login', 'Admin\LoginController@showLogin')->name('admin.login');
-Route::post('/admin/login', 'Admin\LoginController@login')->name('admin.login.submit');
+Route::get('/admin/login', 'Admin\LoginController@showLogin')->name('admin.login')->middleware('guest');
+Route::post('/admin/login', 'Admin\LoginController@login')->name('admin.login.submit')->middleware('throttle:5,1');
 Route::post('/admin/logout', 'Admin\LoginController@logout')->name('admin.logout');
 
 // Admin area (wajib login)
@@ -32,10 +32,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/lamaran/export', 'Admin\ApplicationController@export')->name('applications.export');
     Route::get('/lamaran/{id}', 'Admin\ApplicationController@show')->name('applications.show');
     Route::post('/lamaran/{id}/status', 'Admin\ApplicationController@updateStatus')->name('applications.status');
-    Route::post('/lamaran/{id}/ai', 'Admin\ApplicationController@evaluateAi')->name('applications.ai');
-    Route::post('/lamaran/{id}/ai-reuse', 'Admin\ApplicationController@reuseAi')->name('applications.aiReuse');
+    Route::post('/lamaran/{id}/ai', 'Admin\ApplicationController@evaluateAi')->middleware('throttle:10,60')->name('applications.ai');
+    Route::post('/lamaran/{id}/ai-reuse', 'Admin\ApplicationController@reuseAi')->middleware('throttle:20,60')->name('applications.aiReuse');
     Route::get('/lamaran/{id}/download', 'Admin\ApplicationController@download')->name('applications.download');
-    Route::get('/lamaran/{id}/preview', 'Admin\\ApplicationController@preview')->name('applications.preview');
+    Route::get('/lamaran/{id}/preview', 'Admin\ApplicationController@preview')->name('applications.preview');
     Route::delete('/lamaran/{id}', 'Admin\ApplicationController@destroy')->name('applications.destroy');
 
     Route::post('/cabang/switch', 'Admin\BranchController@switch')->name('branch.switch');

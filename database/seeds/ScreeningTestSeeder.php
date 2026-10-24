@@ -30,8 +30,12 @@ class ScreeningTestSeeder extends Seeder
         }
 
         // Bersihkan tes lama agar bisa dijalankan ulang tanpa ganda
+        $oldFiles = Applicant::where('email', 'like', '%@contoh.id')->pluck('file_path');
         Applicant::where('email', 'like', '%@contoh.id')->delete();
-        Storage::disk('public')->makeDirectory('lamaran');
+        foreach ($oldFiles as $f) {
+            if ($f) Storage::disk('local')->delete($f);
+        }
+        Storage::disk('local')->makeDirectory('lamaran');
 
         // [nama, jk, hp, domisili, sim, posisi, cv_text/null, file, status, hari_lalu, lahir, gaji, didik, lembur]
         $tests = [
@@ -77,14 +81,14 @@ class ScreeningTestSeeder extends Seeder
             [$nama, $jk, $hp, $dom, $sim, $pKey, $cvText, $fname, $status, $days, $lahir, $gaji, $didik, $lembur] = $t;
             $pos = $posMap[$pKey];
             $date = Carbon::now()->subDays($days)->setTime(9 + ($i % 8), 10);
-            $stored = 'lamaran/tes_cv_' . ($i + 1) . '_' . pathinfo($fname, PATHINFO_EXTENSION);
+            $stored = 'lamaran/tes_cv_' . ($i + 1) . '.' . pathinfo($fname, PATHINFO_EXTENSION);
 
             if ($cvText !== null) {
-                Storage::disk('public')->put($stored, $this->makePdf($cvText));
+                Storage::disk('local')->put($stored, $this->makePdf($cvText));
                 $mime = 'application/pdf';
-                $size = Storage::disk('public')->size($stored);
+                $size = Storage::disk('local')->size($stored);
             } else {
-                Storage::disk('public')->put($stored, 'dummy doc content');
+                Storage::disk('local')->put($stored, 'dummy doc content');
                 $mime = 'application/msword';
                 $size = 512;
             }
@@ -101,6 +105,8 @@ class ScreeningTestSeeder extends Seeder
                 'education' => $didik,
                 'willing_overtime' => $lembur,
                 'sim' => $sim,
+                'pengalaman_kerja' => $cvText ?: 'Belum memiliki pengalaman kerja.',
+                'ai_consent' => true,
                 'file_path' => $stored,
                 'file_original' => $fname,
                 'file_mime' => $mime,

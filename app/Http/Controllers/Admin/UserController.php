@@ -37,7 +37,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|max:150|unique:users,email',
-            'password' => 'required|string|min:6|max:100',
+            'password' => 'required|string|min:8|max:100',
             'is_superadmin' => 'nullable|boolean',
             'branch_ids' => 'nullable|array',
             'branch_ids.*' => 'exists:branches,id',
@@ -70,7 +70,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|max:150|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:6|max:100',
+            'password' => 'nullable|string|min:8|max:100',
             'is_superadmin' => 'nullable|boolean',
             'branch_ids' => 'nullable|array',
             'branch_ids.*' => 'exists:branches,id',

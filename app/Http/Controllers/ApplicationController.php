@@ -6,6 +6,7 @@ use App\Applicant;
 use App\Position;
 use App\Mail\ApplicationReceived;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,7 +34,7 @@ class ApplicationController extends Controller
             return redirect()->route('jobs.index');
         }
         $loadedAt = session('form_loaded_at');
-        if ($loadedAt && (time() - $loadedAt) < 3) {
+        if (!$loadedAt || (time() - $loadedAt) < 3) {
             return back()->withErrors(['form' => 'Form terkirim terlalu cepat. Silakan coba lagi.'])->withInput();
         }
 
@@ -49,7 +50,7 @@ class ApplicationController extends Controller
             'nama_lengkap' => 'required|string|max:100',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tanggal_lahir' => 'required|date|before:today|after:1950-01-01',
-            'no_hp' => 'required|regex:/^[0-9+\-\s]{10,20}$/',
+            'no_hp' => 'required|regex:/^(0|\+62)[0-9]{9,13}$/',
             'email' => 'nullable|email|max:150',
             'domisili' => 'required|string|max:100',
             'expected_salary' => 'required|integer|min:0|max:1000000000',
@@ -59,14 +60,15 @@ class ApplicationController extends Controller
             'belum_berpengalaman' => 'nullable|boolean',
             'pengalaman_kerja' => 'required_without:belum_berpengalaman|nullable|string|max:3500',
             'position_id' => 'required|exists:positions,id',
-            'berkas' => 'required|file|mimes:pdf,doc,docx,zip|max:5120',
+            'berkas' => 'required|file|mimes:pdf,docx,zip|max:5120',
             'ai_consent' => 'required|accepted',
         ], [
             'berkas.max' => 'Ukuran file maksimal 5 MB.',
-            'berkas.mimes' => 'File harus PDF / DOC / DOCX / ZIP.',
+            'berkas.mimes' => 'File harus PDF / DOCX / ZIP.',
+            'no_hp.regex' => 'Nomor HP tidak valid (cth. 0812xxxxxxx atau +62812xxxxxxx).',
             'ai_consent.accepted' => 'Anda harus menyetujui pemrosesan data untuk melamar.',
             'pengalaman_kerja.required_without' => 'Pengalaman kerja wajib diisi, atau centang "Saya belum punya pengalaman kerja".',
-            'pengalaman_kerja.max' => 'Pengalaman kerja terlalu panjang (maks. sekitar 3000 karakter).',
+            'pengalaman_kerja.max' => 'Pengalaman kerja terlalu panjang (maks. 3500 karakter).',
             'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
             'expected_salary.required' => 'Permintaan gaji wajib diisi.',
             'education.required' => 'Jenjang pendidikan wajib dipilih.',
@@ -78,12 +80,14 @@ class ApplicationController extends Controller
         }
 
         // Cegah lamaran ganda: no HP + posisi yang sama dalam 30 hari terakhir
+        // Pre-check cepat sebelum upload, lalu kunci di transaksi agar double-submit paralel tidak lolos
+        $duplikatError = ['no_hp' => 'Nomor HP ini sudah melamar posisi tersebut dalam 30 hari terakhir. Mohon tunggu kabar dari tim HRD.'];
         $sudahMelamar = Applicant::where('position_id', $position->id)
             ->where('no_hp', $validated['no_hp'])
             ->where('created_at', '>=', now()->subDays(30))
             ->exists();
         if ($sudahMelamar) {
-            return back()->withErrors(['no_hp' => 'Nomor HP ini sudah melamar posisi tersebut dalam 30 hari terakhir. Mohon tunggu kabar dari tim HRD.'])->withInput();
+            return back()->withErrors($duplikatError)->withInput();
         }
 
         $file = $request->file('berkas');
@@ -94,26 +98,47 @@ class ApplicationController extends Controller
             ? 'Belum memiliki pengalaman kerja.'
             : trim($validated['pengalaman_kerja'] ?? '');
 
-        $applicant = Applicant::create([
-            'position_id' => $position->id,
-            'nama_lengkap' => $validated['nama_lengkap'],
-            'jenis_kelamin' => $validated['jenis_kelamin'],
-            'tanggal_lahir' => $validated['tanggal_lahir'],
-            'no_hp' => $validated['no_hp'],
-            'email' => $validated['email'] ?? null,
-            'domisili' => $validated['domisili'],
-            'expected_salary' => $validated['expected_salary'],
-            'education' => $validated['education'],
-            'willing_overtime' => $request->boolean('willing_overtime'),
-            'sim' => $validated['sim'],
-            'pengalaman_kerja' => $pengalaman,
-            'ai_consent' => true,
-            'file_path' => $storedPath,
-            'file_original' => $file->getClientOriginalName(),
-            'file_mime' => $file->getClientMimeType(),
-            'file_size' => $file->getSize(),
-            'status' => 'Baru',
-        ]);
+        try {
+            $applicant = DB::transaction(function () use ($position, $validated, $request, $pengalaman, $file, $storedPath) {
+                $locked = Applicant::where('position_id', $position->id)
+                    ->where('no_hp', $validated['no_hp'])
+                    ->where('created_at', '>=', now()->subDays(30))
+                    ->lockForUpdate()
+                    ->exists();
+                if ($locked) {
+                    return null;
+                }
+
+                return Applicant::create([
+                    'position_id' => $position->id,
+                    'nama_lengkap' => $validated['nama_lengkap'],
+                    'jenis_kelamin' => $validated['jenis_kelamin'],
+                    'tanggal_lahir' => $validated['tanggal_lahir'],
+                    'no_hp' => $validated['no_hp'],
+                    'email' => $validated['email'] ?? null,
+                    'domisili' => $validated['domisili'],
+                    'expected_salary' => $validated['expected_salary'],
+                    'education' => $validated['education'],
+                    'willing_overtime' => $request->boolean('willing_overtime'),
+                    'sim' => $validated['sim'],
+                    'pengalaman_kerja' => $pengalaman,
+                    'ai_consent' => true,
+                    'file_path' => $storedPath,
+                    'file_original' => $file->getClientOriginalName(),
+                    'file_mime' => $file->getClientMimeType(),
+                    'file_size' => $file->getSize(),
+                    'status' => 'Baru',
+                ]);
+            });
+        } catch (\Exception $e) {
+            Storage::disk('local')->delete($storedPath);
+            throw $e;
+        }
+
+        if (!$applicant) {
+            Storage::disk('local')->delete($storedPath);
+            return back()->withErrors($duplikatError)->withInput();
+        }
 
         // Notifikasi email ke HRD (jangan gagalkan submit jika SMTP belum disetting)
         try {

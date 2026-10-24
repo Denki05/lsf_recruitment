@@ -1,5 +1,7 @@
 @extends('layouts.public')
 
+{{-- Normalisasi: controller kirim $selectedBranch, view lama pakai $branch --}}
+@php($branch = $branch ?? $selectedBranch ?? null)
 <!-- DYNAMIC HEADER LAYOUT -->
 @section('title', isset($branch) ? 'Lowongan ' . $branch->name : 'Portal Karir & Rekrutmen')
 @section('hero_title', isset($branch) ? 'Karir di ' . $branch->name : 'Eksplorasi Peluang Karir')

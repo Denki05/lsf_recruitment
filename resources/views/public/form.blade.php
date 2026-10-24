@@ -73,7 +73,7 @@
           @else
             <select name="position_id" class="form-control form-control-custom" required>
               <option value="">-- Pilih Lowongan --</option>
-              @foreach($positions as$p) <option value="{{ $p->id }}" {{ old('position_id')==$p->id?'selected':'' }}>{{$p->full_title }}</option> @endforeach
+              @foreach($positions as $p) <option value="{{ $p->id }}" {{ old('position_id')==$p->id?'selected':'' }}>{{$p->full_title }}</option> @endforeach
             </select>
           @endif
         </div>
@@ -128,7 +128,7 @@
             <i class="bi bi-card-checklist"></i>
             <div><h6 class="form-section-title">Kualifikasi & Gaji</h6></div>
           </div>
-          <div class="form-group mb-2"><label class="form-label-custom required">Pendidikan Terakhir</label><select name="education" class="form-control form-control-custom" required><option value="">-- Pilih --</option>@foreach($educations as$e)<option value="{{ $e }}" {{ old('education')==$e?'selected':'' }}>{{ $e }}</option>@endforeach</select></div>
+          <div class="form-group mb-2"><label class="form-label-custom required">Pendidikan Terakhir</label><select name="education" class="form-control form-control-custom" required><option value="">-- Pilih --</option>@foreach($educations as $e)<option value="{{ $e }}" {{ old('education')==$e?'selected':'' }}>{{ $e }}</option>@endforeach</select></div>
           <div class="form-group mb-2"><label class="form-label-custom required">Permintaan Gaji / Bulan (Rp)</label><input type="number" name="expected_salary" class="form-control form-control-custom" value="{{ old('expected_salary') }}" required min="0" placeholder="cth. 5000000"></div>
           <div class="custom-control custom-checkbox mt-2">
             <input type="checkbox" name="willing_overtime" value="1" id="lembur" class="custom-control-input" {{ old('willing_overtime') ? 'checked' : '' }}>
@@ -140,14 +140,14 @@
         <div class="form-section-card">
           <div class="form-section-header">
             <i class="bi bi-file-earmark-arrow-up-fill"></i>
-            <div><h6 class="form-section-title">Lampiran CV</h6><p class="form-section-subtitle">PDF/DOC/ZIP (Maks 5 MB)</p></div>
+            <div><h6 class="form-section-title">Lampiran CV</h6><p class="form-section-subtitle">PDF/DOCX/ZIP (Maks 5 MB)</p></div>
           </div>
           <div class="dz-custom" id="dropzone">
             <i class="bi bi-cloud-arrow-up-fill text-primary" style="font-size:24px;"></i>
             <div class="mt-1 font-weight-bold" style="font-size:12px; color:#334155;">Klik / Seret file CV ke sini</div>
             <small class="text-muted d-block mt-1" id="fileInfo" style="font-size:10.5px;">Wajib melampirkan CV.</small>
           </div>
-          <input type="file" name="berkas" id="berkas" accept=".pdf,.doc,.docx,.zip" required hidden>
+          <input type="file" name="berkas" id="berkas" accept=".pdf,.docx,.zip" required hidden>
         </div>
 
         <!-- SUBMIT AREA -->
@@ -172,8 +172,8 @@ var dropzone = document.getElementById('dropzone');
 
 function handleFile(f){
   if(!f) return;
-  var okExt = /\.(pdf|doc|docx|zip)$/i.test(f.name);
-  if(!okExt){ alert('File harus PDF / DOC / DOCX / ZIP.'); berkasInput.value=''; return; }
+  var okExt = /\.(pdf|docx|zip)$/i.test(f.name);
+  if(!okExt){ alert('File harus PDF / DOCX / ZIP.'); berkasInput.value=''; return; }
   if(f.size > 5*1024*1024){ alert('File melebihi 5 MB. Kecilkan file Anda.'); berkasInput.value=''; return; }
   document.getElementById('fileInfo').innerHTML = '<span class="badge badge-success px-2 py-1"><i class="bi bi-check-circle"></i> '+f.name+'</span>';
   dropzone.style.borderColor = '#10b981';
@@ -207,7 +207,8 @@ function reindexPengalaman() {
   });
 }
 
-function createPengalamanItem() {
+function createPengalamanItem(preset) {
+  preset = preset || {};
   var div = document.createElement('div');
   div.className = 'exp-item';
   div.innerHTML = `
@@ -222,13 +223,17 @@ function createPengalamanItem() {
     </div>
     <textarea class="form-control form-control-custom exp-tugas" rows="1" placeholder="Tugas utama..." style="height:auto; padding:6px 8px;"></textarea>
   `;
+  if (preset.perusahaan) div.querySelector('.exp-perusahaan').value = preset.perusahaan;
+  if (preset.jabatan) div.querySelector('.exp-jabatan').value = preset.jabatan;
+  if (preset.periode) div.querySelector('.exp-periode').value = preset.periode;
+  if (preset.tugas) div.querySelector('.exp-tugas').value = preset.tugas;
 
   div.querySelector('.btn-remove').addEventListener('click', function() { div.remove(); reindexPengalaman(); });
   container.appendChild(div);
   reindexPengalaman();
 }
 
-btnAdd.addEventListener('click', createPengalamanItem);
+btnAdd.addEventListener('click', function () { createPengalamanItem(); });
 
 function togglePengalaman() {
   if (belumCb.checked) {
@@ -241,6 +246,26 @@ function togglePengalaman() {
 
 belumCb.addEventListener('change', togglePengalaman);
 togglePengalaman();
+
+// Kembalikan isian pengalaman setelah gagal validasi (old tersimpan di hidden textarea)
+(function restoreOldPengalaman() {
+  if (belumCb.checked) return;
+  var old = (hiddenInput.value || '').trim();
+  if (!old) return;
+  container.innerHTML = '';
+  var chunks = old.split(/\n\s*\n/);
+  chunks.forEach(function (ch) {
+    ch = ch.trim();
+    if (!ch) return;
+    var m = ch.match(/^\d+\.\s*(.*?)\s*[–-]\s*(.*?)\s*\((.*?)\)\s*\n?\s*Tugas:\s*([\s\S]*)$/);
+    if (m) {
+      createPengalamanItem({ perusahaan: m[1].trim(), jabatan: m[2].trim(), periode: m[3].trim() === '–' ? '' : m[3].trim(), tugas: (m[4] || '').trim() });
+    } else {
+      createPengalamanItem({ tugas: ch });
+    }
+  });
+  if (container.children.length === 0) createPengalamanItem();
+})();
 
 // --- Submit Validator ---
 lamaranForm.addEventListener('submit', function(e) {
