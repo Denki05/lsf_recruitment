@@ -49,14 +49,7 @@ class JobsController extends Controller
     /** Detail 1 loker via ID (URL kanonis). */
     public function show($id)
     {
-        $position = Position::with('branch')->withCount('applicants')->active()->findOrFail($id);
-        return $this->detail($position);
-    }
-
-    /** Detail 1 loker via URL pendek share, cth. /mm. */
-    public function short($slug)
-    {
-        $position = Position::with('branch')->withCount('applicants')->active()->where('slug', $slug)->firstOrFail();
+        $position = Position::with('branch')->active()->findOrFail($id);
         return $this->detail($position);
     }
 

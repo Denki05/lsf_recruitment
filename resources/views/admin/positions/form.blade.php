@@ -14,7 +14,13 @@
 .req-row .req-num{flex-shrink:0;width:26px;height:31px;display:flex;align-items:center;justify-content:center;background:#f1f3f5;border-radius:6px;font-size:12px;font-weight:700;color:#6c757d;}
 .save-bar{position:sticky;bottom:0;background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin-top:10px;display:flex;gap:8px;box-shadow:0 -2px 10px rgba(0,0,0,.06);}
 </style>
-<div class="mb-2"><a href="{{ route('admin.positions.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Kembali</a></div>
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{{ $position->exists ? 'Edit Loker' : 'Tambah Loker' }}</h1>
+    <p class="page-sub">Lengkapi penempatan, kriteria, dan deskripsi lowongan.</p>
+  </div>
+  <a href="{{ route('admin.positions.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Kembali</a>
+</div>
 <form method="POST" action="{{ $position->exists ? route('admin.positions.update', $position->id) : route('admin.positions.store') }}" id="lokerForm">@csrf @if($position->exists) @method('PUT') @endif
 <div class="content-card p-3 mb-2">
   @php($reqLines = old('requirements_lines', $position->requirements ? preg_split('/\r\n|\r|\n/', $position->requirements) : []))
@@ -50,6 +56,13 @@
       @endforelse
     </div>
     <button type="button" class="btn btn-sm btn-outline-primary mt-1" id="reqAdd"><i class="bi bi-plus"></i> Tambah baris</button>
+  </div>
+
+  <div class="loker-sect"><span class="num">4</span>Benefit & Fasilitas</div>
+  <div class="form-group mb-0">
+    <label>Benefit / Fasilitas <small class="text-muted">(satu baris = satu benefit)</small></label>
+    <textarea name="benefits" class="form-control form-control-sm" rows="3" placeholder="cth: BPJS Kesehatan & Ketenagakerjaan&#10;Bonus kinerja bulanan&#10;Tunjangan transport & komunikasi">{{ old('benefits', $position->benefits) }}</textarea>
+    <small class="text-muted">Tampil di detail lowongan dan formulir lamaran pelamar.</small>
   </div>
 
   <input type="hidden" name="skill_tags" value="{{ old('skill_tags', $position->skill_tags) }}">

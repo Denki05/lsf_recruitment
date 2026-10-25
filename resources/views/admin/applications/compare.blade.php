@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 @section('title', 'Banding Kandidat')
 @section('content')
-<div class="mb-2"><a href="{{ route('admin.applications.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Kembali</a></div>
+<div class="page-head mb-2">
+  <div>
+    <h1 class="page-title">Banding Kandidat</h1>
+    <p class="page-sub">Bandingkan {{ count($data) }} pelamar berdasarkan skor dan data utama.</p>
+  </div>
+  <a href="{{ route('admin.applications.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Kembali</a>
+</div>
 <div class="content-card p-2">
   <h6 class="font-weight-bold">Banding {{ count($data) }} Kandidat <small style="color:var(--muted)">(urut skor keyword)</small></h6>
   <div class="table-responsive"><table class="table table-sm table-hover">

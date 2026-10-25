@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class Position extends Model
 {
-    protected $fillable = ['branch_id', 'title', 'slug', 'location', 'gaji', 'pendidikan_minimal', 'usia_min', 'usia_maks', 'butuh_lembur', 'syarat_sim', 'description', 'requirements', 'skill_tags', 'is_active'];
+    protected $fillable = ['branch_id', 'title', 'slug', 'location', 'gaji', 'pendidikan_minimal', 'usia_min', 'usia_maks', 'butuh_lembur', 'syarat_sim', 'description', 'requirements', 'benefits', 'skill_tags', 'is_active'];
 
     protected $casts = ['is_active' => 'boolean', 'butuh_lembur' => 'boolean'];
 
@@ -18,13 +18,17 @@ class Position extends Model
         static::saving(function (Position $position) {
             $position->slug = static::uniqueSlug($position->slug ?: $position->title, $position->id);
         });
+
+        static::saved(function (Position $position) {
+            $position->ensureDefaultShortLink();
+        });
     }
 
     /** Slug unik untuk URL share pendek, mis. "mm" atau "manajer-marketing". */
     public static function uniqueSlug($value, $ignoreId = null)
     {
         $base = Str::slug((string) $value) ?: 'loker';
-        if (in_array($base, ['admin', 'lamaran', 'loker', 'c', 'api'], true)) {
+        if (ShortLink::isReservedCode($base)) {
             $base = 'loker-' . $base;
         }
         $slug = $base;
@@ -41,7 +45,38 @@ class Position extends Model
 
     public function getShareUrlAttribute()
     {
-        return $this->slug ? route('jobs.short', $this->slug) : route('jobs.show', $this->id);
+        $link = $this->relationLoaded('defaultShortLink')
+            ? $this->defaultShortLink
+            : $this->defaultShortLink()->first();
+
+        if ($link && $link->isAvailable()) {
+            return $link->url;
+        }
+        return route('jobs.show', $this->id);
+    }
+
+    public function shortLinks()
+    {
+        return $this->hasMany(ShortLink::class);
+    }
+
+    public function defaultShortLink()
+    {
+        return $this->hasOne(ShortLink::class)->where('is_default', true);
+    }
+
+    /** Setiap loker otomatis punya satu link pendek default. */
+    public function ensureDefaultShortLink()
+    {
+        $existing = $this->shortLinks()->where('is_default', true)->first();
+        if ($existing) {
+            return $existing;
+        }
+        return $this->shortLinks()->create([
+            'code' => ShortLink::generateCode(),
+            'is_active' => true,
+            'is_default' => true,
+        ]);
     }
 
     public function branch()
@@ -144,6 +179,23 @@ class Position extends Model
             return [];
         }
         $lines = preg_split('/\r\n|\r|\n/', $this->requirements);
+        $out = [];
+        foreach ($lines as $l) {
+            $l = trim(preg_replace('/^[-•*\d.)\s]+/u', '', $l));
+            if (mb_strlen($l) >= 3) {
+                $out[] = $l;
+            }
+        }
+        return array_values(array_unique($out));
+    }
+
+    /** Daftar benefit/fasilitas, satu poin per baris. */
+    public function getBenefitListAttribute()
+    {
+        if (empty($this->benefits)) {
+            return [];
+        }
+        $lines = preg_split('/\r\n|\r|\n/', $this->benefits);
         $out = [];
         foreach ($lines as $l) {
             $l = trim(preg_replace('/^[-•*\d.)\s]+/u', '', $l));

@@ -1,7 +1,13 @@
 @extends('layouts.admin')
 @section('title', ($branch->exists ? 'Edit' : 'Tambah') . ' Cabang')
 @section('content')
-<div class="mb-2"><a href="{{ route('admin.branches.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Kembali</a></div>
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{{ $branch->exists ? 'Edit Cabang' : 'Tambah Cabang' }}</h1>
+    <p class="page-sub">Atur identitas dan status tampil cabang di situs.</p>
+  </div>
+  <a href="{{ route('admin.branches.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Kembali</a>
+</div>
 <div class="content-card p-2" style="max-width:560px">
 <form method="POST" action="{{ $branch->exists ? route('admin.branches.update', $branch->id) : route('admin.branches.store') }}">@csrf @if($branch->exists) @method('PUT') @endif
   <div class="form-group"><label>Nama Cabang / Perusahaan *</label><input name="name" class="form-control form-control-sm" value="{{ old('name', $branch->name) }}" required maxlength="100" placeholder="cth: UNIFRA"></div>

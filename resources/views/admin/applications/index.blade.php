@@ -4,12 +4,12 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
 <style>
 /* Layout Container */
-.admin-container { max-width: 1340px; margin: 0 auto; }
-.compact-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+.admin-container { width: 100%; }
+.compact-card { background: #ffffff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 2px rgba(15,23,42,.04); }
 
 /* Sidebar Filter */
-.screening-card { position: sticky; top: 64px; }
-.screening-head { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-radius: 8px 8px 0 0; }
+.screening-card { position: sticky; top: calc(var(--nav-h, 56px) + 12px); }
+.screening-head { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border-radius: 11px 11px 0 0; }
 .screening-head b { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px; color: #1e293b; }
 .screening-body { padding: 12px 14px; }
 .scr-label { font-size: 10.5px; font-weight: 700; color: #64748b; margin-bottom: 3px; display: block; text-transform: uppercase; letter-spacing: 0.3px; }
@@ -23,7 +23,7 @@
 .select2-container--default .select2-selection--single .select2-selection__arrow { height: 26px !important; }
 
 /* Sticky Toolbar Kanan */
-.toolbar-card { padding: 8px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 60px; z-index: 60; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); }
+.toolbar-card { padding: 8px 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: calc(var(--nav-h, 56px) + 12px); z-index: 60; background: rgba(255,255,255,0.96); backdrop-filter: blur(4px); }
 .fbadge { position: absolute; top: -6px; right: -6px; background: #ef4444; color: #fff; font-size: 9px; font-weight: 800; border-radius: 10px; min-width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; }
 
 /* Buttons */
@@ -41,6 +41,13 @@
 </style>
 
 <div class="admin-container">
+  <div class="page-head mb-2">
+    <div>
+      <h1 class="page-title">Data Lamaran</h1>
+      <p class="page-sub">Saring kandidat, perbarui status, dan bandingkan pelamar.</p>
+    </div>
+  </div>
+
   <div class="row">
     <!-- FILTER SIDEBAR -->
     <div class="col-md-3 pr-md-2">

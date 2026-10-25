@@ -1,7 +1,13 @@
 @extends('layouts.admin')
-@section('title', ($user->exists ? 'Edit' : 'Tambah') . ' Login')
+@section('title', ($user->exists ? 'Edit' : 'Tambah') . ' Pengguna')
 @section('content')
-<div class="mb-2"><a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Kembali</a></div>
+<div class="page-head">
+  <div>
+    <h1 class="page-title">{{ $user->exists ? 'Edit Pengguna' : 'Tambah Pengguna' }}</h1>
+    <p class="page-sub">Atur akun, peran, dan cabang yang boleh diakses.</p>
+  </div>
+  <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Kembali</a>
+</div>
 <div class="content-card p-2" style="max-width:600px">
 <form method="POST" action="{{ $user->exists ? route('admin.users.update', $user->id) : route('admin.users.store') }}">@csrf @if($user->exists) @method('PUT') @endif
   <div class="form-row">

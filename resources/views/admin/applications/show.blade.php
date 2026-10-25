@@ -74,7 +74,13 @@
 </style>
 
 {{-- Bar atas --}}
-<div class="mb-2"><a href="{{ route('admin.applications.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Daftar Lamaran</a></div>
+<div class="page-head mb-2">
+  <div>
+    <h1 class="page-title">Detail Lamaran</h1>
+    <p class="page-sub">Profil pelamar, berkas, status, dan riwayat proses seleksi.</p>
+  </div>
+  <a href="{{ route('admin.applications.index') }}" class="btn btn-sm btn-light border"><i class="bi bi-arrow-left"></i> Daftar Lamaran</a>
+</div>
 
 {{-- Header pelamar --}}
 <div class="content-card dt-card mb-2" style="border-left:4px solid {{ $statusHex[$applicant->status] ?? '#6c757d' }}">

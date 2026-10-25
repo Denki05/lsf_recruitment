@@ -55,6 +55,17 @@
 .lam-pagination .pagination { margin-bottom: 4px; }
 .lam-pagination .page-link { font-size: 12px; padding: 4px 10px; color: #0f4c81; }
 .lam-pagination .page-item.active .page-link { background: #0f4c81; border-color: #0f4c81; }
+
+@media (max-width: 767.98px) {
+  .crow { flex-wrap: wrap; align-items: flex-start; padding: 12px; gap: 10px; }
+  .crow > div:first-child { margin-top: 3px; }
+  .crow-main { flex: 1 1 calc(100% - 26px); }
+  .crow-l1 .ml-auto { margin-left: 0 !important; }
+  .crow-act { width: 100%; padding-left: 26px; }
+  .crow-act .btn-action-group { width: 100%; }
+  .crow-act .btn-act { flex: 1 1 auto; justify-content: center; display: inline-flex; align-items: center; padding: 8px 10px; }
+  .crow-act .btn-reject-icon { flex: 0 0 44px; }
+}
 </style>
 
 @php

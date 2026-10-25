@@ -43,8 +43,13 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('pengguna', 'Admin\UserController')->names('users')->except(['show']);
 
     Route::resource('loker', 'Admin\PositionController')->names('positions')->except(['show']);
+    Route::get('/link/kode-acak', 'Admin\ShortLinkController@randomCode')->name('shortlinks.randomCode');
+    Route::resource('link', 'Admin\ShortLinkController')->names('shortlinks')->except(['show']);
 });
 
-// URL pendek share lowongan (cth. /mm). Wajib di paling bawah agar tidak
+// URL pendek share lowongan (cth. /s/mm). Wajib di paling bawah agar tidak
 // menimpa route lain yang sudah terdaftar di atas.
-Route::get('/{slug}', 'JobsController@short')->name('jobs.short')->where('slug', '[A-Za-z0-9-]+');
+Route::get('/s/{code}', 'ShortLinkController@redirect')->name('jobs.short')->where('code', '[A-Za-z0-9-]+');
+
+// Kompatibilitas link lama yang masih di root (cth. /mm) → /s/mm.
+Route::get('/{code}', 'ShortLinkController@legacyRedirect')->name('jobs.short.legacy')->where('code', '[A-Za-z0-9-]+');

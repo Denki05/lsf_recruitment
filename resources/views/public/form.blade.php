@@ -45,7 +45,22 @@
     padding: 14px; text-align: center; cursor: pointer; transition: all 0.2s;
   }
   .dz-custom:hover { border-color: #0f4c81; background: #f0f7ff; }
+
+  /* Benefit pada kartu posisi */
+  .apply-benefits { margin-top: 8px; border: 1px solid #e2e8f0; border-radius: 7px; background: #f8fafc; }
+  .apply-benefits summary { display: flex; align-items: center; gap: 6px; padding: 6px 9px; list-style: none; cursor: pointer; color: #0f4c81; font-size: 11.5px; font-weight: 700; }
+  .apply-benefits summary::-webkit-details-marker { display: none; }
+  .apply-benefits summary > i:first-child { color: #0f766e; font-size: 12px; }
+  .apply-benefits-count { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: #e0f2fe; color: #0f4c81; font-size: 10px; font-weight: 800; }
+  .apply-benefits-chevron { margin-left: auto; color: #94a3b8; font-size: 10px; transition: transform .18s; }
+  .apply-benefits[open] .apply-benefits-chevron { transform: rotate(180deg); }
+  .apply-benefits-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 16px; margin: 0; padding: 0 10px 9px; list-style: none; }
+  .apply-benefits-list li { display: flex; gap: 5px; color: #475569; font-size: 11.5px; line-height: 1.45; }
+  .apply-benefits-list li i { flex-shrink: 0; margin-top: 1px; color: #059669; font-size: 11px; }
+  @media (max-width: 575.98px) { .apply-benefits-list { grid-template-columns: 1fr; } }
 </style>
+
+@php($selectedBenefits = !empty($selectedPosition) ? $selectedPosition->benefit_list : [])
 
 <div class="apply-container">
   <div class="d-flex justify-content-between align-items-center mb-2">
@@ -78,6 +93,20 @@
           @endif
         </div>
       </div>
+      @if(count($selectedBenefits))
+      <details class="apply-benefits">
+        <summary>
+          <i class="bi bi-gift-fill"></i> Benefit yang Anda dapat
+          <span class="apply-benefits-count">{{ count($selectedBenefits) }}</span>
+          <i class="bi bi-chevron-down apply-benefits-chevron"></i>
+        </summary>
+        <ul class="apply-benefits-list">
+          @foreach($selectedBenefits as $benefit)
+            <li><i class="bi bi-check2-circle"></i> {{ $benefit }}</li>
+          @endforeach
+        </ul>
+      </details>
+      @endif
     </div>
 
     <div class="row">

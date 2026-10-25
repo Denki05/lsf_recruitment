@@ -12,7 +12,7 @@ class PositionController extends Controller
 {
     public function index()
     {
-        $positions = BranchAccess::scopePositions(Position::with('branch')->withCount('applicants'))
+        $positions = BranchAccess::scopePositions(Position::with('branch', 'defaultShortLink')->withCount('applicants'))
             ->orderBy('title')->get();
         return view('admin.positions.index', compact('positions'));
     }
@@ -48,6 +48,7 @@ class PositionController extends Controller
             'requirements' => 'nullable|string',
             'requirements_lines' => 'nullable|array',
             'requirements_lines.*' => 'nullable|string|max:500',
+            'benefits' => 'nullable|string|max:2000',
             'skill_tags' => 'nullable|string|max:500',
             'is_active' => 'nullable|boolean',
         ]);
@@ -112,6 +113,9 @@ class PositionController extends Controller
         }
         if (empty($data['gaji'])) {
             $data['gaji'] = null;
+        }
+        if (isset($data['benefits'])) {
+            $data['benefits'] = trim($data['benefits']) !== '' ? trim($data['benefits']) : null;
         }
         return $data;
     }

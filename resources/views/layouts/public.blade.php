@@ -51,6 +51,9 @@ h5.sect{font-size:16px;margin-bottom:2px;}
 </style>
 </head>
 <body>
+@hasSection('page')
+  @yield('page')
+@else
 <div class="top-hero">
   <div class="container container-narrow text-center">
     <h3 class="font-weight-bold mb-1"><i class="bi bi-briefcase-fill"></i> @yield('hero_title', 'Recruitment')</h3>
@@ -67,6 +70,7 @@ h5.sect{font-size:16px;margin-bottom:2px;}
     </div>
   </div>
 </div>
+@endif
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 @stack('scripts')
