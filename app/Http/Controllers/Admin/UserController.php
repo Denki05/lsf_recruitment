@@ -6,7 +6,10 @@ use App\Branch;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -54,6 +57,26 @@ class UserController extends Controller
             $user->branches()->detach();
         }
         return redirect()->route('admin.users.index')->with('success', 'Login baru dibuat.');
+    }
+
+    public function magicLink($id)
+    {
+        $user = User::findOrFail($id);
+
+        $token = Str::random(64);
+        $expires = now()->addDays(7);
+        // Satu link aktif per akun; membuat link baru otomatis mematikan yang lama.
+        Cache::put('magic_login_user:' . $user->id, hash('sha256', $token), $expires);
+        $url = URL::temporarySignedRoute('admin.magic', $expires, [
+            'user' => $user->id,
+            'token' => $token,
+        ]);
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'Link login untuk ' . $user->name . ' dibuat. Bisa dipakai berulang.')
+            ->with('magic_link', $url)
+            ->with('magic_link_user', $user->name . ' (' . $user->email . ')')
+            ->with('magic_link_expires', $expires->format('d/m/Y H:i'));
     }
 
     public function edit($id)

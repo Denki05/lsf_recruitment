@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class LoginController extends Controller
 {
@@ -46,6 +48,23 @@ class LoginController extends Controller
 
         cache()->put($key, $attempts + 1, 60);
         return back()->withErrors(['email' => 'Email atau password salah.'])->withInput();
+    }
+
+    public function magicLogin(Request $request, $id, $token)
+    {
+        $user = User::find($id);
+        $storedHash = Cache::get('magic_login_user:' . $id);
+
+        if (!$user || !$storedHash || !hash_equals($storedHash, hash('sha256', $token))) {
+            abort(403, 'Link login tidak valid atau sudah diganti. Minta link baru.');
+        }
+
+        // Ingat perangkat ini (~5 tahun) agar tidak perlu memasukkan password lagi.
+        Auth::login($user, true);
+        $request->session()->forget('current_branch_id');
+
+        return redirect()->route('admin.dashboard')
+            ->with('success', 'Masuk sebagai ' . $user->name . '. Perangkat ini akan tetap login.');
     }
 
     public function logout(Request $request)

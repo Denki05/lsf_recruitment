@@ -21,6 +21,12 @@ Route::get('/admin/login', 'Admin\LoginController@showLogin')->name('admin.login
 Route::post('/admin/login', 'Admin\LoginController@login')->name('admin.login.submit')->middleware('throttle:5,1');
 Route::post('/admin/logout', 'Admin\LoginController@logout')->name('admin.logout');
 
+// Login lewat link: signature 7 hari, token cache bisa dipakai berulang.
+Route::get('/admin/masuk/{user}/{token}', 'Admin\LoginController@magicLogin')
+    ->name('admin.magic')
+    ->middleware('signed')
+    ->where(['user' => '[0-9]+', 'token' => '[A-Za-z0-9]+']);
+
 // Admin area (wajib login)
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
@@ -40,6 +46,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
     Route::post('/cabang/switch', 'Admin\BranchController@switch')->name('branch.switch');
     Route::resource('cabang', 'Admin\BranchController')->names('branches')->except(['show']);
+    Route::post('/pengguna/{user}/link-login', 'Admin\UserController@magicLink')->name('users.magic')->middleware('throttle:10,1');
     Route::resource('pengguna', 'Admin\UserController')->names('users')->except(['show']);
 
     Route::resource('loker', 'Admin\PositionController')->names('positions')->except(['show']);
