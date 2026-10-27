@@ -17,7 +17,14 @@ class ApplicationController extends Controller
         $positions = Position::with('branch')->active()->orderBy('title')->get();
         $selectedPosition = null;
         if ($position) {
-            $selectedPosition = Position::with('branch')->active()->find($position);
+            $selectedPosition = Position::with('branch')->active()
+                ->where(function ($q) use ($position) {
+                    $q->where('public_token', $position);
+                    if (ctype_digit((string) $position)) {
+                        $q->orWhere('id', $position);
+                    }
+                })
+                ->first();
             if (!$selectedPosition) {
                 return redirect()->route('jobs.index');
             }

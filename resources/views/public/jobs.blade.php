@@ -116,7 +116,7 @@
   <!-- Job List (Grid) -->
   <div id="jobList">
     @foreach($positions as $p)
-    <a class="job-card" href="{{ route('jobs.show', $p->id) }}" data-key="{{ mb_strtolower($p->title . ' ' . ($p->branch ? $p->branch->name : '') . ' ' . $p->location) }}">
+    <a class="job-card" href="{{ route('jobs.show', $p) }}" data-key="{{ mb_strtolower($p->title . ' ' . ($p->branch ? $p->branch->name : '') . ' ' . $p->location) }}">
       
       <div class="job-card-header">
         <div class="job-avatar">
@@ -153,7 +153,7 @@
         @if($p->sim_list)
           <span><i class="bi bi-card-checklist text-muted"></i> SIM {{ implode('/', $p->sim_list) }}</span>
         @endif
-        @if($p->gaji)
+        @if($p->gaji && $p->show_salary)
           <span class="pay-chip"><i class="bi bi-cash-stack"></i> Rp {{ number_format($p->gaji, 0, ',', '.') }}</span>
         @endif
       </div>

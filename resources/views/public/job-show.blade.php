@@ -3,7 +3,7 @@
 @php
 $companyName = $position->branch ? $position->branch->name : 'LSF Recruitment';
 $metaDescription = \Illuminate\Support\Str::limit(trim(strip_tags($position->description ?: implode(' ', $position->requirement_list))), 160);
-$jobUrl = route('jobs.show', $position->id);
+$jobUrl = route('jobs.show', $position);
 $descLines = collect(preg_split('/\r\n|\r|\n/', (string) $position->description))
     ->map(function ($line) { return trim(preg_replace('/^[-•*]\s*/u', '', $line)); })
     ->filter()
@@ -49,7 +49,7 @@ $postedLabel = $position->created_at ? $position->created_at->locale('id')->diff
   .job-hero {
     position: relative;
     overflow: hidden;
-    padding: 16px 0 62px;
+    padding: 24px 0 62px;
     background: linear-gradient(120deg, #092d4f 0%, #0b3a63 42%, #0f4c81 74%, #16659b 100%);
     color: #fff;
   }
@@ -76,43 +76,21 @@ $postedLabel = $position->created_at ? $position->created_at->locale('id')->diff
   .job-hero-inner {
     position: relative;
     z-index: 1;
-    max-width: 1180px;
+    max-width: 992px;
     margin: 0 auto;
     padding: 0 24px;
   }
-  .job-crumb {
+  .job-title-row {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 14px;
-    font-size: 12px;
-    color: rgba(255, 255, 255, .55);
+    gap: 14px 20px;
   }
-  .job-crumb a {
-    color: rgba(255, 255, 255, .8);
-    text-decoration: none;
-    transition: color .15s;
-  }
-  .job-crumb a:hover { color: #fff; text-decoration: underline; }
-  .job-crumb .crumb-current {
-    max-width: 320px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: rgba(255, 255, 255, .55);
-  }
-  .job-hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 272px;
-    gap: 28px;
-    align-items: end;
-  }
+  .job-title-row h1 { flex: 0 1 auto; }
   .job-status {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-bottom: 10px;
     padding: 4px 10px;
     border-radius: 999px;
     border: 1px solid rgba(52, 211, 153, .3);
@@ -208,28 +186,12 @@ $postedLabel = $position->created_at ? $position->created_at->locale('id')->diff
     background: rgba(52, 211, 153, .14);
     color: #d1fae5;
   }
-  .job-hero-cta {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 14px 16px;
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, .14);
-    background: rgba(255, 255, 255, .08);
-    backdrop-filter: blur(8px);
-  }
-  .job-hero-cta .posted {
-    color: rgba(255, 255, 255, .82);
-    font-size: 12px;
-    font-weight: 700;
-  }
   .btn-hero-apply {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 7px;
-    padding: 11px 14px;
+    padding: 12px 22px;
     border-radius: 9px;
     background: #fff;
     color: var(--brand-deep) !important;
@@ -246,32 +208,14 @@ $postedLabel = $position->created_at ? $position->created_at->locale('id')->diff
     transform: translateY(-1px);
     box-shadow: 0 14px 28px rgba(0, 0, 0, .22);
   }
-  .cta-note {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 4px;
-    color: rgba(255, 255, 255, .6);
-    font-size: 10px;
-    line-height: 1.35;
-  }
-  .cta-note i { color: #fbbf24; }
-  .cta-note i.bi-shield-check { color: #34d399; }
 
   /* Shell */
   .job-shell {
     position: relative;
     z-index: 2;
-    max-width: 1180px;
+    max-width: 992px;
     margin: -44px auto 0;
     padding: 0 24px 30px;
-  }
-  .job-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 300px;
-    gap: 20px;
-    align-items: start;
   }
   .job-panel {
     margin-bottom: 12px;
@@ -369,141 +313,6 @@ $postedLabel = $position->created_at ? $position->created_at->locale('id')->diff
     color: var(--brand);
     transform: translateY(-1px);
   }
-  .steps-panel { background: linear-gradient(145deg, #f8fbff 0%, #fff 65%); }
-  .hiring-steps {
-    display: grid;
-    gap: 9px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .hiring-steps li {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .hiring-steps li:not(:last-child)::before {
-    content: "";
-    position: absolute;
-    left: 13px;
-    top: 27px;
-    bottom: -9px;
-    width: 1px;
-    background: #dbeafe;
-  }
-  .step-num {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    flex: 0 0 26px;
-    border-radius: 50%;
-    background: var(--brand);
-    box-shadow: 0 0 0 3px #eef4fa;
-    color: #fff;
-    font-size: 11.5px;
-    font-weight: 800;
-  }
-  .hiring-steps strong {
-    display: block;
-    margin-bottom: 1px;
-    color: #1e293b;
-    font-size: 12.5px;
-  }
-  .hiring-steps p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 11.5px;
-    line-height: 1.45;
-  }
-
-  /* Sidebar */
-  .job-side { align-self: start; }
-  .job-side .job-panel { padding: 16px 18px 18px; }
-  .job-side .hiring-steps { gap: 9px; }
-  @media (min-width: 992px) and (min-height: 760px) {
-    .job-side { position: sticky; top: 16px; }
-  }
-
-  .other-jobs { display: grid; gap: 6px; }
-  .other-job {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 8px;
-    border: 1px solid transparent;
-    border-radius: 9px;
-    color: inherit;
-    text-decoration: none;
-    transition: background .18s, border-color .18s;
-  }
-  .other-job:hover {
-    border-color: var(--line);
-    background: #f8fafc;
-    color: inherit;
-    text-decoration: none;
-  }
-  .other-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    flex: 0 0 30px;
-    border-radius: 8px;
-    background: #eef4fa;
-    color: var(--brand);
-    font-size: 12px;
-  }
-  .other-copy { min-width: 0; flex: 1; }
-  .other-copy strong {
-    display: block;
-    overflow: hidden;
-    color: #1e293b;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1.35;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .other-copy small {
-    display: block;
-    margin-top: 1px;
-    color: #94a3b8;
-    font-size: 10.5px;
-  }
-  .other-arrow { flex-shrink: 0; color: #cbd5e1; font-size: 10px; }
-  .explore-copy {
-    margin: 0 0 10px;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.5;
-  }
-  .btn-explore {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid #dbe3ee;
-    border-radius: 9px;
-    background: #f8fafc;
-    color: var(--brand) !important;
-    font-size: 12px;
-    font-weight: 700;
-    text-decoration: none !important;
-    transition: background .18s, border-color .18s;
-  }
-  .btn-explore:hover {
-    border-color: #bfd4e8;
-    background: #eef4fa;
-    text-decoration: none !important;
-  }
   .job-footnote {
     display: flex;
     align-items: center;
@@ -519,21 +328,11 @@ $postedLabel = $position->created_at ? $position->created_at->locale('id')->diff
   .mobile-apply-bar { display: none; }
 
   @media (max-width: 991.98px) {
-    .job-hero { padding: 14px 0 56px; }
+    .job-hero { padding: 18px 0 56px; }
     .job-hero-inner { padding: 0 18px; }
-    .job-hero-grid { grid-template-columns: 1fr; gap: 0; }
-    .job-hero-cta { display: none; }
+    .job-hero .btn-hero-apply { display: none; }
     .job-shell { margin-top: -38px; padding: 0 16px 86px; }
-    .job-layout { grid-template-columns: 1fr; gap: 0; }
-    .job-side { position: static; }
     .job-panel { margin-bottom: 10px; padding: 16px; }
-    .job-side .job-panel { padding: 16px; margin-bottom: 10px; }
-    .hiring-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-    .hiring-steps li { flex-direction: column; gap: 6px; }
-    .hiring-steps li:not(:last-child)::before { display: none; }
-    .hiring-steps p { display: none; }
-    .hiring-steps strong { font-size: 12px; line-height: 1.3; }
-    .step-num { width: 24px; height: 24px; flex-basis: 24px; font-size: 11px; }
     .job-footnote { margin-top: 12px; }
     .mobile-apply-bar {
       position: fixed;
@@ -583,15 +382,14 @@ $postedLabel = $position->created_at ? $position->created_at->locale('id')->diff
       font-weight: 700;
       text-decoration: none !important;
     }
+    .mobile-apply-bar.is-single { justify-content: center; }
+    .mobile-apply-bar.is-single .btn-mobile-apply { flex: 1 1 auto; justify-content: center; }
   }
 
   @media (max-width: 575.98px) {
-    .job-hero { padding: 12px 0 52px; }
-    .job-crumb { margin-bottom: 10px; font-size: 11px; }
-    .job-crumb .crumb-current { display: none; }
-    .job-crumb .crumb-sep:nth-last-child(2) { display: none; }
+    .job-hero { padding: 16px 0 52px; }
     .job-hero h1 { margin-bottom: 10px; font-size: 24px; line-height: 1.15; }
-    .job-status { margin-bottom: 8px; padding: 3px 9px; font-size: 9.5px; }
+    .job-status { padding: 3px 9px; font-size: 9.5px; }
     .job-company-line { gap: 9px; margin-bottom: 10px; }
     .company-mark { width: 34px; height: 34px; flex-basis: 34px; border-radius: 9px; font-size: 14px; }
     .company-copy strong { font-size: 12.5px; }
@@ -601,7 +399,6 @@ $postedLabel = $position->created_at ? $position->created_at->locale('id')->diff
     .job-hero-chips span { padding: 5px 8px; font-size: 10.5px; gap: 4px; }
     .job-shell { padding: 0 12px 80px; }
     .job-panel { padding: 14px; margin-bottom: 9px; border-radius: 12px; }
-    .job-side .job-panel { padding: 14px; margin-bottom: 9px; }
     .job-panel h2 { gap: 8px; margin-bottom: 9px; font-size: 16px; }
     .panel-icon { width: 26px; height: 26px; flex-basis: 26px; border-radius: 7px; font-size: 12.5px; }
     .job-list-clean { gap: 4px; }
@@ -610,9 +407,6 @@ $postedLabel = $position->created_at ? $position->created_at->locale('id')->diff
     .job-list-clean li::after { top: 6.5px; left: 4px; width: 5.5px; height: 3px; }
     .skill-cloud { gap: 5px; }
     .skill-pill { padding: 4px 8px; font-size: 11px; gap: 4px; }
-    .hiring-steps { gap: 6px; }
-    .hiring-steps strong { font-size: 11px; }
-    .step-num { width: 22px; height: 22px; flex-basis: 22px; font-size: 10.5px; }
     .btn-mobile-apply { padding: 10px 14px; font-size: 12px; }
     .job-footnote { margin-top: 10px; font-size: 10px; }
   }
@@ -621,179 +415,109 @@ $postedLabel = $position->created_at ? $position->created_at->locale('id')->diff
 <div class="job-page">
   <section class="job-hero">
     <div class="job-hero-inner">
-      <nav class="job-crumb" aria-label="Breadcrumb">
-        <a href="{{ route('jobs.index') }}"><i class="bi bi-arrow-left"></i> Semua lowongan</a>
-        @if($position->branch)
-          <span class="crumb-sep">/</span>
-          <a href="{{ route('jobs.branch', $position->branch->name) }}">{{ $position->branch->name }}</a>
+      <div class="job-title-row">
+        <h1>{{ $position->title }}</h1>
+        <a class="btn-hero-apply" href="{{ route('lamaran.form', $position) }}">
+          Lamar Sekarang <i class="bi bi-arrow-up-right"></i>
+        </a>
+      </div>
+
+      <div class="job-company-line">
+        <span class="company-mark">{{ mb_strtoupper(mb_substr($companyName, 0, 1)) }}</span>
+        <div class="company-copy">
+          <strong>{{ $companyName }}</strong>
+          <span>
+            <i class="bi bi-geo-alt"></i> {{ $position->location }}@if($position->branch && $position->branch->location && $position->branch->location !== $position->location), {{ $position->branch->location }}@endif
+          </span>
+        </div>
+        <span class="job-status"><span class="dot"></span> Lowongan aktif</span>
+        <span class="verified"><i class="bi bi-patch-check-fill"></i> Terverifikasi</span>
+      </div>
+
+      <div class="job-hero-chips">
+        <span><i class="bi bi-briefcase"></i> Penuh waktu</span>
+        @if($position->pendidikan_minimal)
+          <span><i class="bi bi-mortarboard"></i> Min. {{ $position->pendidikan_minimal }}</span>
         @endif
-        <span class="crumb-sep">/</span>
-        <span class="crumb-current">{{ $position->title }}</span>
-      </nav>
-
-      <div class="job-hero-grid">
-        <div>
-          <span class="job-status"><span class="dot"></span> Lowongan aktif</span>
-          <h1>{{ $position->title }}</h1>
-
-          <div class="job-company-line">
-            <span class="company-mark">{{ mb_strtoupper(mb_substr($companyName, 0, 1)) }}</span>
-            <div class="company-copy">
-              <strong>{{ $companyName }}</strong>
-              <span>
-                <i class="bi bi-geo-alt"></i> {{ $position->location }}@if($position->branch && $position->branch->location && $position->branch->location !== $position->location), {{ $position->branch->location }}@endif
-              </span>
-            </div>
-            <span class="verified"><i class="bi bi-patch-check-fill"></i> Terverifikasi</span>
-          </div>
-
-          <div class="job-hero-chips">
-            <span><i class="bi bi-briefcase"></i> Penuh waktu</span>
-            @if($position->pendidikan_minimal)
-              <span><i class="bi bi-mortarboard"></i> Min. {{ $position->pendidikan_minimal }}</span>
-            @endif
-            @if(count($position->sim_list))
-              <span><i class="bi bi-card-checklist"></i> SIM {{ implode('/', $position->sim_list) }}</span>
-            @endif
-            <span class="pay"><i class="bi bi-cash-stack"></i> {{ $salaryLabel }}@if($position->gaji) / bln @endif</span>
-            <span><i class="bi bi-clock-history"></i> Diposting {{ $postedLabel }}</span>
-          </div>
-        </div>
-
-        <div class="job-hero-cta">
-          <span class="posted">Tertarik dengan posisi ini?</span>
-          <a class="btn-hero-apply" href="{{ route('lamaran.form', $position->id) }}">
-            Lamar Sekarang <i class="bi bi-arrow-up-right"></i>
-          </a>
-          <span class="cta-note"><i class="bi bi-lightning-charge-fill"></i> ±2 menit · <i class="bi bi-shield-check"></i> Data hanya untuk rekrutmen</span>
-        </div>
+        @if(count($position->sim_list))
+          <span><i class="bi bi-card-checklist"></i> SIM {{ implode('/', $position->sim_list) }}</span>
+        @endif
+        @if($position->show_salary)
+          <span class="pay"><i class="bi bi-cash-stack"></i> {{ $salaryLabel }}@if($position->gaji) / bln @endif</span>
+        @endif
+        <span><i class="bi bi-clock-history"></i> Diposting {{ $postedLabel }}</span>
       </div>
     </div>
   </section>
 
   <main class="job-shell">
-    <div class="job-layout">
-      <div class="job-main">
-        @if($skills->count())
-        <section class="job-panel">
-          <h2><span class="panel-icon"><i class="bi bi-stars"></i></span> Keahlian yang Dicari</h2>
-          <div class="skill-cloud">
-            @foreach($skills as $skill)
-              <span class="skill-pill"><i class="bi bi-check2-circle"></i> {{ $skill }}</span>
-            @endforeach
-          </div>
-        </section>
-        @endif
-
-        @if($benefits->count())
-        <section class="job-panel">
-          <h2><span class="panel-icon"><i class="bi bi-gift"></i></span> Benefit yang Anda Dapat</h2>
-          <ul class="job-list-clean benefit-list">
-            @foreach($benefits as $benefit)
-              <li>{{ $benefit }}</li>
-            @endforeach
-          </ul>
-        </section>
-        @endif
-
-        @if($hasQualifications)
-        <section class="job-panel">
-          <h2><span class="panel-icon"><i class="bi bi-ui-checks"></i></span> Kualifikasi</h2>
-          <ul class="job-list-clean">
-            @if($showEducation)
-              <li>Pendidikan minimal <strong>{{ $position->pendidikan_minimal }}</strong>.</li>
-            @endif
-            @if($showAge)
-              <li>Rentang usia <strong>{{ $position->usia_min ?: '…' }} – {{ $position->usia_maks ?: '…' }} tahun</strong>.</li>
-            @endif
-            @if($showSim)
-              <li>Memiliki SIM <strong>{{ implode(' / ', $position->sim_list) }}</strong> yang masih berlaku.</li>
-            @endif
-            @if($showOvertime)
-              <li>Bersedia bekerja lembur saat dibutuhkan.</li>
-            @endif
-            @foreach($position->requirement_list as $requirement)
-              <li>{{ $requirement }}</li>
-            @endforeach
-          </ul>
-        </section>
-        @endif
-
-        @if($descLines->count())
-        <section class="job-panel">
-          <h2><span class="panel-icon"><i class="bi bi-file-text"></i></span> Deskripsi Pekerjaan</h2>
-          <ul class="job-list-clean">
-            @foreach($descLines as $line)
-              <li>{{ $line }}</li>
-            @endforeach
-          </ul>
-        </section>
-        @endif
+    @if($skills->count())
+    <section class="job-panel">
+      <h2><span class="panel-icon"><i class="bi bi-stars"></i></span> Keahlian yang Dicari</h2>
+      <div class="skill-cloud">
+        @foreach($skills as $skill)
+          <span class="skill-pill"><i class="bi bi-check2-circle"></i> {{ $skill }}</span>
+        @endforeach
       </div>
+    </section>
+    @endif
 
-      <aside class="job-side">
-        <section class="job-panel steps-panel">
-          <h2><span class="panel-icon"><i class="bi bi-signpost-split"></i></span> Proses Rekrutmen</h2>
-          <ol class="hiring-steps">
-            <li>
-              <span class="step-num">1</span>
-              <div>
-                <strong>Isi formulir lamaran</strong>
-                <p>Lengkapi data diri dan unggah CV terbaru Anda melalui formulir online.</p>
-              </div>
-            </li>
-            <li>
-              <span class="step-num">2</span>
-              <div>
-                <strong>Tim HRD meninjau</strong>
-                <p>Kualifikasi dan pengalaman Anda dicocokkan dengan kebutuhan posisi.</p>
-              </div>
-            </li>
-            <li>
-              <span class="step-num">3</span>
-              <div>
-                <strong>Kami menghubungi Anda</strong>
-                <p>Kandidat terpilih akan dihubungi melalui WhatsApp atau email.</p>
-              </div>
-            </li>
-          </ol>
-        </section>
+    @if($position->show_benefits && $benefits->count())
+    <section class="job-panel">
+      <h2><span class="panel-icon"><i class="bi bi-gift"></i></span> Benefit yang Anda Dapat</h2>
+      <ul class="job-list-clean benefit-list">
+        @foreach($benefits as $benefit)
+          <li>{{ $benefit }}</li>
+        @endforeach
+      </ul>
+    </section>
+    @endif
 
-        @if($others->count())
-        <div class="job-panel">
-          <h2>Lowongan Lain</h2>
-          <div class="other-jobs">
-            @foreach($others as $other)
-            <a class="other-job" href="{{ route('jobs.show', $other->id) }}">
-              <span class="other-icon"><i class="bi bi-briefcase"></i></span>
-              <span class="other-copy">
-                <strong>{{ $other->title }}</strong>
-                <small><i class="bi bi-geo-alt"></i> {{ $other->location }}</small>
-              </span>
-              <i class="bi bi-chevron-right other-arrow"></i>
-            </a>
-            @endforeach
-          </div>
-        </div>
-        @else
-        <div class="job-panel explore-panel">
-          <h2>Cari Lowongan Lain</h2>
-          <p class="explore-copy">Temukan posisi lain yang sesuai dengan pengalaman dan minat Anda.</p>
-          <a class="btn-explore" href="{{ route('jobs.index') }}">Lihat Semua Lowongan <i class="bi bi-arrow-right"></i></a>
-        </div>
+    @if($hasQualifications)
+    <section class="job-panel">
+      <h2><span class="panel-icon"><i class="bi bi-ui-checks"></i></span> Kualifikasi</h2>
+      <ul class="job-list-clean">
+        @if($showEducation)
+          <li>Pendidikan minimal <strong>{{ $position->pendidikan_minimal }}</strong>.</li>
         @endif
-      </aside>
-    </div>
+        @if($showAge)
+          <li>Rentang usia <strong>{{ $position->usia_min ?: '…' }} – {{ $position->usia_maks ?: '…' }} tahun</strong>.</li>
+        @endif
+        @if($showSim)
+          <li>Memiliki SIM <strong>{{ implode(' / ', $position->sim_list) }}</strong> yang masih berlaku.</li>
+        @endif
+        @if($showOvertime)
+          <li>Bersedia bekerja lembur saat dibutuhkan.</li>
+        @endif
+        @foreach($position->requirement_list as $requirement)
+          <li>{{ $requirement }}</li>
+        @endforeach
+      </ul>
+    </section>
+    @endif
 
-    <p class="job-footnote"><i class="bi bi-info-circle"></i> Pastikan seluruh data lamaran sudah benar sebelum dikirim.</p>
+    @if($descLines->count())
+    <section class="job-panel">
+      <h2><span class="panel-icon"><i class="bi bi-file-text"></i></span> Deskripsi Pekerjaan</h2>
+      <ul class="job-list-clean">
+        @foreach($descLines as $line)
+          <li>{{ $line }}</li>
+        @endforeach
+      </ul>
+    </section>
+    @endif
+
+    <p class="job-footnote"><i class="bi bi-shield-check"></i> Data hanya untuk rekrutmen · Pengisian ±2 menit · Pastikan data lamaran sudah benar sebelum dikirim.</p>
   </main>
 
-  <div class="mobile-apply-bar">
-    <div class="mobile-apply-meta">
-      <span>Gaji</span>
-      <strong>{{ $salaryLabel }}</strong>
-    </div>
-    <a class="btn-mobile-apply" href="{{ route('lamaran.form', $position->id) }}">Lamar Sekarang <i class="bi bi-arrow-right"></i></a>
+  <div class="mobile-apply-bar{{ $position->show_salary ? '' : ' is-single' }}">
+    @if($position->show_salary)
+      <div class="mobile-apply-meta">
+        <span>Gaji</span>
+        <strong>{{ $salaryLabel }}</strong>
+      </div>
+    @endif
+    <a class="btn-mobile-apply" href="{{ route('lamaran.form', $position) }}">Lamar Sekarang <i class="bi bi-arrow-right"></i></a>
   </div>
 </div>
 @endsection

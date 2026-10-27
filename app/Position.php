@@ -7,21 +7,45 @@ use Illuminate\Support\Str;
 
 class Position extends Model
 {
-    protected $fillable = ['branch_id', 'title', 'slug', 'location', 'gaji', 'pendidikan_minimal', 'usia_min', 'usia_maks', 'butuh_lembur', 'syarat_sim', 'description', 'requirements', 'benefits', 'skill_tags', 'is_active'];
+    protected $fillable = ['branch_id', 'title', 'slug', 'location', 'gaji', 'show_salary', 'pendidikan_minimal', 'usia_min', 'usia_maks', 'butuh_lembur', 'syarat_sim', 'description', 'requirements', 'benefits', 'show_benefits', 'skill_tags', 'is_active'];
 
-    protected $casts = ['is_active' => 'boolean', 'butuh_lembur' => 'boolean'];
+    protected $casts = ['is_active' => 'boolean', 'butuh_lembur' => 'boolean', 'show_salary' => 'boolean', 'show_benefits' => 'boolean'];
 
     protected static function boot()
     {
         parent::boot();
 
         static::saving(function (Position $position) {
+            if (!$position->public_token) {
+                $position->public_token = static::generatePublicToken();
+            }
             $position->slug = static::uniqueSlug($position->slug ?: $position->title, $position->id);
         });
 
         static::saved(function (Position $position) {
             $position->ensureDefaultShortLink();
         });
+    }
+
+    /** Token acak untuk URL publik, hindari karakter mirip (0/1/l/o). */
+    public static function generatePublicToken($length = 10)
+    {
+        $chars = 'abcdefghijkmnpqrstuvwxyz23456789';
+        $max = strlen($chars) - 1;
+
+        do {
+            $token = '';
+            for ($i = 0; $i < $length; $i++) {
+                $token .= $chars[random_int(0, $max)];
+            }
+        } while (!preg_match('/[a-z]/', $token) || static::where('public_token', $token)->exists());
+
+        return $token;
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'public_token';
     }
 
     /** Slug unik untuk URL share pendek, mis. "mm" atau "manajer-marketing". */
@@ -52,7 +76,7 @@ class Position extends Model
         if ($link && $link->isAvailable()) {
             return $link->url;
         }
-        return route('jobs.show', $this->id);
+        return route('jobs.show', $this);
     }
 
     public function shortLinks()

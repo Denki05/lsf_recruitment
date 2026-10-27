@@ -46,19 +46,20 @@ class JobsController extends Controller
         return view('public.jobs', compact('positions', 'branches', 'selectedBranch'));
     }
 
-    /** Detail 1 loker via ID (URL kanonis). */
-    public function show($id)
+    /** Detail 1 loker via token publik; ID numerik lama dialihkan permanen. */
+    public function show($code)
     {
-        $position = Position::with('branch')->active()->findOrFail($id);
+        if (ctype_digit((string) $code)) {
+            $position = Position::with('branch')->active()->findOrFail($code);
+            return redirect()->route('jobs.show', $position, 301);
+        }
+
+        $position = Position::with('branch')->active()->where('public_token', $code)->firstOrFail();
         return $this->detail($position);
     }
 
     protected function detail(Position $position)
     {
-        $others = Position::with('branch')->active()
-            ->where('branch_id', $position->branch_id)
-            ->where('id', '<>', $position->id)
-            ->orderBy('title')->take(3)->get();
-        return view('public.job-show', compact('position', 'others'));
+        return view('public.job-show', compact('position'));
     }
 }

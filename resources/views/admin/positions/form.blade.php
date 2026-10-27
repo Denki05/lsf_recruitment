@@ -40,7 +40,7 @@
     @php($usiaRangeVal = old('usia_range', ($position->usia_min || $position->usia_maks) ? ($position->usia_min . '-' . $position->usia_maks) : ''))
     <div class="form-group col-md-2 mb-2"><label>Rentang Usia</label><input name="usia_range" class="form-control form-control-sm" value="{{ $usiaRangeVal }}" placeholder="cth: 18-35" pattern="\d{1,2}\s*-\s*\d{1,2}" title="Format: min-maks, cth 18-35"><small class="text-muted">Kosong = bebas.</small></div>
     <div class="form-group col-md-2 mb-2"><label>SIM</label><select name="syarat_sim[]" id="simSelect" class="form-control form-control-sm" multiple="multiple" style="width:100%">@foreach(['A','B','C'] as $s)<option value="{{ $s }}" {{ in_array($s, (array) $simSelected) ? 'selected' : '' }}>SIM {{ $s }}</option>@endforeach</select><small class="text-muted">Kosong = tidak butuh SIM.</small></div>
-    <div class="form-group col-md-2 mb-2"><label>&nbsp;</label><div class="form-check pt-1"><input type="checkbox" name="butuh_lembur" value="1" class="form-check-input" id="butuhLembur" {{ old('butuh_lembur', $position->butuh_lembur) ? 'checked' : '' }}><label class="form-check-label" for="butuhLembur">Butuh lembur di luar jam kerja</label></div><small class="text-muted">Pelamar wajib bersedia.</small></div>
+    <div class="form-group col-md-2 mb-2"><label>&nbsp;</label><div class="form-check pt-1"><input type="checkbox" name="butuh_lembur" value="1" class="form-check-input" id="butuhLembur" {{ old('butuh_lembur', $position->butuh_lembur) ? 'checked' : '' }}><label class="form-check-label" for="butuhLembur">Bersedia lembur di luar jam kerja</label></div></div>
   </div>
 
   <div class="loker-sect"><span class="num">3</span>Deskripsi & Requirement</div>

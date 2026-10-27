@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Route;
 // Frontend pelamar (publik, tanpa login)
 Route::get('/', 'JobsController@index')->name('jobs.index');
 Route::get('/c/{branch}', 'JobsController@branch')->name('jobs.branch');
-Route::get('/loker/{id}', 'JobsController@show')->name('jobs.show')->where('id', '[0-9]+');
+Route::get('/loker/{kode}', 'JobsController@show')->name('jobs.show')->where('kode', '[A-Za-z0-9]+');
 Route::get('/lamaran/sukses', 'ApplicationController@success')->name('lamaran.sukses');
-Route::get('/lamaran/{position?}', 'ApplicationController@create')->name('lamaran.form')->where('position', '[0-9]+');
+Route::get('/lamaran/{position?}', 'ApplicationController@create')->name('lamaran.form')->where('position', '[A-Za-z0-9]+');
 Route::post('/lamaran', 'ApplicationController@store')->middleware('throttle:10,1')->name('lamaran.store');
 
 // Admin auth

@@ -43,7 +43,7 @@
           <td class="text-right">
             <div class="table-actions">
               <a href="{{ route('admin.positions.edit', $p->id) }}" class="btn btn-outline-primary" title="Edit loker"><i class="bi bi-pencil"></i> Edit</a>
-              <a href="{{ route('jobs.show', $p->id) }}" target="_blank" rel="noopener" class="btn btn-outline-info" title="Buka detail publik"><i class="bi bi-eye"></i> Detail</a>
+              <a href="{{ route('jobs.show', $p) }}" target="_blank" rel="noopener" class="btn btn-outline-info" title="Buka detail publik"><i class="bi bi-eye"></i> Detail</a>
               <button type="button" class="btn btn-outline-secondary" data-copy-link="{{ $p->share_url }}" title="Salin link share pendek"><i class="bi bi-clipboard"></i> Link</button>
               <form method="POST" action="{{ route('admin.positions.destroy', $p->id) }}" class="d-inline m-0" onsubmit="return confirm('Hapus loker ini?')">@csrf @method('DELETE')<button class="btn btn-outline-danger" title="Hapus loker"><i class="bi bi-trash"></i> Hapus</button></form>
             </div>

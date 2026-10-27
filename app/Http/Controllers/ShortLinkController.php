@@ -6,7 +6,7 @@ use App\ShortLink;
 
 class ShortLinkController extends Controller
 {
-    /** URL pendek publik, cth. /s/mm → /loker/6 (klik dicatat). */
+    /** URL pendek publik, cth. /s/mm → /loker/{token} (klik dicatat). */
     public function redirect($code)
     {
         $link = ShortLink::with('position.branch')
@@ -24,7 +24,7 @@ class ShortLinkController extends Controller
 
         $link->recordClick();
 
-        return redirect()->route('jobs.show', $position->id);
+        return redirect()->route('jobs.show', $position);
     }
 
     /** Link lama di root diarahkan permanen ke format /s/{code}. */

@@ -36,6 +36,8 @@ class PositionController extends Controller
             'title' => 'required|string|max:100',
             'location' => 'required|string|max:100',
             'gaji' => 'nullable|integer|min:0|max:1000000000',
+            'show_salary' => 'nullable|boolean',
+            'show_benefits' => 'nullable|boolean',
             'pendidikan_minimal' => 'nullable|in:SD,SMP,SMA/SMK,D3,D4/S1,S2,S3',
             'usia_range' => 'nullable|regex:/^\d{1,2}\s*-\s*\d{1,2}$/',
             'usia_min' => 'nullable|integer|min:15|max:70',
@@ -101,6 +103,8 @@ class PositionController extends Controller
         }
         unset($data['butuh_sim']);
         $data['butuh_lembur'] = $request->boolean('butuh_lembur');
+        $data['show_salary'] = $request->boolean('show_salary');
+        $data['show_benefits'] = $request->boolean('show_benefits');
         $data['is_active'] = $request->boolean('is_active', true);
         if (empty($data['pendidikan_minimal'])) {
             $data['pendidikan_minimal'] = null;

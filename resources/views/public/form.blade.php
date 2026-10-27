@@ -60,7 +60,7 @@
   @media (max-width: 575.98px) { .apply-benefits-list { grid-template-columns: 1fr; } }
 </style>
 
-@php($selectedBenefits = !empty($selectedPosition) ? $selectedPosition->benefit_list : [])
+@php($selectedBenefits = !empty($selectedPosition) && $selectedPosition->show_benefits ? $selectedPosition->benefit_list : [])
 
 <div class="apply-container">
   <div class="d-flex justify-content-between align-items-center mb-2">

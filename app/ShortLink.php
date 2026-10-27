@@ -59,7 +59,7 @@ class ShortLink extends Model
 
     public function getTargetUrlAttribute()
     {
-        return $this->position ? route('jobs.show', $this->position->id) : '#';
+        return $this->position ? route('jobs.show', $this->position) : '#';
     }
 
     /** Hitung 1 klik tanpa menimpa atribut lain (aman untuk request bersamaan). */
